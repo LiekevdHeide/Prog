@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MaintenanceActivities.h" />
+    <ClInclude Include="performanceTimer.h" />
     <ClInclude Include="RoadNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
