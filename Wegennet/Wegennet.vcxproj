@@ -124,7 +124,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="readRoadNetwork.cpp" />
     <ClCompile Include="RoadNetwork.cpp" />
   </ItemGroup>
   <ItemGroup>

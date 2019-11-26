@@ -24,9 +24,6 @@
     <ClCompile Include="RoadNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="readRoadNetwork.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RoadNetwork.h">
