@@ -1,5 +1,6 @@
 #include "performanceTimer.h"
 #include "RoadNetwork.h"
+#include "MaintenanceActivities.h"
 
 #include <vector>
 //#include <functional> //if want to make a standard function that can be different functions (such as policies etc)
@@ -32,7 +33,7 @@ int main()
 	}
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
 	string maintenanceInput = whichComputer + "/maintenanceInput.txt";
-
+	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices);
 	
 	//write results to:
 	ofstream write(whichComputer + "/Results.txt");  //, std::ios::app for adding to end of file

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 
 using namespace std;
 class MaintenanceActivities
@@ -7,15 +8,17 @@ class MaintenanceActivities
 
 public:
 	//constructor!
-	MaintenanceActivities() {};
+	MaintenanceActivities(string maintenanceInput, size_t vertices);
 
 	size_t M; //number of activities
+	size_t T; //time horizon
 	
 	vector<size_t> duration;//size=M, duration per maintenance
 	
 	vector<vector<size_t>> locationSets;//size=M, numLocationsOfM, location set per maintenance activity
 	
 	vector<double> costs;//costs per maintenance activity
+
 	//matrix of reduction of costs if scheduled simultaneously
 	vector<vector<double>> costReduction;//size=MxM, reduction if 2 at the same time.
 
