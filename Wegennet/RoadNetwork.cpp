@@ -49,6 +49,6 @@ RoadNetwork::RoadNetwork(string inputDoc) {
 	freeFlowTimes = readMatrix;
 
 	//function to calculate which paths!
-	calculatePaths(readFrom);
+	readPaths(readFrom);
 	cout << "Created network\n";
 }

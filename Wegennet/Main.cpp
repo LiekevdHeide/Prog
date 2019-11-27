@@ -34,12 +34,6 @@ int main()
 
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
-	for (size_t n = 0; n < Maintenance.M; ++n) {
-		for (size_t m = 0; m < Maintenance.locationSets[n].size(); ++m) {
-			cout << Maintenance.locationSets[n][m];
-		}
-		cout << '\n';
-	}
 	//class? with schedule / capacities per link per time unit?
 
 
@@ -51,7 +45,7 @@ int main()
 
 	//calculate equilibrium with no maintenance scheduled.
 	//look at what the Honours boys did..
-
+	//Network.TravelTimeRoad
 
 	//Make initial schedule solution 
 
