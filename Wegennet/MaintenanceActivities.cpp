@@ -36,13 +36,13 @@ MaintenanceActivities::MaintenanceActivities(string maintenanceInput, size_t ver
 	vector<size_t> allLocs;
 	for (size_t m = 0; m < M; ++m) {
 		//for number of locations per maintenance
+		readFrom >> loc;
 		while (loc < vertices) {
-			readFrom >> loc;
 			allLocs.push_back(loc);
+			readFrom >> loc;
 		}
 		perM[m] = allLocs;
 		allLocs.clear();
-		loc = 0;
 	}
 	locationSets = perM;
 
@@ -53,4 +53,6 @@ MaintenanceActivities::MaintenanceActivities(string maintenanceInput, size_t ver
 			readFrom >> reductions[m][n];
 		}
 	costReduction = reductions;
+
+	cout << "Created maintenance projects\n";
 }

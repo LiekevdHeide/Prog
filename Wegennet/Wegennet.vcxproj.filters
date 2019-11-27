@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Debug">
       <UniqueIdentifier>{823c7c40-83b8-4ad5-946a-d38484d10284}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Debugging">
+      <UniqueIdentifier>{c989d40f-5638-4bd0-9ad0-6c4272044555}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -27,6 +30,30 @@
     <ClCompile Include="MaintenanceActivities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="print2Dim.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="print2DimtoFile.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="print2DimDouble.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="print2DimtoFileDouble.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="print2Dim1.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="print2DimDouble1.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="print2DimtoFile1.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="print2DimtoFileDouble1.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RoadNetwork.h">
@@ -36,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="performanceTimer.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="generalPrintingFunctions.h">
       <Filter>Header Files\Debug</Filter>
     </ClInclude>
   </ItemGroup>
