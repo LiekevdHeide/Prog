@@ -1,7 +1,12 @@
+//checking
 #include "performanceTimer.h"
 #include "generalPrintingFunctions.h"
+//classes
 #include "RoadNetwork.h"
 #include "MaintenanceActivities.h"
+#include "ScheduleAndFlows.h"
+
+#include "ConvexCombinations.h"
 
 
 #include <vector>
@@ -35,7 +40,9 @@ int main()
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
 	//class? with schedule / capacities per link per time unit?
+	ScheduleAndFlows Schedule(Maintenance.T, Network.vertices, Maintenance.M, Network.numberODpairs, Network.numberODpaths);
 
+	print2Dim(Schedule.y, Maintenance.T, Maintenance.M);
 
 	//write results to:
 	ofstream write(whichComputer + "/Results.txt");  //, std::ios::app for adding to end of file
@@ -44,8 +51,11 @@ int main()
 	time.reset();
 
 	//calculate equilibrium with no maintenance scheduled.
-	//look at what the Honours boys did..
-	//Network.TravelTimeRoad
+	
+	//CONVEX COMBINATIONS:
+	ScheduleAndFlows equilibrium(2, Network.vertices, 0, Network.numberODpairs, Network.numberODpaths);//all flows 0, no maintenance
+	convexCombinations(equilibrium, Network, 10);//convergenceCriterion??
+	
 
 	//Make initial schedule solution 
 

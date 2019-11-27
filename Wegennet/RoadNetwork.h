@@ -55,10 +55,17 @@ public:
 	vector<vector<double>> standardCapacities;
 	vector<vector<double>> freeFlowTimes;
 
-	double TravelTimeRoad(double capacity, double freeFlow, double actualFlow) {//returns travel time on an arc, given capacity, freeFlow, actualFlow
+	double travelTimeRoad(double capacity, double freeFlow, double actualFlow) {//returns travel time on an arc, given capacity, freeFlow, actualFlow
 		return(freeFlow * (1 + 0.15 * pow(actualFlow / freeFlow, 4)));
 	}
 
+	double pathTravelTime(vector<size_t> &path, double flow) {
+		double travelTime = 0.0;
+		for (size_t a = 0; a < path.size() - 1; ++a) {
+			travelTime += travelTimeRoad(standardCapacities[path[a]][path[a + 1]], freeFlowTimes[path[a]][path[a + 1]], flow);
+		}
+		return travelTime;
+	}
 	
 };
 
