@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Debugging">
       <UniqueIdentifier>{c989d40f-5638-4bd0-9ad0-6c4272044555}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Not Used">
+      <UniqueIdentifier>{17775354-f9a7-47b0-b17f-0aaed466cde0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -64,6 +67,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ConvexCombinations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="findOptimalStepsize.cpp">
+      <Filter>Source Files\Not Used</Filter>
+    </ClCompile>
+    <ClCompile Include="findGoodStepsize.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

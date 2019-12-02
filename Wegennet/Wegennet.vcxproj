@@ -87,9 +87,14 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community129\cplex\include;C:\Program Files\IBM\ILOG\CPLEX_Studio_Community129\concert\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_CONSOLE;IL_STD;_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community129\cplex\lib\x64_windows_vs2017\stat_mda;C:\Program Files\IBM\ILOG\CPLEX_Studio_Community129\concert\lib\x64_windows_vs2017\stat_mda;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>concert.lib;ilocplex.lib;cplex1290.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,6 +130,8 @@
   <ItemGroup>
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
+    <ClCompile Include="findGoodStepsize.cpp" />
+    <ClCompile Include="findOptimalStepsize.cpp" />
     <ClCompile Include="findShortestPath.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MaintenanceActivities.cpp" />
