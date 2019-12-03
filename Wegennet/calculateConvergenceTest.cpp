@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 using namespace std;
-double calculateConvergenceTest(vector<vector<double>> &oldPathFlows, vector<vector<double>> &newPathFlows, RoadNetwork &Roads) {
+double calculateConvergenceTest(vector<vector<double>> &oldArcFlows, vector<vector<double>> &newArcFlows, RoadNetwork &Roads) {
 	
 	double max = 0.0;
 	double test = 0.0;
@@ -12,12 +12,13 @@ double calculateConvergenceTest(vector<vector<double>> &oldPathFlows, vector<vec
 	size_t shortestNew = 0;
 	for (size_t od = 0; od < Roads.numberODpairs; ++od) {
 			//find shortest paths (implicitly also calculates the corr times...)
-			shortestOld = findShortestPath(Roads, od, oldPathFlows[od]);//err
-			shortestNew = findShortestPath(Roads, od, newPathFlows[od]);
+			shortestOld = findShortestPath(Roads, od, oldArcFlows);
+			shortestNew = findShortestPath(Roads, od, newArcFlows);
 
 			//|min path travel time at nth iteration - min path travel time at n-1th iteration| / min path travel time iteration n 
-			test = abs(Roads.pathTravelTime(Roads.ODpaths[od][shortestNew], newPathFlows[od][shortestNew]) - Roads.pathTravelTime( Roads.ODpaths[od][shortestOld], oldPathFlows[od][shortestOld]) );
-			cout << "test:" << Roads.pathTravelTime(Roads.ODpaths[od][shortestNew], newPathFlows[od][shortestNew]) << ' ' << Roads.pathTravelTime(Roads.ODpaths[od][shortestOld], oldPathFlows[od][shortestOld]) << '\n';
+			test = abs(Roads.pathTravelTime(Roads.ODpaths[od][shortestNew], newArcFlows) - Roads.pathTravelTime( Roads.ODpaths[od][shortestOld], oldArcFlows) );
+			
+			cout << "test:" << Roads.pathTravelTime(Roads.ODpaths[od][shortestNew], newArcFlows) << ' ' << Roads.pathTravelTime(Roads.ODpaths[od][shortestOld], oldArcFlows) << '\n';
 			
 			//can divide by first part?
 			if (test > max) {

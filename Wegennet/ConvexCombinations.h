@@ -2,9 +2,9 @@
 #include "ScheduleAndFlows.h"
 #include "RoadNetwork.h"
 
-void convexCombinations(ScheduleAndFlows& Flow, RoadNetwork& Roads, double convergenceCriterion);
+void convexCombinations(ScheduleAndFlows& Flow, RoadNetwork& Roads, double convergenceCriterion, double accuracyStepsize);
 
-size_t findShortestPath(RoadNetwork, size_t od, std::vector<double> pathFlows);
+size_t findShortestPath(RoadNetwork, size_t od, std::vector<std::vector<double>> arcFlows);
 
 double calculateConvergenceTest(std::vector<std::vector<double>> &xOld, std::vector<std::vector<double>> &xNew, RoadNetwork &Roads);
 

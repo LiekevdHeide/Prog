@@ -54,7 +54,7 @@ int main()
 	
 	//CONVEX COMBINATIONS:
 	ScheduleAndFlows equilibrium(2, Network.vertices, 0, Network.numberODpairs, Network.numberODpaths);//all flows 0, no maintenance
-	convexCombinations(equilibrium, Network, 0.5);//convergenceCriterion??
+	convexCombinations(equilibrium, Network, 0.01, 0.01);//convergenceCriterion,  epsilon for stepsize?
 	
 
 	//Make initial schedule solution 
