@@ -78,9 +78,9 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 		cout << "old flows:\n";
 		print2Dim(oldArcFlow, Roads.vertices);
 		alpha = findGoodStepsize(directionArcFlow, oldArcFlow, Roads, accuracyStepsize);
-		if (alpha < accuracyStepsize) {
-			break;
-		}
+		//if (alpha < accuracyStepsize) {
+		//	break;
+		//}
 		//move to new flow using step size
 		for (size_t od = 0; od < Roads.numberODpairs; ++od) {
 			for (size_t p = 0; p < Roads.numberODpaths[od]; ++p) {
@@ -106,7 +106,12 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 		cout << "\nTravel times per path:\n";
 		for (size_t od = 0; od < Roads.numberODpairs; ++od) {
 			for (size_t p = 0; p < Roads.numberODpaths[od]; ++p) {
-				cout << Roads.pathTravelTime(Roads.ODpaths[od][p], newArcFlow) << ' ';
+				if (Flow.pathFlow[0][od][p] > 0) {
+					cout << Roads.pathTravelTime(Roads.ODpaths[od][p], newArcFlow) << ' ';
+				}
+				else {
+					cout << "-- ";
+				}
 			}
 			cout << '\n';
 		}
@@ -121,7 +126,12 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 	cout << "Travel times per path:\n";
 	for (size_t od = 0; od < Roads.numberODpairs; ++od) {
 		for (size_t p = 0; p < Roads.numberODpaths[od]; ++p) {
-			cout << Roads.pathTravelTime(Roads.ODpaths[od][p], newArcFlow) << ' ';
+			if (Flow.pathFlow[0][od][p] > 0) {
+				cout << Roads.pathTravelTime(Roads.ODpaths[od][p], newArcFlow) << ' ';
+			}
+			else {
+				cout << "-- ";
+			}
 		}
 		cout << '\n';
 	}
