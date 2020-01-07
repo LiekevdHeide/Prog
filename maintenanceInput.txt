@@ -1,4 +1,4 @@
-MTDurationsCostsLocationsetsCosreductions
+MTDurationsCostsLocationsetsCostreductions
 
 3 10
 

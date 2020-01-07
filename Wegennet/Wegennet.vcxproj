@@ -128,11 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="binaryToCapacities.cpp" />
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
     <ClCompile Include="findGoodStepsize.cpp" />
     <ClCompile Include="findOptimalStepsize.cpp" />
     <ClCompile Include="findShortestPath.cpp" />
+    <ClCompile Include="initializeSchedule.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MaintenanceActivities.cpp" />
     <ClCompile Include="print2Dim.cpp" />
@@ -143,16 +145,20 @@
     <ClCompile Include="print2DimtoFile1.cpp" />
     <ClCompile Include="print2DimtoFileDouble.cpp" />
     <ClCompile Include="print2DimtoFileDouble1.cpp" />
+    <ClCompile Include="proportionalSwitch.cpp" />
     <ClCompile Include="RoadNetwork.cpp" />
     <ClCompile Include="ScheduleAndFlows.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConvexCombinations.h" />
     <ClInclude Include="generalPrintingFunctions.h" />
+    <ClInclude Include="InitializationFunctions.h" />
     <ClInclude Include="MaintenanceActivities.h" />
     <ClInclude Include="performanceTimer.h" />
     <ClInclude Include="RoadNetwork.h" />
     <ClInclude Include="ScheduleAndFlows.h" />
+    <ClInclude Include="ScheduleCheckFunctions.h" />
+    <ClInclude Include="ScheduleCostFunctions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

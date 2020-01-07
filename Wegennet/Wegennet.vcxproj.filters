@@ -22,15 +22,15 @@
     <Filter Include="Source Files\Not Used">
       <UniqueIdentifier>{17775354-f9a7-47b0-b17f-0aaed466cde0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Constructors">
+      <UniqueIdentifier>{8872ef6c-9b05-4c59-b500-0c7a50128bd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ConvexCombi">
+      <UniqueIdentifier>{845077c5-e2b2-40fd-b636-8df477f4a36b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RoadNetwork.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MaintenanceActivities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="print2Dim.cpp">
@@ -57,22 +57,37 @@
     <ClCompile Include="print2DimtoFileDouble1.cpp">
       <Filter>Source Files\Debugging</Filter>
     </ClCompile>
-    <ClCompile Include="ScheduleAndFlows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="findShortestPath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="calculateConvergenceTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConvexCombinations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="findOptimalStepsize.cpp">
       <Filter>Source Files\Not Used</Filter>
     </ClCompile>
+    <ClCompile Include="MaintenanceActivities.cpp">
+      <Filter>Source Files\Constructors</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadNetwork.cpp">
+      <Filter>Source Files\Constructors</Filter>
+    </ClCompile>
+    <ClCompile Include="ScheduleAndFlows.cpp">
+      <Filter>Source Files\Constructors</Filter>
+    </ClCompile>
+    <ClCompile Include="initializeSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="binaryToCapacities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvexCombinations.cpp">
+      <Filter>Source Files\ConvexCombi</Filter>
+    </ClCompile>
+    <ClCompile Include="calculateConvergenceTest.cpp">
+      <Filter>Source Files\ConvexCombi</Filter>
+    </ClCompile>
     <ClCompile Include="findGoodStepsize.cpp">
+      <Filter>Source Files\ConvexCombi</Filter>
+    </ClCompile>
+    <ClCompile Include="findShortestPath.cpp">
+      <Filter>Source Files\ConvexCombi</Filter>
+    </ClCompile>
+    <ClCompile Include="proportionalSwitch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,6 +108,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConvexCombinations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InitializationFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScheduleCheckFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScheduleCostFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

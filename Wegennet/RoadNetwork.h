@@ -72,11 +72,20 @@ public:
 		return(freeFlow * (1 + 0.15 * pow(actualFlow / capacity, 4)));//capacity??
 	}
 
-	double pathTravelTime(vector<size_t> &path, vector<vector<double>> arcFlows) {
+	double pathTravelTime(const vector<size_t> &path, const vector<vector<double>> &arcFlows) {
 		//only uses the freeflow + capacities in this class. Flow is input.
 		double travelTime = 0.0;
 		for (size_t a = 0; a < path.size() - 1; ++a) {
 			travelTime += travelTimeRoad(standardCapacities[path[a]][path[a + 1]], freeFlowTimes[path[a]][path[a + 1]], arcFlows[path[a]][path[a + 1]]);
+		}
+		return travelTime;
+	}
+
+	double pathTravelTime(const vector<size_t>& path, const vector<vector<double>>& arcFlows, const vector<vector<double>> &actualCapacities) {
+		//only uses the freeflow + capacities in this class. Flow is input.
+		double travelTime = 0.0;
+		for (size_t a = 0; a < path.size() - 1; ++a) {
+			travelTime += travelTimeRoad(actualCapacities[path[a]][path[a + 1]], freeFlowTimes[path[a]][path[a + 1]], arcFlows[path[a]][path[a + 1]]);
 		}
 		return travelTime;
 	}

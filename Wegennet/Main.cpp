@@ -7,6 +7,7 @@
 #include "ScheduleAndFlows.h"
 
 #include "ConvexCombinations.h"
+#include "InitializationFunctions.h"
 
 
 #include <vector>
@@ -40,9 +41,9 @@ int main()
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
 	//class? with schedule / capacities per link per time unit?
-	ScheduleAndFlows Schedule(Maintenance.T, Network.vertices, Maintenance.M, Network.numberODpairs, Network.numberODpaths);
+	ScheduleAndFlows Schedule(Maintenance.T, Network.vertices, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.standardCapacities);
 
-	print2Dim(Schedule.y, Maintenance.T, Maintenance.M);
+	print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
 
 	//write results to:
 	ofstream write(whichComputer + "/Results.txt");  //, std::ios::app for adding to end of file
@@ -51,13 +52,28 @@ int main()
 	time.reset();
 
 	//calculate equilibrium with no maintenance scheduled.
-	
 	//CONVEX COMBINATIONS:
-	ScheduleAndFlows equilibrium(2, Network.vertices, 0, Network.numberODpairs, Network.numberODpaths);//all flows 0, no maintenance
+	ScheduleAndFlows equilibrium(2, Network.vertices, 0, Network.numberODpairs, Network.numberODpaths, Network.standardCapacities);//all flows 0, no maintenance
 	convexCombinations(equilibrium, Network, 0.01, 0.001);//convergenceCriterion,  epsilon for stepsize?
 	
 
 	//Make initial schedule solution 
+	cout << "--------------Create initial schedule ----------------\n";
+
+	initializeSchedule(Schedule, Maintenance);
+
+	cout << "\n\n";
+	print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
+	for (size_t t = 0; t < Maintenance.T; ++t) {
+		print2Dim(Schedule.scheduledCapacities[t], Network.vertices);
+		cout << '\n';
+	}
+
+	//cost function: return total travel time at a certain day, for a given schedule.
+
+
+	//dynamic adjustment function: PSAP
+	proportionalSwitch(Schedule);
 
 	//implement a heuristic GA/ALNS?
 
