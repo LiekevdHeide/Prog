@@ -8,6 +8,7 @@
 
 #include "ConvexCombinations.h"
 #include "InitializationFunctions.h"
+#include "PSAP.h"
 
 
 #include <vector>
@@ -26,7 +27,7 @@ int main()
 	Timer time;
 
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "/roadInput.txt";
+	string roadInput = whichComputer + "/roadInputXYY.txt";
 
 	RoadNetwork Network(roadInput);
 
@@ -54,26 +55,31 @@ int main()
 	//calculate equilibrium with no maintenance scheduled.
 	//CONVEX COMBINATIONS:
 	ScheduleAndFlows equilibrium(2, Network.vertices, 0, Network.numberODpairs, Network.numberODpaths, Network.standardCapacities);//all flows 0, no maintenance
-	convexCombinations(equilibrium, Network, 0.01, 0.001);//convergenceCriterion,  epsilon for stepsize?
+	convexCombinations(equilibrium, Network, 0.001, 0.0001);//convergenceCriterion,  epsilon for stepsize?
 	
 
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
 
-	initializeSchedule(Schedule, Maintenance);
-
+	//initializeSchedule(Schedule, Maintenance);
+	
+	Schedule.arcFlow[0][0] = {{0, 5, 5, 0}, {0, 0, 0, 5}, {0, 0, 0, 5}, {0, 0, 0, 0}};
+	print2Dim(Schedule.arcFlow[0][0], Network.vertices);
+	Schedule.arcFlowAll[0] = Schedule.arcFlow[0][0];
+	Schedule.pathFlow[0][0] = { 5,5 };
+	
 	cout << "\n\n";
-	print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
-	for (size_t t = 0; t < Maintenance.T; ++t) {
-		print2Dim(Schedule.scheduledCapacities[t], Network.vertices);
-		cout << '\n';
-	}
+	//print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
+	//for (size_t t = 0; t < Maintenance.T; ++t) {
+	//	print2Dim(Schedule.scheduledCapacities[t], Network.vertices);
+	//	cout << '\n';
+	//}
 
 	//cost function: return total travel time at a certain day, for a given schedule.
 
 
 	//dynamic adjustment function: PSAP
-	proportionalSwitch(Schedule);
+	proportionalSwitch(Maintenance.T, Network, Schedule);
 
 	//implement a heuristic GA/ALNS?
 

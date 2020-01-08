@@ -36,16 +36,6 @@ private:
 		for (size_t n = 0; n < numberODpairs; ++n) {
 			numberODpaths[n] = ODpaths[n].size();
 		}
-		/*cout << "Paths:\n";
-		for (size_t o = 0; o < numberODpairs; ++o) {
-			for (size_t p = 0; p < numberODpaths[o]; ++p) {
-				for (size_t a = 0; a < ODpaths[o][p].size(); ++a) {
-					cout << ODpaths[o][p][a] << ' ';
-				}
-				cout << '\n';
-			}
-			cout << '\n';
-		}*/
 	}
 
 public:
@@ -89,6 +79,8 @@ public:
 		}
 		return travelTime;
 	}
+
+
 	
 };
 

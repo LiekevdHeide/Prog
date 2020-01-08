@@ -155,10 +155,10 @@
     <ClInclude Include="InitializationFunctions.h" />
     <ClInclude Include="MaintenanceActivities.h" />
     <ClInclude Include="performanceTimer.h" />
+    <ClInclude Include="PSAP.h" />
     <ClInclude Include="RoadNetwork.h" />
     <ClInclude Include="ScheduleAndFlows.h" />
     <ClInclude Include="ScheduleCheckFunctions.h" />
-    <ClInclude Include="ScheduleCostFunctions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

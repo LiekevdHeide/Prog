@@ -116,7 +116,7 @@
     <ClInclude Include="ScheduleCheckFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScheduleCostFunctions.h">
+    <ClInclude Include="PSAP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
