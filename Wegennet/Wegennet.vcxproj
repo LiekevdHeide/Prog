@@ -134,6 +134,7 @@
     <ClCompile Include="findGoodStepsize.cpp" />
     <ClCompile Include="findOptimalStepsize.cpp" />
     <ClCompile Include="findShortestPath.cpp" />
+    <ClCompile Include="findTouristFlows.cpp" />
     <ClCompile Include="initializeSchedule.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MaintenanceActivities.cpp" />

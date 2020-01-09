@@ -43,6 +43,7 @@ public:
 	RoadNetwork(string inputDoc);
 
 	size_t vertices; //vertices in the network
+	double touristPercentage;
 
 	//OD pairs
 	size_t numberODpairs;

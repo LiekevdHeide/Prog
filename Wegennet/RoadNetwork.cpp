@@ -17,6 +17,8 @@ RoadNetwork::RoadNetwork(string inputDoc) {
 
 	readFrom >> vertices;
 	readFrom >> numberODpairs;
+	readFrom >> touristPercentage;
+
 	vector<size_t> numPaths(numberODpairs, 0);
 	for (size_t n = 0; n < numberODpairs; ++n) {
 		readFrom >> numPaths[n];

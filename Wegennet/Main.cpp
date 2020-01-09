@@ -36,7 +36,7 @@ int main()
 		cout << '\n';
 	}
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "/maintenanceInput.txt";
+	string maintenanceInput = whichComputer + "/maintenanceInputXYY.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices);
 
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
@@ -44,7 +44,7 @@ int main()
 	//class? with schedule / capacities per link per time unit?
 	ScheduleAndFlows Schedule(Maintenance.T, Network.vertices, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.standardCapacities);
 
-	print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
+	//print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
 
 	//write results to:
 	ofstream write(whichComputer + "/Results.txt");  //, std::ios::app for adding to end of file
@@ -61,7 +61,7 @@ int main()
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
 
-	//initializeSchedule(Schedule, Maintenance);
+	initializeSchedule(Schedule, Maintenance);
 	
 	Schedule.arcFlow[0][0] = {{0, 5, 5, 0}, {0, 0, 0, 5}, {0, 0, 0, 5}, {0, 0, 0, 0}};
 	print2Dim(Schedule.arcFlow[0][0], Network.vertices);

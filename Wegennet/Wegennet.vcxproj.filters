@@ -90,6 +90,9 @@
     <ClCompile Include="proportionalSwitch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="findTouristFlows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RoadNetwork.h">
