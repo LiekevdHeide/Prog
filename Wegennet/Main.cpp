@@ -63,10 +63,21 @@ int main()
 
 	initializeSchedule(Schedule, Maintenance);
 	
-	Schedule.arcFlow[0][0] = {{0, 5, 5, 0}, {0, 0, 0, 5}, {0, 0, 0, 5}, {0, 0, 0, 0}};
+	//start at equilibrium.
+	Schedule.arcFlow[0] = equilibrium.arcFlow[0];
+	Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
+	Schedule.pathFlow[0] = equilibrium.pathFlow[0];
+
+	for (size_t t = 1; t < Maintenance.T; ++t) 
+		for(size_t a = 0; a < Network.vertices; ++a)
+			for(size_t b=0; b < Network.vertices; ++b){
+				Schedule.arcFlowAll[t][a][b] = Network.touristPercentage * equilibrium.arcFlowAll[0][a][b];
+			}
+
+	//Schedule.arcFlow[0][0] = {{0, 5, 5, 0}, {0, 0, 0, 5}, {0, 0, 0, 5}, {0, 0, 0, 0}};
 	print2Dim(Schedule.arcFlow[0][0], Network.vertices);
-	Schedule.arcFlowAll[0] = Schedule.arcFlow[0][0];
-	Schedule.pathFlow[0][0] = { 5,5 };
+	//Schedule.arcFlowAll[0] = Schedule.arcFlow[0][0];
+	//Schedule.pathFlow[0][0] = { 5,5 };
 	
 	cout << "\n\n";
 	//print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);

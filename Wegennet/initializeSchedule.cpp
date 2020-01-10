@@ -10,7 +10,7 @@ void initializeSchedule(ScheduleAndFlows &Schedule, MaintenanceActivities &Maint
 	//create initial schedule in the ScheduleAndFlows class (binary)
 	
 	//For now quick and easy, are better initialization heuristics +- 
-	size_t t = 1; 
+	size_t t = 10; 
 	for (size_t m = 0; m < Maintenance.M; ++m) {
 		if (t > (Maintenance.T - Maintenance.duration[m])) {
 			t = 1;

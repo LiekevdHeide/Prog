@@ -20,6 +20,7 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 	vector<vector<double>> touristFlows(Network.vertices, vector<double>(Network.vertices, 0.0));
 
 	//arcFlow: both drivers, pathflow: only recurrent drivers
+	//arcflow input is ONLY THE TOURIST IN EQUILIBRIUM FLOW
 
 	//subtract the tourists from the path flows:
 	for(size_t od = 0; od < Network.numberODpairs; ++od)
@@ -54,13 +55,14 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 
 		}
 		
-		//add tourists to flows at t+1
+		//add tourists to flows at t+1, current value of arcFlowAll[t+1] is the tourist part of the flow
 		findTouristFlows(Schedule.scheduledCapacities[t + 1], Network, Schedule.arcFlowAll[t + 1]);
 
 		Schedule.addArcFlowAll(t + 1, Network.numberODpairs, Network.numberODpaths, Network.ODpaths); //assumes all flows are 0
 		
 		cout << "recurrentFLOW ";
 		for (size_t r = 0; r < Network.numberODpaths[0]; ++r) {
+			cout << Schedule.binarySchedule[t][0] << "  ";
 				cout << Schedule.pathFlow[t + 1][0][r] << ' ';
 			} 
 		
