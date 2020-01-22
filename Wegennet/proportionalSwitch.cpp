@@ -12,9 +12,14 @@ using namespace std;
 void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedule) { //assumes at 0 no maintenance!
 	
 	vector<vector<double>> pathTimes(Network.numberODpairs, vector<double>());
+	//vector<vector<size_t>> availableRoutes(Network.numberODpairs, vector<size_t>());//od, routes available?
 	for(size_t od = 0; od < Network.numberODpairs; ++ od){
 			pathTimes[od] = vector<double>(Network.numberODpaths[od]);
-		}
+			//availableRoutes[od] = vector<size_t>(Network.numberODpaths[od]);//?
+	}
+	//vector<size_t> numAvailableRoutes(Network.numberODpairs, 0);
+	
+	
 	//cout << Schedule.pathFlow[0][0][0] << ' ';
 
 	vector<vector<double>> touristFlows(Network.vertices, vector<double>(Network.vertices, 0.0));
@@ -34,6 +39,9 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 		cout << t;
 		//calculate all arc times given current flows!
 		//cout << "Time: " << t << "\n";
+
+		//check which routes are open!
+
 		for (size_t od = 0; od < Network.numberODpairs; ++od) {
 			cout << " Pathtimes: ";
 
@@ -63,8 +71,8 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 		cout << "recurrentFLOW ";
 		for (size_t r = 0; r < Network.numberODpaths[0]; ++r) {
 			cout << Schedule.binarySchedule[t][0] << "  ";
-				cout << Schedule.pathFlow[t + 1][0][r] << ' ';
-			} 
+			cout << Schedule.pathFlow[t + 1][0][r] << ' ';
+		} 
 		
 		//for each OD pair
 			//for all paths

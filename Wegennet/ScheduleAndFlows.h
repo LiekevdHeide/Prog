@@ -9,6 +9,9 @@ public:
 	std::vector<std::vector<size_t>> binarySchedule;//time, activities planned (binary)
 	std::vector<std::vector<std::vector<double>>> scheduledCapacities;//time, capacities
 
+	std::vector<std::vector<std::vector<size_t>>> availableRoutes;//t, OD, routeNum
+	std::vector<std::vector<size_t>> numAvailableRoutes;//t, OD
+
 	//arc flows
 	std::vector<std::vector< std::vector<std::vector<double>>>> arcFlow; //time, ODpair, vertice a, vertice b
 

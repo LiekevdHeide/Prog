@@ -93,6 +93,9 @@
     <ClCompile Include="findTouristFlows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="adjustAvailableRoutes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RoadNetwork.h">

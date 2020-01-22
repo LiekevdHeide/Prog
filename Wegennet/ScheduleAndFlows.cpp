@@ -29,4 +29,20 @@ ScheduleAndFlows::ScheduleAndFlows(size_t T, size_t vertices, size_t M, size_t O
 		caps[t] = standardCapacities;
 	
 	scheduledCapacities = caps;
+
+	std::vector<std::vector<std::vector<size_t>>> constructAvailableRoutes(T, vector<vector<size_t>>(ODpairs, vector<size_t>()));
+	for(size_t t=0; t < T; ++t)
+		for(size_t od = 0; od < ODpairs; ++od)
+			for (size_t p = 0; p < numberODpaths[od]; ++p) {
+				constructAvailableRoutes[t][od].push_back(1);
+			}
+	availableRoutes = constructAvailableRoutes;
+
+	vector<vector<size_t>> constructNumAvailableRoutes(T, vector<size_t>(ODpairs, 1));
+	for(size_t t = 0; t < T; ++t)
+		for (size_t od = 0; od < ODpairs; ++od) {
+			constructNumAvailableRoutes[t][od] = numberODpaths[od];
+		}
+
+	numAvailableRoutes = constructNumAvailableRoutes;
 }

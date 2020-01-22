@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="adjustAvailableRoutes.cpp" />
     <ClCompile Include="binaryToCapacities.cpp" />
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
