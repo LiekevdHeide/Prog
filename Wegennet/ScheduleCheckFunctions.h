@@ -7,4 +7,6 @@
 void binaryToCapacities(size_t T, size_t M, const std::vector< std::vector<size_t>>& binarySchedule, const std::vector<std::vector<size_t>>& locations, std::vector< std::vector< std::vector<double>>>& resultingCapacities);
 
 //function that updates available routes:
-void adjustAvailableRoutes(size_t T, size_t M, size_t ODpairs, std::vector<size_t>& numberODpaths, std::vector<std::vector<std::vector<size_t>>>& ODpaths, const std::vector< std::vector<size_t>>& binarySchedule, const std::vector<std::vector<size_t>>& locations, std::vector<std::vector<std::vector<size_t>>> &availableRoutes, std::vector<std::vector<size_t>> &numAvailableRoutes);
+void adjustAvailableRoutes(size_t T, size_t M, size_t ODpairs, std::vector<size_t>& numberODpaths, std::vector<std::vector<std::vector<size_t>>>& ODpaths, const std::vector< std::vector<size_t>>& binarySchedule, const std::vector<std::vector<size_t>>& locations, std::vector<std::vector<std::vector<size_t>>>& maintenanceToRouteInterruption, std::vector<std::vector<std::vector<size_t>>>& availableRoutes, std::vector<std::vector<size_t>>& numAvailableRoutes);
+
+void findInterruptedRoutes(size_t M, const std::vector<std::vector<size_t>>& locations, size_t ODpairs, const std::vector<size_t>& numberODpaths, const std::vector<std::vector<std::vector<size_t>>>& ODpaths, std::vector<std::vector<std::vector<size_t>>>& interruptedRoutes);//set the routes interrupted for each maintenance activity);//find which routes are interrupted by the maintenance action.

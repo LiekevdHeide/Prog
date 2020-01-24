@@ -133,6 +133,7 @@
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
     <ClCompile Include="findGoodStepsize.cpp" />
+    <ClCompile Include="findInterruptedRoutes.cpp" />
     <ClCompile Include="findOptimalStepsize.cpp" />
     <ClCompile Include="findShortestPath.cpp" />
     <ClCompile Include="findTouristFlows.cpp" />

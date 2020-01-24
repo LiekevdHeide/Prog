@@ -6,6 +6,8 @@
 #include "MaintenanceActivities.h"
 #include "ScheduleAndFlows.h"
 
+#include "ScheduleCheckFunctions.h"
+
 #include "ConvexCombinations.h"
 #include "InitializationFunctions.h"
 #include "PSAP.h"
@@ -38,6 +40,9 @@ int main()
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
 	string maintenanceInput = whichComputer + "/maintenanceInputXYY.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices);
+
+	//find which maintenance interrupts which route:
+	findInterruptedRoutes(Maintenance.M, Maintenance.locationSets, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Maintenance.interruptedRoutes);
 
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
