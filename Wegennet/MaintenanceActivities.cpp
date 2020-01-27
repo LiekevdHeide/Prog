@@ -8,7 +8,7 @@
 
 
 using namespace std;
-MaintenanceActivities::MaintenanceActivities(string maintenanceInput, size_t vertices) {
+MaintenanceActivities::MaintenanceActivities(string maintenanceInput, size_t vertices, size_t ODpairs, vector<size_t> &numODroutes) {
 
 	ifstream readFrom(maintenanceInput);
 	assert(readFrom && "Wrong maintenance input doc");
@@ -54,5 +54,19 @@ MaintenanceActivities::MaintenanceActivities(string maintenanceInput, size_t ver
 		}
 	costReduction = reductions;
 
+
+
+	//initialize interruptedRoutes;
+	vector<vector<vector<size_t>>> initInterruptedRoutes(M, vector<vector<size_t>>(ODpairs, vector<size_t>()));
+	for(size_t m = 0; m < M; ++m)
+		for (size_t od = 0; od < ODpairs; ++od) {
+			cout << "r:" <<numODroutes[od]<< " ";
+			for (size_t r = 0; r < numODroutes[od]; ++r) {
+				cout << m << ":" << od << ":" << r << "  ";
+				initInterruptedRoutes[m][od].push_back(0);
+			}
+		}
+
+	interruptedRoutes = initInterruptedRoutes;
 	cout << "Created maintenance projects\n";
 }

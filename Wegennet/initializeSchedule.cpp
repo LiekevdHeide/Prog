@@ -26,7 +26,5 @@ void initializeSchedule(ScheduleAndFlows &Schedule, MaintenanceActivities &Maint
 	//change the available capacities in the network corr to the binary schedule.
 	binaryToCapacities(Maintenance.T, Maintenance.M, Schedule.binarySchedule, Maintenance.locationSets, Schedule.scheduledCapacities);
 
-	adjustAvailableRoutes();
-
 	return;
 }

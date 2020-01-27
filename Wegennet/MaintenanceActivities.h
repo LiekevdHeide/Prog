@@ -8,7 +8,7 @@ class MaintenanceActivities
 
 public:
 	//constructor!
-	MaintenanceActivities(string maintenanceInput, size_t vertices);
+	MaintenanceActivities(string maintenanceInput, size_t vertices, size_t ODpairs, vector<size_t>& ODroutes);
 
 	size_t M; //number of activities
 	size_t T; //time horizon

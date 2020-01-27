@@ -29,20 +29,20 @@ int main()
 	Timer time;
 
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "/roadInputXYY.txt";
+	string roadInput = whichComputer + "/roadInput.txt";
 
 	RoadNetwork Network(roadInput);
-
-	for (size_t n = 0; n < Network.numberODpairs; ++n) {
-		print2Dim(Network.ODpaths[n], Network.numberODpaths[n]);
-		cout << '\n';
-	}
+	
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "/maintenanceInputXYY.txt";
-	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices);
+	string maintenanceInput = whichComputer + "/maintenanceInput.txt";
+	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 
 	//find which maintenance interrupts which route:
 	findInterruptedRoutes(Maintenance.M, Maintenance.locationSets, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Maintenance.interruptedRoutes);
+	cout << '\n';
+	for (size_t m = 0; m < Maintenance.M; ++m) {
+		print2Dim(Maintenance.interruptedRoutes[m], Network.numberODpairs);//immediately fails
+	}
 
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
@@ -67,7 +67,9 @@ int main()
 	cout << "--------------Create initial schedule ----------------\n";
 
 	initializeSchedule(Schedule, Maintenance);
-	
+	adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes);
+
+
 	//start at equilibrium.
 	Schedule.arcFlow[0] = equilibrium.arcFlow[0];
 	Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
