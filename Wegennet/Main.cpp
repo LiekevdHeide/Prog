@@ -69,6 +69,10 @@ int main()
 	initializeSchedule(Schedule, Maintenance);
 	adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes);
 
+	for (size_t t = 0; t < 100; ++t) {
+		cout << t << "----\n";
+		print2Dim(Schedule.availableRoutes[t], Network.numberODpairs);
+	}
 
 	//start at equilibrium.
 	Schedule.arcFlow[0] = equilibrium.arcFlow[0];
@@ -86,12 +90,6 @@ int main()
 	//Schedule.arcFlowAll[0] = Schedule.arcFlow[0][0];
 	//Schedule.pathFlow[0][0] = { 5,5 };
 	
-	cout << "\n\n";
-	//print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
-	//for (size_t t = 0; t < Maintenance.T; ++t) {
-	//	print2Dim(Schedule.scheduledCapacities[t], Network.vertices);
-	//	cout << '\n';
-	//}
 
 	//cost function: return total travel time at a certain day, for a given schedule.
 
