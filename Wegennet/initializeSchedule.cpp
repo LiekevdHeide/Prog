@@ -19,7 +19,7 @@ void initializeSchedule(ScheduleAndFlows &Schedule, MaintenanceActivities &Maint
 		for (size_t d = 0; d < Maintenance.duration[m]; ++d) {
 			Schedule.binarySchedule[t + d][m] = 1;
 		}
-		t += Maintenance.duration[m];	
+		t += Maintenance.duration[m] + 1;	
 	}
 	//ADD CHECK IF STILL ALL DEMANDS POSSIBLE!
 

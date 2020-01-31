@@ -5,6 +5,7 @@
 
 #include "generalPrintingFunctions.h"
 
+#include <iostream>
 #include <algorithm>
 #include <vector>
 using namespace std;
@@ -38,13 +39,18 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 	
 	for (size_t t = 0; t < T - 1; ++t) {
 		//start with equilibrium at t=0;
-		cout << t;
+		cout << t << ' ';
+
+		for (size_t m = 0; m < Schedule.binarySchedule[t].size(); ++m) {
+			cout << Schedule.binarySchedule[t][m];
+		}
+		cout << ' ';
 		//calculate all arc times given current flows!
 		
 		//check which routes are open -> Schedule.availableRoutes.
 
 		for (size_t od = 0; od < Network.numberODpairs; ++od) {
-			cout << " Pathtimes: ";
+			cout << " Pt: ";
 			//---------------------------Calculate pathtimes at time t
 
 			//set all pathTimes to free flow time when no maintenance is scheduled:
@@ -54,11 +60,11 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 
 			//change pathtimes for available routes: based on both types of drivers.
 			for (size_t p = 0; p < Schedule.numAvailableRoutes[t][od]; ++p) {
-				pathTimes[od][p] = Network.pathTravelTime(Network.ODpaths[od][Schedule.availableRoutes[t][od][p]], Schedule.arcFlowAll[t], Schedule.scheduledCapacities[t]);//patharcs (for available route), flows, caps)
+				pathTimes[od][Schedule.availableRoutes[t][od][p]] = Network.pathTravelTime(Network.ODpaths[od][Schedule.availableRoutes[t][od][p]], Schedule.arcFlowAll[t], Schedule.scheduledCapacities[t]);//patharcs (for available route), flows, caps)
 				cout << pathTimes[od][p] << ' ';
 			}
-			//----------------------------Change recurring traffic flows at t+1
-
+			
+			//------------------------Find shortest path at t for all flow on closing path
 			flowAtClosingPath = 0.0;
 			size_t indexShortest = 0;
 		   //find flows on paths at t, which are unavailable at t+1!
@@ -73,7 +79,9 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 					}
 				}
 			}
-	
+			
+			//----------------------------Change recurring traffic flows at t+1
+
 			//change flows only for recurring drivers (so NOT tourists!), only consider changing from / to available paths at t+1
 			for (size_t p = 0; p < Schedule.numAvailableRoutes[t + 1][od]; ++p) {
 				//update pathflows based for all available at t + 1, based on t flows (FOR ALL AVAILABLE AT t and t + 1), only for non-tourists
@@ -81,13 +89,14 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 				//if route not available at t: flow is 0.0 so OK
 				Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] = Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][p]];//still excludes tourists.
 
-				for (size_t r = 0; r < Schedule.numAvailableRoutes[t + 1][od]; ++r) { // r is about flows at previous time
+				for (size_t r = 0; r < Schedule.numAvailableRoutes[t + 1][od]; ++r) { // if not available flow = 0
 					if (r != p) {
-						Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] += 0.001 * ( Schedule.pathFlow[t][od][Schedule.availableRoutes[t][od][r]] * max(pathTimes[od][r] - pathTimes[od][p], 0.0) - Schedule.pathFlow[t][od][Schedule.availableRoutes[t][od][p]] * max(pathTimes[od][p] - pathTimes[od][r], 0.0));
+						Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] += 0.0001 * ( Schedule.pathFlow[t][od][Schedule.availableRoutes[t][od][r]] * max(pathTimes[od][r] - pathTimes[od][p], 0.0) - Schedule.pathFlow[t][od][Schedule.availableRoutes[t][od][p]] * max(pathTimes[od][p] - pathTimes[od][r], 0.0));
 					}
 				}
 			}
 
+			cout << "ClPFlow: " << flowAtClosingPath << ' ';
 			//add flowAtClosingPath to shortest path at t (that is still available)
 			Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][indexShortest]] += flowAtClosingPath;
 
@@ -95,16 +104,20 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 		//------------------------------Find tourist traffic flows
 
 		//add tourists to flows at t+1, current value of arcFlowAll[t+1] is the tourist part of the flow
+		//FOR ALL ODs??
 		findTouristFlows(Schedule.scheduledCapacities[t + 1], Network, Schedule.arcFlowAll[t + 1]);
 
+		//from path flows to arc flows:
 		Schedule.addArcFlowAll(t + 1, Network.numberODpairs, Network.numberODpaths, Network.ODpaths); //assumes all flows are 0
 		
-		cout << "recurrentFLOW ";
-		for (size_t r = 0; r < Network.numberODpaths[0]; ++r) {
-			cout << Schedule.binarySchedule[t][0] << "  ";
-			cout << Schedule.pathFlow[t + 1][0][r] << ' ';
-		} 
-		
+		cout << "recFLOW ";
+		for (size_t od = 0; od < Network.numberODpairs; ++od) {
+			cout << "od:" <<  od << ' ';
+			for (size_t r = 0; r < Network.numberODpaths[0]; ++r) {
+				//cout << Schedule.binarySchedule[t][0] << "  ";
+				cout << Schedule.pathFlow[t + 1][od][r] << ' ';
+			}
+		}
 		//for each OD pair
 			//for all paths
 		//determine path time given all flows (using calculated time)
