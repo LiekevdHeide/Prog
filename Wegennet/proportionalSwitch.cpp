@@ -8,10 +8,14 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedule) { //assumes at 0 no maintenance!
 	
+	//cout << fixed;
+	cout << setprecision(3);
+
 	vector<vector<double>> pathTimes(Network.numberODpairs, vector<double>());
 	//vector<vector<size_t>> availableRoutes(Network.numberODpairs, vector<size_t>());//od, routes available?
 	for(size_t od = 0; od < Network.numberODpairs; ++ od){

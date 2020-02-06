@@ -11,6 +11,7 @@
 #include "ConvexCombinations.h"
 #include "InitializationFunctions.h"
 #include "PSAP.h"
+#include "DepthFirstSearchFunctions.h"
 
 
 #include <vector>
@@ -32,6 +33,7 @@ int main()
 	string roadInput = whichComputer + "/roadInput.txt";
 
 	RoadNetwork Network(roadInput);
+	depthFirstSearch();
 	
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
 	string maintenanceInput = whichComputer + "/maintenanceInput.txt";

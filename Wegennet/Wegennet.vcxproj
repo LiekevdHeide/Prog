@@ -132,6 +132,9 @@
     <ClCompile Include="binaryToCapacities.cpp" />
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
+    <ClCompile Include="depthFirstSearch.cpp" />
+    <ClCompile Include="dfsRecursive.cpp" />
+    <ClCompile Include="findAllPaths.cpp" />
     <ClCompile Include="findGoodStepsize.cpp" />
     <ClCompile Include="findInterruptedRoutes.cpp" />
     <ClCompile Include="findOptimalStepsize.cpp" />
@@ -154,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConvexCombinations.h" />
+    <ClInclude Include="DepthFirstSearchFunctions.h" />
     <ClInclude Include="generalPrintingFunctions.h" />
     <ClInclude Include="InitializationFunctions.h" />
     <ClInclude Include="MaintenanceActivities.h" />

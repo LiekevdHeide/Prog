@@ -99,6 +99,15 @@
     <ClCompile Include="findInterruptedRoutes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="depthFirstSearch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dfsRecursive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="findAllPaths.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RoadNetwork.h">
@@ -126,6 +135,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PSAP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthFirstSearchFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
