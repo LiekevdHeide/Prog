@@ -19,12 +19,12 @@ RoadNetwork::RoadNetwork(string inputDoc) {
 	readFrom >> numberODpairs;
 	readFrom >> touristPercentage;
 
-	vector<size_t> numPaths(numberODpairs, 0);
-	for (size_t n = 0; n < numberODpairs; ++n) {
-		readFrom >> numPaths[n];
-	}
-	numberODpaths = numPaths;
-
+	//vector<size_t> numPaths(numberODpairs, 0);
+	//for (size_t n = 0; n < numberODpairs; ++n) {
+	//	readFrom >> numPaths[n];
+	//}
+	//numberODpaths = numPaths;
+	
 	vector<size_t> numPairs(numberODpairs * 2, 0);
 	for (size_t n = 0; n < 2 * numberODpairs; ++n) {
 			readFrom >> numPairs[n];
@@ -50,7 +50,5 @@ RoadNetwork::RoadNetwork(string inputDoc) {
 		}
 	freeFlowTimes = readMatrix;
 
-	//function to calculate which paths!
-	readPaths(readFrom);
 	cout << "Created network\n";
 }

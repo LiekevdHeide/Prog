@@ -9,7 +9,8 @@ using namespace std;
 class RoadNetwork
 {
 private:
-	void readPaths(ifstream& read) {
+	//created alternative for this: (depthFirstSearch.cpp)
+	/*void readPaths(ifstream& read) {
 		//for now assume we have the paths in the file!
 
 		vector<vector<vector<size_t>>> ODroutes;
@@ -36,7 +37,7 @@ private:
 		for (size_t n = 0; n < numberODpairs; ++n) {
 			numberODpaths[n] = ODpaths[n].size();
 		}
-	}
+	}*/
 
 public:
 	//constructor!

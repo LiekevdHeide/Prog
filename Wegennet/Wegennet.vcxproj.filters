@@ -108,6 +108,9 @@
     <ClCompile Include="findAllPaths.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="print2Dim0.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RoadNetwork.h">

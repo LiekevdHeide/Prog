@@ -65,7 +65,7 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 			//change pathtimes for available routes: based on both types of drivers.
 			for (size_t p = 0; p < Schedule.numAvailableRoutes[t][od]; ++p) {
 				pathTimes[od][Schedule.availableRoutes[t][od][p]] = Network.pathTravelTime(Network.ODpaths[od][Schedule.availableRoutes[t][od][p]], Schedule.arcFlowAll[t], Schedule.scheduledCapacities[t]);//patharcs (for available route), flows, caps)
-				cout << pathTimes[od][p] << ' ';
+				cout << Schedule.availableRoutes[t][od][p]<< ':' << pathTimes[od][p] << ' ';
 			}
 			
 			//------------------------Find shortest path at t for all flow on closing path
@@ -100,7 +100,7 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 				}
 			}
 
-			cout << "ClPFlow: " << flowAtClosingPath << ' ';
+			cout << "ClPFlow:" << Schedule.availableRoutes[t + 1][od][indexShortest] << ' ' << flowAtClosingPath << ' ';
 			//add flowAtClosingPath to shortest path at t (that is still available)
 			Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][indexShortest]] += flowAtClosingPath;
 
@@ -119,7 +119,15 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 			cout << "od:" <<  od << ' ';
 			for (size_t r = 0; r < Network.numberODpaths[0]; ++r) {
 				//cout << Schedule.binarySchedule[t][0] << "  ";
-				cout << Schedule.pathFlow[t + 1][od][r] << ' ';
+				if (Schedule.pathFlow[t + 1][od][r] < 0.00001 && Schedule.pathFlow[t + 1][od][r] > -0.00001) {
+					cout << "0.00" << ' ';
+				}
+				//else if (Schedule.pathFlow[t + 1][od][r] < -0.0001) {
+				//	cerr << "\n\nERR neg flow:" << t + 1 << ' ' << od << ' ' << r << ' ' << Schedule.pathFlow[t + 1][od][r]<< "\n\n\n";
+				//}
+				else {
+					cout << Schedule.pathFlow[t + 1][od][r] << ' ';
+				}
 			}
 		}
 		//for each OD pair

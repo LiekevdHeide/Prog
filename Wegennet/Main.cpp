@@ -33,7 +33,7 @@ int main()
 	string roadInput = whichComputer + "/roadInput.txt";
 
 	RoadNetwork Network(roadInput);
-	depthFirstSearch();
+	depthFirstSearch(Network);
 	
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
 	string maintenanceInput = whichComputer + "/maintenanceInput.txt";
@@ -71,7 +71,7 @@ int main()
 	initializeSchedule(Schedule, Maintenance);
 	adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes);
 
-	for (size_t t = 0; t < 100; ++t) {
+	for (size_t t = 0; t < Maintenance.T; ++t) {
 		cout << t << "----\n";
 		print2Dim(Schedule.availableRoutes[t], Network.numberODpairs);
 	}

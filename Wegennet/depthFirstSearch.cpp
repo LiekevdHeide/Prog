@@ -5,14 +5,14 @@
 
 using namespace std;
 
-void depthFirstSearch(RoadNetwork Network) {
-
+void depthFirstSearch(RoadNetwork &Network) {
+	cout << "Found routes ";
 	for (size_t od = 0; od < Network.numberODpairs; ++od) {
-
-		
-		findAllPaths(Network.ODpairs[2 * od], Network.ODpairs[2 * od + 1]);
+		cout << od << ":\n";
+		findAllPaths(od, Network);
 
 	}
+
 
 
 	return;

@@ -1,4 +1,5 @@
 #include "ScheduleCheckFunctions.h"
+#include "generalPrintingFunctions.h"
 
 #include <vector>
 #include <numeric> //for iota
@@ -25,7 +26,7 @@ void adjustAvailableRoutes(size_t T, size_t M, size_t ODpairs, vector<size_t> &n
 				if (binarySchedule[t][m] > 0) {
 					for (size_t a = 0; a < numberODpaths[od]; ++a) {
 						if (maintenanceToRouteInterruption[m][od][a] == 1) {//if it is interrupted
-							availables[a] = a;//remove from availables
+							//remove from availables
 							locRoute = find(availables.begin(), availables.end(), a);
 							if (locRoute != availables.end()) {
 								availables.erase(locRoute);
@@ -37,8 +38,9 @@ void adjustAvailableRoutes(size_t T, size_t M, size_t ODpairs, vector<size_t> &n
 
 			availableRoutes[t][od] = availables;
 			numAvailableRoutes[t][od] = availableRoutes[t][od].size();
+			//print2Dim(availableRoutes[t], ODpairs);
 		}
-
+		
 
 	return;
 }
