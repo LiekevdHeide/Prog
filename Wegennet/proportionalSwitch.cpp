@@ -13,17 +13,12 @@ using namespace std;
 
 void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedule) { //assumes at 0 no maintenance!
 	
-	//cout << fixed;
 	cout << setprecision(3);
 
 	vector<vector<double>> pathTimes(Network.numberODpairs, vector<double>());
-	//vector<vector<size_t>> availableRoutes(Network.numberODpairs, vector<size_t>());//od, routes available?
 	for(size_t od = 0; od < Network.numberODpairs; ++ od){
 			pathTimes[od] = vector<double>(Network.numberODpaths[od]);//init to eq time
-			//availableRoutes[od] = vector<size_t>(Network.numberODpaths[od]);//?
-	}
-	//vector<size_t> numAvailableRoutes(Network.numberODpairs, 0);
-	
+	}	
 	
 	vector<vector<double>> touristFlows(Network.vertices, vector<double>(Network.vertices, 0.0));
 
@@ -33,6 +28,7 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 	//arcflow input is ONLY THE TOURIST IN EQUILIBRIUM FLOW
 
 	//pathTime is init to freeFlow time -> if not available at t, but used at t+1: time is eq time
+	//pathTime is used to determine flows at t + 1 (so equals path durations at t)
 
 	//subtract the tourists from the path flows:
 	for(size_t od = 0; od < Network.numberODpairs; ++od)
@@ -43,10 +39,10 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 	
 	for (size_t t = 0; t < T - 1; ++t) {
 		//start with equilibrium at t=0;
-		cout << t << ' ';
+		cout << t + 1 << ' ';
 
 		for (size_t m = 0; m < Schedule.binarySchedule[t].size(); ++m) {
-			cout << Schedule.binarySchedule[t][m];
+			cout << Schedule.binarySchedule[t + 1][m];
 		}
 		cout << ' ';
 		//calculate all arc times given current flows!
@@ -54,7 +50,7 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 		//check which routes are open -> Schedule.availableRoutes.
 
 		for (size_t od = 0; od < Network.numberODpairs; ++od) {
-			cout << " Pt: ";
+			cout << " Pt-1: ";
 			//---------------------------Calculate pathtimes at time t
 
 			//set all pathTimes to free flow time when no maintenance is scheduled:
@@ -70,17 +66,18 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 			
 			//------------------------Find shortest path at t for all flow on closing path
 			flowAtClosingPath = 0.0;
-			size_t indexShortest = 0;
+			
 		   //find flows on paths at t, which are unavailable at t+1!
 			for (size_t p = 0; p < Schedule.numAvailableRoutes[t][od]; ++p) {
 				if (find(Schedule.availableRoutes[t + 1][od].begin(), Schedule.availableRoutes[t + 1][od].end(), Schedule.availableRoutes[t][od][p]) == Schedule.availableRoutes[t + 1][od].end()) {
 					flowAtClosingPath += Schedule.pathFlow[t][od][p];
 				}
-				else {
+			}
+			size_t indexShortest = 0;
+			for(size_t p = 0; p < Schedule.numAvailableRoutes[t + 1][od]; ++p){
 					//find shortest path at t (which is available at t+1) and add flowAtClosingPath
-					if (pathTimes[od][p] < pathTimes[od][indexShortest]) {
+				if (pathTimes[od][Schedule.availableRoutes[t + 1][od][p]] < pathTimes[od][Schedule.availableRoutes[t + 1][od][indexShortest]]) {
 						indexShortest = p;
-					}
 				}
 			}
 			
@@ -95,7 +92,7 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 
 				for (size_t r = 0; r < Schedule.numAvailableRoutes[t + 1][od]; ++r) { // if not available flow = 0
 					if (r != p) {
-						Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] += 0.0001 * ( Schedule.pathFlow[t][od][Schedule.availableRoutes[t][od][r]] * max(pathTimes[od][r] - pathTimes[od][p], 0.0) - Schedule.pathFlow[t][od][Schedule.availableRoutes[t][od][p]] * max(pathTimes[od][p] - pathTimes[od][r], 0.0));
+						Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] += 0.0001 * ( Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][r]] * max(pathTimes[od][r] - pathTimes[od][p], 0.0) - Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][p]] * max(pathTimes[od][p] - pathTimes[od][r], 0.0));
 					}
 				}
 			}
@@ -122,9 +119,9 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 				if (Schedule.pathFlow[t + 1][od][r] < 0.00001 && Schedule.pathFlow[t + 1][od][r] > -0.00001) {
 					cout << "0.00" << ' ';
 				}
-				//else if (Schedule.pathFlow[t + 1][od][r] < -0.0001) {
-				//	cerr << "\n\nERR neg flow:" << t + 1 << ' ' << od << ' ' << r << ' ' << Schedule.pathFlow[t + 1][od][r]<< "\n\n\n";
-				//}
+				else if (Schedule.pathFlow[t + 1][od][r] < -0.0001) {
+					cerr << "\n\nERR neg flow:" << t + 1 << ' ' << od << ' ' << r << ' ' << Schedule.pathFlow[t + 1][od][r]<< "\n\n\n";
+				}
 				else {
 					cout << Schedule.pathFlow[t + 1][od][r] << ' ';
 				}
