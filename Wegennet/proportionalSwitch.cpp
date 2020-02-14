@@ -70,7 +70,7 @@ void proportionalSwitch(size_t T, RoadNetwork &Network, ScheduleAndFlows &Schedu
 		   //find flows on paths at t, which are unavailable at t+1!
 			for (size_t p = 0; p < Schedule.numAvailableRoutes[t][od]; ++p) {
 				if (find(Schedule.availableRoutes[t + 1][od].begin(), Schedule.availableRoutes[t + 1][od].end(), Schedule.availableRoutes[t][od][p]) == Schedule.availableRoutes[t + 1][od].end()) {
-					flowAtClosingPath += Schedule.pathFlow[t][od][p];
+					flowAtClosingPath += Schedule.pathFlow[t][od][Schedule.availableRoutes[t][od][p]];
 				}
 			}
 			size_t indexShortest = 0;

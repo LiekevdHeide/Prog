@@ -13,13 +13,13 @@ void initializeSchedule(ScheduleAndFlows &Schedule, MaintenanceActivities &Maint
 	size_t t = 10; 
 	for (size_t m = 0; m < Maintenance.M; ++m) {
 		if (t > (Maintenance.T - Maintenance.duration[m])) {
-			t = 1;
+			t = 10;
 		}
 		cout << Maintenance.duration[m] << ' ';
 		for (size_t d = 0; d < Maintenance.duration[m]; ++d) {
 			Schedule.binarySchedule[t + d][m] = 1;
 		}
-		t += Maintenance.duration[m] + 1;	
+		t += Maintenance.duration[m] ;	
 	}
 	//ADD CHECK IF STILL ALL DEMANDS POSSIBLE!
 
