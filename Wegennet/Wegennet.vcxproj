@@ -129,12 +129,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="adjustAvailableRoutes.cpp" />
+    <ClCompile Include="adjustingTrafficflows.cpp" />
     <ClCompile Include="binaryToCapacities.cpp" />
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
     <ClCompile Include="depthFirstSearch.cpp" />
+    <ClCompile Include="determineFlowClosingPaths.cpp" />
     <ClCompile Include="dfsRecursive.cpp" />
     <ClCompile Include="findAllPaths.cpp" />
+    <ClCompile Include="findAlternativePathRecurringDrivers.cpp" />
     <ClCompile Include="findGoodStepsize.cpp" />
     <ClCompile Include="findInterruptedRoutes.cpp" />
     <ClCompile Include="findOptimalStepsize.cpp" />
@@ -155,6 +158,7 @@
     <ClCompile Include="proportionalSwitch.cpp" />
     <ClCompile Include="RoadNetwork.cpp" />
     <ClCompile Include="ScheduleAndFlows.cpp" />
+    <ClCompile Include="updateExpectedPathTimes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConvexCombinations.h" />

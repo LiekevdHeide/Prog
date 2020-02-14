@@ -97,7 +97,7 @@ int main()
 
 
 	//dynamic adjustment function: PSAP
-	proportionalSwitch(Maintenance.T, Network, Schedule);
+	adjustingTrafficFlows(Maintenance.T, Network, Schedule);
 
 	//implement a heuristic GA/ALNS?
 

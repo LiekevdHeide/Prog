@@ -5,6 +5,13 @@ using namespace std;
 
 void findTouristFlows(vector<vector<double>>& scheduledCapacities, RoadNetwork& Roads, vector<vector<double>>& touristFlows) { //at one time!
 
+	//for all scheduled maintenance, check locations
+		//set flow at this location to 0
+				//add to alternative arcs as determined a priori
+
+
+
+
 	//for implemented maintenance plan
 	vector<vector<double>> zeroFlows = vector<vector<double>>(Roads.vertices, vector<double>(Roads.vertices, 0.0));
 	double shortestRouteTime;

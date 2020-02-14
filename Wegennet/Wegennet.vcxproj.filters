@@ -28,6 +28,9 @@
     <Filter Include="Source Files\ConvexCombi">
       <UniqueIdentifier>{845077c5-e2b2-40fd-b636-8df477f4a36b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\PSAP">
+      <UniqueIdentifier>{4b2a0d7f-7406-4086-8806-3b4625cfb5ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -87,12 +90,6 @@
     <ClCompile Include="findShortestPath.cpp">
       <Filter>Source Files\ConvexCombi</Filter>
     </ClCompile>
-    <ClCompile Include="proportionalSwitch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="findTouristFlows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="adjustAvailableRoutes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -110,6 +107,24 @@
     </ClCompile>
     <ClCompile Include="print2Dim0.cpp">
       <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="proportionalSwitch.cpp">
+      <Filter>Source Files\PSAP</Filter>
+    </ClCompile>
+    <ClCompile Include="findTouristFlows.cpp">
+      <Filter>Source Files\PSAP</Filter>
+    </ClCompile>
+    <ClCompile Include="updateExpectedPathTimes.cpp">
+      <Filter>Source Files\PSAP</Filter>
+    </ClCompile>
+    <ClCompile Include="adjustingTrafficflows.cpp">
+      <Filter>Source Files\PSAP</Filter>
+    </ClCompile>
+    <ClCompile Include="determineFlowClosingPaths.cpp">
+      <Filter>Source Files\PSAP</Filter>
+    </ClCompile>
+    <ClCompile Include="findAlternativePathRecurringDrivers.cpp">
+      <Filter>Source Files\PSAP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
