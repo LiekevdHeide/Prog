@@ -11,13 +11,13 @@ void dfsRecursive(size_t v, size_t destination, size_t vertices, const vector<ve
 	if (v == destination) {
 		//end and save path
 		for (size_t i = 0; i < pathIndex; ++i) {
-			cout << path[i] << ' ';
+			//cout << path[i] << ' ';
 		}
 		finalPaths.push_back(path);
 		for (size_t i = pathIndex; i < path.size(); ++i) {
 			finalPaths[finalPaths.size() - 1].pop_back();
 		}
-		cout << '\n';
+		//cout << '\n';
 	}
 	else {
 

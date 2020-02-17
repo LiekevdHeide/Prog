@@ -33,11 +33,13 @@ int main()
 	string roadInput = whichComputer + "/roadInput.txt";
 
 	RoadNetwork Network(roadInput);
+	//find all routes
 	depthFirstSearch(Network);
 	
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
 	string maintenanceInput = whichComputer + "/maintenanceInput.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
+	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
 	//find which maintenance interrupts which route:
 	findInterruptedRoutes(Maintenance.M, Maintenance.locationSets, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Maintenance.interruptedRoutes);
@@ -45,8 +47,6 @@ int main()
 	for (size_t m = 0; m < Maintenance.M; ++m) {
 		print2Dim(Maintenance.interruptedRoutes[m], Network.numberODpairs);//immediately fails
 	}
-
-	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
 	//class? with schedule / capacities per link per time unit?
 	ScheduleAndFlows Schedule(Maintenance.T, Network.vertices, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.standardCapacities);
@@ -80,23 +80,26 @@ int main()
 	Schedule.arcFlow[0] = equilibrium.arcFlow[0];
 	Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
 	Schedule.pathFlow[0] = equilibrium.pathFlow[0];
-
+	
 	for (size_t t = 1; t < Maintenance.T; ++t) 
-		for(size_t a = 0; a < Network.vertices; ++a)
-			for(size_t b=0; b < Network.vertices; ++b){
+		for (size_t a = 0; a < Network.vertices; ++a) {
+			for (size_t b = 0; b < Network.vertices; ++b) {
 				Schedule.arcFlowAll[t][a][b] = Network.touristPercentage * equilibrium.arcFlowAll[0][a][b];
 			}
+		}
 
-	//Schedule.arcFlow[0][0] = {{0, 5, 5, 0}, {0, 0, 0, 5}, {0, 0, 0, 5}, {0, 0, 0, 0}};
-	print2Dim(Schedule.arcFlow[0][0], Network.vertices);
-	//Schedule.arcFlowAll[0] = Schedule.arcFlow[0][0];
-	//Schedule.pathFlow[0][0] = { 5,5 };
-	
-
+	cout << "-----------------\n";
+	cout << "Equilibrium all flows:\n";
+	print2Dim(Schedule.arcFlowAll[0], Network.vertices);
+	cout << "-----------------\n";
+	cout << "Equilibrium tourist flows:\n";
+	print2Dim(Schedule.arcFlowAll[1], Network.vertices);
+	cout << "-----------------\n";
+		
 	//cost function: return total travel time at a certain day, for a given schedule.
-
-
+	
 	//dynamic adjustment function: PSAP
+	//CHECK TIMING!!!
 	adjustingTrafficFlows(Maintenance.T, Network, Schedule);
 
 	//implement a heuristic GA/ALNS?

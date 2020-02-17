@@ -31,6 +31,12 @@
     <Filter Include="Source Files\PSAP">
       <UniqueIdentifier>{4b2a0d7f-7406-4086-8806-3b4625cfb5ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\DepthFirstSearch">
+      <UniqueIdentifier>{d3e50246-d15a-4a6d-b110-8997ef3ef23c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Classes">
+      <UniqueIdentifier>{f526e9df-7968-47b5-b1db-0648686f9d7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -96,22 +102,10 @@
     <ClCompile Include="findInterruptedRoutes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="depthFirstSearch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dfsRecursive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="findAllPaths.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="print2Dim0.cpp">
       <Filter>Source Files\Debugging</Filter>
     </ClCompile>
     <ClCompile Include="proportionalSwitch.cpp">
-      <Filter>Source Files\PSAP</Filter>
-    </ClCompile>
-    <ClCompile Include="findTouristFlows.cpp">
       <Filter>Source Files\PSAP</Filter>
     </ClCompile>
     <ClCompile Include="updateExpectedPathTimes.cpp">
@@ -126,22 +120,28 @@
     <ClCompile Include="findAlternativePathRecurringDrivers.cpp">
       <Filter>Source Files\PSAP</Filter>
     </ClCompile>
+    <ClCompile Include="depthFirstSearch.cpp">
+      <Filter>Source Files\DepthFirstSearch</Filter>
+    </ClCompile>
+    <ClCompile Include="dfsRecursive.cpp">
+      <Filter>Source Files\DepthFirstSearch</Filter>
+    </ClCompile>
+    <ClCompile Include="findAllPaths.cpp">
+      <Filter>Source Files\DepthFirstSearch</Filter>
+    </ClCompile>
+    <ClCompile Include="findAlternativeArcFlowsTourists.cpp">
+      <Filter>Source Files\PSAP</Filter>
+    </ClCompile>
+    <ClCompile Include="findShortestAlternativeTourist.cpp">
+      <Filter>Source Files\DepthFirstSearch</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RoadNetwork.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MaintenanceActivities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="performanceTimer.h">
       <Filter>Header Files\Debug</Filter>
     </ClInclude>
     <ClInclude Include="generalPrintingFunctions.h">
       <Filter>Header Files\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="ScheduleAndFlows.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConvexCombinations.h">
       <Filter>Header Files</Filter>
@@ -157,6 +157,15 @@
     </ClInclude>
     <ClInclude Include="DepthFirstSearchFunctions.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MaintenanceActivities.h">
+      <Filter>Header Files\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ScheduleAndFlows.h">
+      <Filter>Header Files\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadNetwork.h">
+      <Filter>Header Files\Classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

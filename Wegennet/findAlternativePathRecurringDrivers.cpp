@@ -15,7 +15,7 @@ size_t findAlternativePathRecurringDrivers(ScheduleAndFlows Schedule, size_t t, 
 		}
 	}
 
-	cout << Schedule.availableRoutes[t + 1][od][indexShortest] << ' ';
+	//cout << Schedule.availableRoutes[t + 1][od][indexShortest] << ' ';
 
 	return indexShortest;
 }

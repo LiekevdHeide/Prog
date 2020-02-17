@@ -138,11 +138,12 @@
     <ClCompile Include="dfsRecursive.cpp" />
     <ClCompile Include="findAllPaths.cpp" />
     <ClCompile Include="findAlternativePathRecurringDrivers.cpp" />
+    <ClCompile Include="findAlternativeArcFlowsTourists.cpp" />
     <ClCompile Include="findGoodStepsize.cpp" />
     <ClCompile Include="findInterruptedRoutes.cpp" />
     <ClCompile Include="findOptimalStepsize.cpp" />
+    <ClCompile Include="findShortestAlternativeTourist.cpp" />
     <ClCompile Include="findShortestPath.cpp" />
-    <ClCompile Include="findTouristFlows.cpp" />
     <ClCompile Include="initializeSchedule.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MaintenanceActivities.cpp" />

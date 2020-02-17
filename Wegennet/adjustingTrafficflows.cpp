@@ -21,7 +21,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 		pathTimes[od] = vector<double>(Network.numberODpaths[od]);//init to eq time
 	}
 
-	vector<vector<double>> touristFlows(Network.vertices, vector<double>(Network.vertices, 0.0));//tourist flows per arc
+	//vector<vector<double>> touristFlows(Network.vertices, vector<double>(Network.vertices, 0.0));//tourist flows per arc
 
 	double flowAtClosingPath = 0.0;
 	//check which routes are open -> Schedule.availableRoutes.
@@ -50,13 +50,16 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 
 		//------------------------------Find tourist traffic flows
 
+
 		//add alternative routes for tourists to flows at t+1, current value of arcFlowAll[t+1] is the tourist part of the flow
-		findTouristFlows(Schedule.scheduledCapacities[t + 1], Network, Schedule.arcFlowAll[t + 1]);
-	
+
+		//adjust arcFlowAll
+		findAlternativeArcFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.arcFlowAll[t+1]);
+
 
 		//------------------------------Recurrent drivers updating:
 		for (size_t od = 0; od < Network.numberODpairs; ++od) {
-			cout << " Pt-1: ";
+			//cout << " Pt-1: ";
 			//Calculate pathtimes at time t (to base decisions t + 1 on)			
 			updateExpectedPathTimes(Network, Schedule, t, od, pathTimes);
 
@@ -88,7 +91,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 				}
 			}
 		}
-
+		
 		//from path flows to arc flows:			 updates Schedule.arcFlowAll[t+1] using pathflow[t+1]
 		//adjust arcFlowAll (which already contains touristFlows), using pathFlow[t+1] (which is the recurrent flows)
 		Schedule.addArcFlowAll(t + 1, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);

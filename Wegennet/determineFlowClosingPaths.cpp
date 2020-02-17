@@ -17,7 +17,7 @@ double determineFlowClosingPaths(ScheduleAndFlows &Schedule, size_t t, size_t od
 		}
 	}
 	
-	cout << "ClPFlow:" << flowAtClosingPath << '@';
+	//cout << "ClPFlow:" << flowAtClosingPath << '@';
 
 	return flowAtClosingPath;
 }

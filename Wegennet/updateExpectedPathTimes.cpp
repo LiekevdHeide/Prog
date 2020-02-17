@@ -17,7 +17,7 @@ void updateExpectedPathTimes(RoadNetwork &Network, ScheduleAndFlows &Schedule, s
 	//change pathtimes for available routes: based on both types of drivers.
 	for (size_t p = 0; p < Schedule.numAvailableRoutes[t][od]; ++p) {
 		pathTimes[od][Schedule.availableRoutes[t][od][p]] = Network.pathTravelTime(Network.ODpaths[od][Schedule.availableRoutes[t][od][p]], Schedule.arcFlowAll[t], Schedule.scheduledCapacities[t]);//patharcs (for available route), flows, caps)
-		cout << Schedule.availableRoutes[t][od][p] << ':' << pathTimes[od][p] << ' ';
+		//cout << Schedule.availableRoutes[t][od][p] << ':' << pathTimes[od][p] << ' ';
 	}
 
 	return;
