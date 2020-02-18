@@ -37,6 +37,9 @@
     <Filter Include="Header Files\Classes">
       <UniqueIdentifier>{f526e9df-7968-47b5-b1db-0648686f9d7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\PrintingFunctions">
+      <UniqueIdentifier>{0cff1adf-11c1-40c3-b246-fa1aa520672e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -65,9 +68,6 @@
     </ClCompile>
     <ClCompile Include="print2DimtoFileDouble1.cpp">
       <Filter>Source Files\Debugging</Filter>
-    </ClCompile>
-    <ClCompile Include="findOptimalStepsize.cpp">
-      <Filter>Source Files\Not Used</Filter>
     </ClCompile>
     <ClCompile Include="MaintenanceActivities.cpp">
       <Filter>Source Files\Constructors</Filter>
@@ -135,6 +135,27 @@
     <ClCompile Include="findShortestAlternativeTourist.cpp">
       <Filter>Source Files\DepthFirstSearch</Filter>
     </ClCompile>
+    <ClCompile Include="bruteForceSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wholeScheduleToMaintenance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="print2DimDouble0.cpp">
+      <Filter>Source Files\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="totalTravelTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="costsSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="printTraffic.cpp">
+      <Filter>Source Files\PrintingFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="printSchedule.cpp">
+      <Filter>Source Files\PrintingFunctions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">
@@ -166,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="RoadNetwork.h">
       <Filter>Header Files\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="costCalculationFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="printingResults.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

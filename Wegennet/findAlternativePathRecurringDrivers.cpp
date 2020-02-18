@@ -5,7 +5,7 @@
 
 using namespace std;
 
-size_t findAlternativePathRecurringDrivers(ScheduleAndFlows Schedule, size_t t, size_t od, vector<vector<double>> pathTimes) {
+size_t findAlternativePathRecurringDrivers(ScheduleAndFlows &Schedule, size_t t, size_t od, vector<vector<double>> pathTimes) {
 
 	size_t indexShortest = 0;
 	for (size_t p = 0; p < Schedule.numAvailableRoutes[t + 1][od]; ++p) {

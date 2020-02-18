@@ -1,12 +1,13 @@
 #include "ScheduleAndFlows.h"
 #include "MaintenanceActivities.h"
+#include "RoadNetwork.h"
 
 #include "InitializationFunctions.h"
 #include "ScheduleCheckFunctions.h"
 
 #include <iostream>
 
-void initializeSchedule(ScheduleAndFlows &Schedule, MaintenanceActivities &Maintenance){
+void initializeSchedule(ScheduleAndFlows &Schedule, MaintenanceActivities &Maintenance, RoadNetwork &Network){
 	//create initial schedule in the ScheduleAndFlows class (binary)
 	
 	//For now quick and easy, are better initialization heuristics +- 
@@ -24,7 +25,7 @@ void initializeSchedule(ScheduleAndFlows &Schedule, MaintenanceActivities &Maint
 	//ADD CHECK IF STILL ALL DEMANDS POSSIBLE!
 
 	//change the available capacities in the network corr to the binary schedule.
-	binaryToCapacities(Maintenance.T, Maintenance.M, Schedule.binarySchedule, Maintenance.locationSets, Schedule.scheduledCapacities);
+	binaryToCapacities(Maintenance.T, Maintenance.M, Schedule.binarySchedule, Maintenance.locationSets, Network.standardCapacities , Schedule.scheduledCapacities);
 
 	return;
 }

@@ -3,6 +3,7 @@
 #include <fstream>
 
 void print2Dim(std::vector<std::vector<size_t>> toPrint);
+void print2Dim(std::vector<std::vector<double>> toPrint);
 
 void print2Dim(std::vector<std::vector<size_t>> toPrint, size_t dim1, size_t dim2);
 void print2Dim(std::vector<std::vector<size_t>> toPrint, size_t dim1, size_t dim2, std::ofstream&);

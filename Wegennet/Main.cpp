@@ -7,6 +7,8 @@
 #include "ScheduleAndFlows.h"
 
 #include "ScheduleCheckFunctions.h"
+#include "costCalculationFunctions.h"
+#include "printingResults.h"
 
 #include "ConvexCombinations.h"
 #include "InitializationFunctions.h"
@@ -55,6 +57,7 @@ int main()
 
 	//write results to:
 	ofstream write(whichComputer + "/Results.txt");  //, std::ios::app for adding to end of file
+	write << roadInput << ' ' << maintenanceInput << '\n';
 
 	cout << "Reading time: " << time.elapsed() << " seconds \n";
 	time.reset();
@@ -68,40 +71,61 @@ int main()
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
 
-	initializeSchedule(Schedule, Maintenance);
+	initializeSchedule(Schedule, Maintenance, Network);
 	adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes);
 
-	for (size_t t = 0; t < Maintenance.T; ++t) {
-		cout << t << "----\n";
-		print2Dim(Schedule.availableRoutes[t], Network.numberODpairs);
-	}
+	//for all new schedules?
+	for (size_t s = 0; s < 2000000; ++s) { // s < time periods ^ maintenance activities
+		//adjust schedule
+		if (bruteForceSchedule(Schedule, Maintenance, Network, s)) {//start from t = 1 (t = 0 is equilibrium!)
 
-	//start at equilibrium.
-	Schedule.arcFlow[0] = equilibrium.arcFlow[0];
-	Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
-	Schedule.pathFlow[0] = equilibrium.pathFlow[0];
-	
-	for (size_t t = 1; t < Maintenance.T; ++t) 
-		for (size_t a = 0; a < Network.vertices; ++a) {
-			for (size_t b = 0; b < Network.vertices; ++b) {
-				Schedule.arcFlowAll[t][a][b] = Network.touristPercentage * equilibrium.arcFlowAll[0][a][b];
-			}
+			//start at equilibrium.
+			Schedule.arcFlow[0] = equilibrium.arcFlow[0];
+			Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
+			Schedule.pathFlow[0] = equilibrium.pathFlow[0];
+
+			for (size_t t = 1; t < Maintenance.T; ++t)
+				for (size_t a = 0; a < Network.vertices; ++a) {
+					for (size_t b = 0; b < Network.vertices; ++b) {
+						Schedule.arcFlowAll[t][a][b] = Network.touristPercentage * equilibrium.arcFlowAll[0][a][b];
+					}
+				}
+
+			cout << "-----------------\n";
+			cout << "Equilibrium all flows:\n";
+			print2Dim(Schedule.arcFlowAll[0], Network.vertices);
+			cout << "-----------------\n";
+			cout << "Equilibrium tourist flows:\n";
+			print2Dim(Schedule.arcFlowAll[1], Network.vertices);
+			cout << "-----------------\n";
+			cout << "Path flows at equilibrium:\n";
+			print2Dim(Schedule.pathFlow[0]);
+			cout << "-----------------\n";
+
+			print2Dim(Schedule.availableRoutes[0]);
+			//print2Dim(Schedule.numAvailableRoutes);
+
+			//dynamic adjustment function: PSAP
+			//CHECK TIMING!!!
+			adjustingTrafficFlows(Maintenance.T, Network, Schedule);
+
+			write << s << ' ' << costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll) << '\n';
+			printTraffic(write, Maintenance.T, Network.vertices, Schedule.arcFlowAll);
+			write << '\n';
+			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
+			write << '\n';
+			write << "--------------------------------\n";
+			//cost function: return total travel time + joint costs of maintenance
+			
+			//save cost
+			//check if "best"?
 		}
+		else {
+			cout << "IMPOSSIBLE SCHEDULE:" << s << '\n';
 
-	cout << "-----------------\n";
-	cout << "Equilibrium all flows:\n";
-	print2Dim(Schedule.arcFlowAll[0], Network.vertices);
-	cout << "-----------------\n";
-	cout << "Equilibrium tourist flows:\n";
-	print2Dim(Schedule.arcFlowAll[1], Network.vertices);
-	cout << "-----------------\n";
+		}
 		
-	//cost function: return total travel time at a certain day, for a given schedule.
-	
-	//dynamic adjustment function: PSAP
-	//CHECK TIMING!!!
-	adjustingTrafficFlows(Maintenance.T, Network, Schedule);
-
+	}
 	//implement a heuristic GA/ALNS?
 
 	cout << "\nImplementation time: " << time.elapsed() << " seconds\n";

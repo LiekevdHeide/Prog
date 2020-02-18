@@ -33,10 +33,14 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 	//pathTime is used to determine flows at t + 1 (so equals path durations at t)
 
 	//subtract the tourists from the path flows:
-	for (size_t od = 0; od < Network.numberODpairs; ++od)
+	for (size_t od = 0; od < Network.numberODpairs; ++od) {
+		cout << od << "  ";
 		for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 			Schedule.pathFlow[0][od][r] *= (1 - Network.touristPercentage);
+			cout << Schedule.pathFlow[0][od][r] << ' ';
 		}
+		cout << '\n';
+	}
 	//allArcFlows + arcFlows still include tourists! (pathFlow does not)
 
 	for (size_t t = 0; t < T - 1; ++t) {
@@ -56,15 +60,15 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 		//adjust arcFlowAll
 		findAlternativeArcFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.arcFlowAll[t+1]);
 
-
+		
 		//------------------------------Recurrent drivers updating:
 		for (size_t od = 0; od < Network.numberODpairs; ++od) {
 			//cout << " Pt-1: ";
 			//Calculate pathtimes at time t (to base decisions t + 1 on)			
 			updateExpectedPathTimes(Network, Schedule, t, od, pathTimes);
-
-			//Find all flow on closing path and subtract from flows
+			
 			flowAtClosingPath = determineFlowClosingPaths(Schedule, t, od);
+			cout << "CL:" << flowAtClosingPath << ' ';
 			//Find (expected) shortest path for t + 1 (so shortest at t + freeflow times on newly opened ones)
 			size_t indexShortest = findAlternativePathRecurringDrivers(Schedule, t, od, pathTimes);
 

@@ -93,8 +93,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community129\cplex\lib\x64_windows_vs2017\stat_mda;C:\Program Files\IBM\ILOG\CPLEX_Studio_Community129\concert\lib\x64_windows_vs2017\stat_mda;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>concert.lib;ilocplex.lib;cplex1290.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,8 +131,10 @@
     <ClCompile Include="adjustAvailableRoutes.cpp" />
     <ClCompile Include="adjustingTrafficflows.cpp" />
     <ClCompile Include="binaryToCapacities.cpp" />
+    <ClCompile Include="bruteForceSchedule.cpp" />
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
+    <ClCompile Include="costsSchedule.cpp" />
     <ClCompile Include="depthFirstSearch.cpp" />
     <ClCompile Include="determineFlowClosingPaths.cpp" />
     <ClCompile Include="dfsRecursive.cpp" />
@@ -141,7 +143,6 @@
     <ClCompile Include="findAlternativeArcFlowsTourists.cpp" />
     <ClCompile Include="findGoodStepsize.cpp" />
     <ClCompile Include="findInterruptedRoutes.cpp" />
-    <ClCompile Include="findOptimalStepsize.cpp" />
     <ClCompile Include="findShortestAlternativeTourist.cpp" />
     <ClCompile Include="findShortestPath.cpp" />
     <ClCompile Include="initializeSchedule.cpp" />
@@ -151,23 +152,30 @@
     <ClCompile Include="print2Dim0.cpp" />
     <ClCompile Include="print2Dim1.cpp" />
     <ClCompile Include="print2DimDouble.cpp" />
+    <ClCompile Include="print2DimDouble0.cpp" />
     <ClCompile Include="print2DimDouble1.cpp" />
     <ClCompile Include="print2DimtoFile.cpp" />
     <ClCompile Include="print2DimtoFile1.cpp" />
     <ClCompile Include="print2DimtoFileDouble.cpp" />
     <ClCompile Include="print2DimtoFileDouble1.cpp" />
+    <ClCompile Include="printSchedule.cpp" />
+    <ClCompile Include="printTraffic.cpp" />
     <ClCompile Include="proportionalSwitch.cpp" />
     <ClCompile Include="RoadNetwork.cpp" />
     <ClCompile Include="ScheduleAndFlows.cpp" />
+    <ClCompile Include="totalTravelTime.cpp" />
     <ClCompile Include="updateExpectedPathTimes.cpp" />
+    <ClCompile Include="wholeScheduleToMaintenance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConvexCombinations.h" />
+    <ClInclude Include="costCalculationFunctions.h" />
     <ClInclude Include="DepthFirstSearchFunctions.h" />
     <ClInclude Include="generalPrintingFunctions.h" />
     <ClInclude Include="InitializationFunctions.h" />
     <ClInclude Include="MaintenanceActivities.h" />
     <ClInclude Include="performanceTimer.h" />
+    <ClInclude Include="printingResults.h" />
     <ClInclude Include="PSAP.h" />
     <ClInclude Include="RoadNetwork.h" />
     <ClInclude Include="ScheduleAndFlows.h" />

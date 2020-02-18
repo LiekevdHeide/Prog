@@ -1,6 +1,6 @@
 MTDurationsCostsLocationsetsCostreductions
 
-5 100
+5 70
 
 10 20 10 10 10
 
