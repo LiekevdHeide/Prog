@@ -156,6 +156,12 @@
     <ClCompile Include="printSchedule.cpp">
       <Filter>Source Files\PrintingFunctions</Filter>
     </ClCompile>
+    <ClCompile Include="printInput.cpp">
+      <Filter>Source Files\PrintingFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="printRecurringTraffic.cpp">
+      <Filter>Source Files\PrintingFunctions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">

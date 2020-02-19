@@ -75,12 +75,14 @@ int main()
 	adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes);
 
 	//for all new schedules?
-	for (size_t s = 0; s < 2000000; ++s) { // s < time periods ^ maintenance activities
+	for (size_t s = 1290000; s < 1291355; ++s) { // s < time periods ^ maintenance activities
 		//adjust schedule
 		if (bruteForceSchedule(Schedule, Maintenance, Network, s)) {//start from t = 1 (t = 0 is equilibrium!)
 
+			cout << "-----------------\n";
+			cout << "Schedule:" << s << '\n';
 			//start at equilibrium.
-			Schedule.arcFlow[0] = equilibrium.arcFlow[0];
+			//Schedule.arcFlow[0] = equilibrium.arcFlow[0]; (NOT USED!)
 			Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
 			Schedule.pathFlow[0] = equilibrium.pathFlow[0];
 
@@ -90,8 +92,12 @@ int main()
 						Schedule.arcFlowAll[t][a][b] = Network.touristPercentage * equilibrium.arcFlowAll[0][a][b];
 					}
 				}
+			for (size_t t = 1; t < Maintenance.T; ++t) 
+				for(size_t od = 0; od < Network.numberODpairs; ++od)
+					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
+						Schedule.pathFlow[t][od][r] = 0.0;
+					}
 
-			cout << "-----------------\n";
 			cout << "Equilibrium all flows:\n";
 			print2Dim(Schedule.arcFlowAll[0], Network.vertices);
 			cout << "-----------------\n";
@@ -111,6 +117,7 @@ int main()
 
 			write << s << ' ' << costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll) << '\n';
 			printTraffic(write, Maintenance.T, Network.vertices, Schedule.arcFlowAll);
+			printRecurringTraffic(write, Maintenance.T, Network.numberODpairs, Network.numberODpaths, Schedule.pathFlow);
 			write << '\n';
 			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 			write << '\n';

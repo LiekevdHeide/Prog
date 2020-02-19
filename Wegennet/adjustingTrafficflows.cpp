@@ -8,7 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <iomanip>
+#include <iomanip> // set precision
 using namespace std;
 
 void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule) { //assumes at 0 no maintenance!
@@ -33,13 +33,14 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 	//pathTime is used to determine flows at t + 1 (so equals path durations at t)
 
 	//subtract the tourists from the path flows:
+	cout << "recFLOW ";
 	for (size_t od = 0; od < Network.numberODpairs; ++od) {
-		cout << od << "  ";
+		cout << "od:" << od << "  ";
 		for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 			Schedule.pathFlow[0][od][r] *= (1 - Network.touristPercentage);
 			cout << Schedule.pathFlow[0][od][r] << ' ';
 		}
-		cout << '\n';
+		cout << ' ';
 	}
 	//allArcFlows + arcFlows still include tourists! (pathFlow does not)
 
