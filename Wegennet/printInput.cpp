@@ -9,7 +9,9 @@
 using namespace std;
 
 void printInput(ofstream &write, RoadNetwork &Network, MaintenanceActivities &Maintenance) {
+	//print all standard input:
 
+	write << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs;
 
 
 	return;

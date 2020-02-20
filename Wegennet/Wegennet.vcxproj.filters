@@ -162,6 +162,9 @@
     <ClCompile Include="printRecurringTraffic.cpp">
       <Filter>Source Files\PrintingFunctions</Filter>
     </ClCompile>
+    <ClCompile Include="printRoutes.cpp">
+      <Filter>Source Files\PrintingFunctions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">

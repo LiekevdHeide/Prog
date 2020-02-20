@@ -37,7 +37,7 @@ int main()
 	RoadNetwork Network(roadInput);
 	//find all routes
 	depthFirstSearch(Network);
-	
+
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
 	string maintenanceInput = whichComputer + "/maintenanceInput.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
@@ -58,6 +58,7 @@ int main()
 	//write results to:
 	ofstream write(whichComputer + "/Results.txt");  //, std::ios::app for adding to end of file
 	write << roadInput << ' ' << maintenanceInput << '\n';
+	printRoutes(write, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 
 	cout << "Reading time: " << time.elapsed() << " seconds \n";
 	time.reset();
@@ -75,7 +76,7 @@ int main()
 	adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes);
 
 	//for all new schedules?
-	for (size_t s = 1290000; s < 1291355; ++s) { // s < time periods ^ maintenance activities
+	for (size_t s = 1250530; s < 1250533; ++s) { // s < time periods ^ maintenance activities
 		//adjust schedule
 		if (bruteForceSchedule(Schedule, Maintenance, Network, s)) {//start from t = 1 (t = 0 is equilibrium!)
 
@@ -121,7 +122,7 @@ int main()
 			write << '\n';
 			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 			write << '\n';
-			write << "--------------------------------\n";
+			write << "++++++++++++++++++++++++++++\n";
 			//cost function: return total travel time + joint costs of maintenance
 			
 			//save cost

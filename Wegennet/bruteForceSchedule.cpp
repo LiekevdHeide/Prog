@@ -12,7 +12,7 @@ bool bruteForceSchedule(ScheduleAndFlows &Sched, MaintenanceActivities &Maint, R
 
 	bool ifFeasible = true;
 	//set binary schedule
-	vector<size_t> startTimes(Maint.M, 0);
+	vector<size_t> startTimes(Maint.M, 0);//start at time 1, 0 is the equilibrium time!
 	wholeScheduleToMaintenance(Maint.T, Maint.M, schedule, startTimes);
 
 	for (size_t m = 0; m < Maint.M; ++m) {
