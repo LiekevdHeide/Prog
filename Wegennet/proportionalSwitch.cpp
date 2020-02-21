@@ -16,7 +16,10 @@ void proportionalSwitch(ScheduleAndFlows &Schedule, size_t t, size_t od, const v
 		Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] = Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][p]];//still excludes tourists.
 		for (size_t r = 0; r < Schedule.numAvailableRoutes[t + 1][od]; ++r) { // if not available flow = 0
 			if (r != p) {
-				Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] += 0.0001 * (Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][r]] * max(pathTimes[od][r] - pathTimes[od][p], 0.0) - Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][p]] * max(pathTimes[od][p] - pathTimes[od][r], 0.0));
+				Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] += 0.01 * (Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][r]] * max(pathTimes[od][r] - pathTimes[od][p], 0.0) - Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][p]] * max(pathTimes[od][p] - pathTimes[od][r], 0.0));
+
+				//if no negative flow: NOT WORKING!
+				//Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] +=  min(Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][r]], 0.01 * Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][r]] * max(pathTimes[od][r] - pathTimes[od][p], 0.0)) - min(Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][p]], 0.01 * Schedule.pathFlow[t][od][Schedule.availableRoutes[t + 1][od][p]] * max(pathTimes[od][p] - pathTimes[od][r], 0.0));
 			}
 		}
 	}

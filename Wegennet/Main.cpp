@@ -39,7 +39,7 @@ int main()
 	depthFirstSearch(Network);
 
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "/maintenanceInput.txt";
+	string maintenanceInput = whichComputer + "/maintenanceInputSmall.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
@@ -75,8 +75,14 @@ int main()
 	initializeSchedule(Schedule, Maintenance, Network);
 	adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes);
 
+	double currentCosts = 0.0;
+	double bestCosts = 0.0;
+	double worstCosts = 0.0;
+	ScheduleAndFlows bestSchedule(Schedule);
+	ScheduleAndFlows worstSchedule(Schedule);
+
 	//for all new schedules?
-	for (size_t s = 1250530; s < 1250533; ++s) { // s < time periods ^ maintenance activities
+	for (size_t s = 0; s < pow(Maintenance.T, Maintenance.M); s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M)
 		//adjust schedule
 		if (bruteForceSchedule(Schedule, Maintenance, Network, s)) {//start from t = 1 (t = 0 is equilibrium!)
 
@@ -116,13 +122,26 @@ int main()
 			//CHECK TIMING!!!
 			adjustingTrafficFlows(Maintenance.T, Network, Schedule);
 
-			write << s << ' ' << costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll) << '\n';
+			currentCosts = costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
+
+			write << s << ' ' <<  currentCosts << '\n';
+			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
+			write << '\n';
 			printTraffic(write, Maintenance.T, Network.vertices, Schedule.arcFlowAll);
 			printRecurringTraffic(write, Maintenance.T, Network.numberODpairs, Network.numberODpaths, Schedule.pathFlow);
 			write << '\n';
-			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
-			write << '\n';
+			
 			write << "++++++++++++++++++++++++++++\n";
+
+			if (currentCosts < bestCosts || bestCosts == 0) {
+				bestCosts = currentCosts;
+				bestSchedule = Schedule;
+			}
+			if (currentCosts > worstCosts) {
+				worstCosts = currentCosts;
+				worstSchedule = Schedule;
+			}
+
 			//cost function: return total travel time + joint costs of maintenance
 			
 			//save cost
@@ -135,6 +154,20 @@ int main()
 		
 	}
 	//implement a heuristic GA/ALNS?
+
+	ofstream bestSolution(whichComputer + "/BestSolution.txt");
+	printRoutes(bestSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
+	printSchedule(bestSolution, Maintenance.T, Maintenance.M, bestSchedule.binarySchedule);
+	printTraffic(bestSolution, Maintenance.T, Network.vertices, bestSchedule.arcFlowAll);
+	printRecurringTraffic(bestSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, bestSchedule.pathFlow);
+	bestSolution << bestCosts;
+
+	ofstream worstSolution(whichComputer + "/WorstSolution.txt");
+	printRoutes(worstSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
+	printSchedule(worstSolution, Maintenance.T, Maintenance.M, worstSchedule.binarySchedule);
+	printTraffic(worstSolution, Maintenance.T, Network.vertices, worstSchedule.arcFlowAll);
+	printRecurringTraffic(worstSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, worstSchedule.pathFlow);
+	worstSolution << worstCosts;
 
 	cout << "\nImplementation time: " << time.elapsed() << " seconds\n";
 }

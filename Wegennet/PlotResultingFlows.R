@@ -1,7 +1,10 @@
 
 #Plotarcflows / pathflows
-location <- "X:/My Documents/Wegennetwerk/Prog/ResultsPathFlowsExample.txt"
-resultingPaths <- read.table(location, skip=1, nrows =50, header=FALSE)
+location <- "X:/My Documents/Wegennetwerk/Prog/ResultingPathFlowsWorst.txt"
+
+timeLength <- read.table(location, skip = 1, nrows = 1, header = TRUE)
+
+resultingPaths <- read.table(location, skip=2, nrows =50, header=FALSE)
 resultingPaths
 
 require(ggplot2)
@@ -10,6 +13,8 @@ require(reshape2)
 #  geom_line(aes(y = s, colour = "State"), size=2) + 
 #  geom_line(aes(y = a, colour = "Action"), size=1) +
 #  geom_point(aes(y=c, colour="Cost"), size=2)
+ 
+time <- seq(0,34, by = 1)
 
 resultingPaths <- cbind(resultingPaths, time)
 
@@ -38,5 +43,10 @@ meltedResultingPaths3 = melt(resultingPaths[,c(11,12,13,14)], id = "time")
 ggplot(meltedResultingPaths3, aes(x= time, y = value, colour = variable)) +
   geom_point(size = 1) +
   theme_bw()+
-  ylab(label = "Recurrent traffic flow on path OD 0") + 
+  ylab(label = "Recurrent traffic flow on path OD 3") + 
   xlab("Time")
+
+
+#plot arc flows
+
+
