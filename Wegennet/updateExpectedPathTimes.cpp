@@ -12,6 +12,7 @@ void updateExpectedPathTimes(RoadNetwork &Network, ScheduleAndFlows &Schedule, s
 	//set all pathTimes to free flow time when no maintenance is scheduled:
 	for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
 		pathTimes[od][p] = Network.pathTravelTime(Network.ODpaths[od][p], vector<vector<double>>(Network.vertices, vector<double>(Network.vertices, 0.0)), Network.standardCapacities);
+		//pathTimes[od][p] = Network.pathTravelTime(Network.ODpaths[od][p], Schedule.arcFlowAll[0]);
 	}
 
 	//change pathtimes for available routes: based on both types of drivers.

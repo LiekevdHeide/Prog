@@ -127,7 +127,7 @@ int main()
 			write << s << ' ' <<  currentCosts << '\n';
 			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 			write << '\n';
-			printTraffic(write, Maintenance.T, Network.vertices, Schedule.arcFlowAll);
+			//printTraffic(write, Maintenance.T, Network.vertices, Schedule.arcFlowAll);
 			printRecurringTraffic(write, Maintenance.T, Network.numberODpairs, Network.numberODpaths, Schedule.pathFlow);
 			write << '\n';
 			
@@ -155,14 +155,14 @@ int main()
 	}
 	//implement a heuristic GA/ALNS?
 
-	ofstream bestSolution(whichComputer + "/BestSolution.txt");
+	ofstream bestSolution(whichComputer + "/BestSolution1.txt");
 	printRoutes(bestSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 	printSchedule(bestSolution, Maintenance.T, Maintenance.M, bestSchedule.binarySchedule);
 	printTraffic(bestSolution, Maintenance.T, Network.vertices, bestSchedule.arcFlowAll);
 	printRecurringTraffic(bestSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, bestSchedule.pathFlow);
 	bestSolution << bestCosts;
 
-	ofstream worstSolution(whichComputer + "/WorstSolution.txt");
+	ofstream worstSolution(whichComputer + "/WorstSolution1.txt");
 	printRoutes(worstSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 	printSchedule(worstSolution, Maintenance.T, Maintenance.M, worstSchedule.binarySchedule);
 	printTraffic(worstSolution, Maintenance.T, Network.vertices, worstSchedule.arcFlowAll);
