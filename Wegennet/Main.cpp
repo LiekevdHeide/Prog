@@ -26,20 +26,20 @@ using namespace std;
 
 int main() 
 {
-	string whichComputer{ "X:/My Documents/Wegennetwerk/Prog" };
+	string whichComputer{ "X:/My Documents/Wegennetwerk/Experiment 2/" };
 	//string whichComputer{ "C:/Users/lieke/Documents/Wegennetwerk/Prog" };
 
 	Timer time;
 
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "/roadInput.txt";
+	string roadInput = whichComputer + "NetworkInputExperiment2.txt";
 
 	RoadNetwork Network(roadInput);
 	//find all routes
 	depthFirstSearch(Network);
 
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "/maintenanceInputSmall.txt";
+	string maintenanceInput = whichComputer + "maintenanceInputExperiment2.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
@@ -56,7 +56,7 @@ int main()
 	//print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
 
 	//write results to:
-	ofstream write(whichComputer + "/Results.txt");  //, std::ios::app for adding to end of file
+	ofstream write(whichComputer + "ResultsB.txt");  //, std::ios::app for adding to end of file
 	write << roadInput << ' ' << maintenanceInput << '\n';
 	printRoutes(write, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 
@@ -66,8 +66,10 @@ int main()
 	//calculate equilibrium with no maintenance scheduled.
 	//CONVEX COMBINATIONS:
 	ScheduleAndFlows equilibrium(2, Network.vertices, 0, Network.numberODpairs, Network.numberODpaths, Network.standardCapacities);//all flows 0, no maintenance
-	convexCombinations(equilibrium, Network, 0.001, 0.0001);//convergenceCriterion,  epsilon for stepsize?
+	convexCombinations(equilibrium, Network, 0.001, 0.0001, 0);//convergenceCriterion,  epsilon for stepsize?, time!
 	
+	print2Dim(equilibrium.arcFlowAll[0]);
+
 
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
@@ -81,13 +83,15 @@ int main()
 	ScheduleAndFlows bestSchedule(Schedule);
 	ScheduleAndFlows worstSchedule(Schedule);
 
-	//for all new schedules?
-	for (size_t s = 0; s < pow(Maintenance.T, Maintenance.M); s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M)
-		//adjust schedule
-		if (bruteForceSchedule(Schedule, Maintenance, Network, s)) {//start from t = 1 (t = 0 is equilibrium!)
+	size_t runOutPeriod = 10;
 
-			cout << "-----------------\n";
-			cout << "Schedule:" << s << '\n';
+	//for all new schedules?
+	for (size_t s = 0; s < pow(Maintenance.T - runOutPeriod, Maintenance.M); s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
+		//adjust schedule
+		if (bruteForceSchedule(Schedule, Maintenance, Network, s, runOutPeriod)) {//start from t = 1 (t = 0 is equilibrium!) (also adjustsavailableRoute)
+
+			//cout << "-----------------\n";
+			cout << s << ' ';
 			//start at equilibrium.
 			//Schedule.arcFlow[0] = equilibrium.arcFlow[0]; (NOT USED!)
 			Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
@@ -105,17 +109,17 @@ int main()
 						Schedule.pathFlow[t][od][r] = 0.0;
 					}
 
-			cout << "Equilibrium all flows:\n";
-			print2Dim(Schedule.arcFlowAll[0], Network.vertices);
-			cout << "-----------------\n";
-			cout << "Equilibrium tourist flows:\n";
-			print2Dim(Schedule.arcFlowAll[1], Network.vertices);
-			cout << "-----------------\n";
-			cout << "Path flows at equilibrium:\n";
-			print2Dim(Schedule.pathFlow[0]);
-			cout << "-----------------\n";
+			//cout << "Equilibrium all flows:\n";
+			//print2Dim(Schedule.arcFlowAll[0], Network.vertices);
+			//cout << "-----------------\n";
+			//cout << "Equilibrium tourist flows:\n";
+			//print2Dim(Schedule.arcFlowAll[1], Network.vertices);
+			//cout << "-----------------\n";
+			//cout << "Path flows at equilibrium:\n";
+			//print2Dim(Schedule.pathFlow[0]);
+			//cout << "-----------------\n";
 
-			print2Dim(Schedule.availableRoutes[0]);
+			//print2Dim(Schedule.availableRoutes[0]);
 			//print2Dim(Schedule.numAvailableRoutes);
 
 			//dynamic adjustment function: PSAP
@@ -123,7 +127,7 @@ int main()
 			adjustingTrafficFlows(Maintenance.T, Network, Schedule);
 
 			currentCosts = costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
-
+			cout << currentCosts << "  ";
 			write << s << ' ' <<  currentCosts << '\n';
 			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 			write << '\n';
@@ -148,26 +152,123 @@ int main()
 			//check if "best"?
 		}
 		else {
-			cout << "IMPOSSIBLE SCHEDULE:" << s << '\n';
+			cout << ' ';// "IMPOSSIBLE:" << s << ' ';
 
 		}
 		
 	}
 	//implement a heuristic GA/ALNS?
 
-	ofstream bestSolution(whichComputer + "/BestSolution1.txt");
+	ofstream bestSolution(whichComputer + "BestSolution1B.txt");
 	printRoutes(bestSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 	printSchedule(bestSolution, Maintenance.T, Maintenance.M, bestSchedule.binarySchedule);
 	printTraffic(bestSolution, Maintenance.T, Network.vertices, bestSchedule.arcFlowAll);
 	printRecurringTraffic(bestSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, bestSchedule.pathFlow);
 	bestSolution << bestCosts;
 
-	ofstream worstSolution(whichComputer + "/WorstSolution1.txt");
+	ofstream worstSolution(whichComputer + "WorstSolution1B.txt");
 	printRoutes(worstSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 	printSchedule(worstSolution, Maintenance.T, Maintenance.M, worstSchedule.binarySchedule);
 	printTraffic(worstSolution, Maintenance.T, Network.vertices, worstSchedule.arcFlowAll);
 	printRecurringTraffic(worstSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, worstSchedule.pathFlow);
 	worstSolution << worstCosts;
+
+	//----------------------------------------------------------------
+	//get benchmark: flows always in equilibrium (for best solution)
+	ScheduleAndFlows equilibriumBenchmark(bestSchedule);
+	cout << "Benchmark all equilirbium: ";
+	//get all start times: (BRUTE FORCE??)
+	for (size_t t = 1; t < Maintenance.T; ++t) { //0 is always equilibrium.
+		if (equilibriumBenchmark.binarySchedule[t] != equilibriumBenchmark.binarySchedule[t - 1]) {
+			//if schedule has changed, find new equilibrium
+				for (size_t a = 0; a < Network.vertices; ++a) {
+					for (size_t b = 0; b < Network.vertices; ++b) {
+						equilibriumBenchmark.arcFlowAll[t][a][b] = 0.0;
+						for(size_t od = 0; od < Network.numberODpairs; ++od)
+							equilibriumBenchmark.arcFlow[t][od][a][b] = 0.0;
+					}
+				}
+
+				for (size_t od = 0; od < Network.numberODpairs; ++od)
+					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
+						equilibriumBenchmark.pathFlow[t][od][r] = 0.0;
+					}
+
+			convexCombinations(equilibriumBenchmark, Network, 0.001, 0.0001, t);//convergenceCriterion,  epsilon for stepsize?
+
+		}
+		else {
+			equilibriumBenchmark.arcFlowAll[t] = equilibriumBenchmark.arcFlowAll[t - 1];
+		}
+	}
+	cout << costsSchedule(Network, Maintenance.T, equilibriumBenchmark.scheduledCapacities, equilibriumBenchmark.arcFlowAll) << "  ";
+	ofstream allEq(whichComputer + "allEqBenchmarkB.txt");
+	printRoutes(allEq, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
+	printSchedule(allEq, Maintenance.T, Maintenance.M, equilibriumBenchmark.binarySchedule);
+	printTraffic(allEq, Maintenance.T, Network.vertices, equilibriumBenchmark.arcFlowAll);
+	allEq << costsSchedule(Network, Maintenance.T, equilibriumBenchmark.scheduledCapacities, equilibriumBenchmark.arcFlowAll);
+
+	//---------------------------------------------------------------
+	//brute force opt for allEqual
+	double currentEqCosts = 0.0;
+	double bestEqCosts = 0.0;
+	ScheduleAndFlows eqSchedule(Schedule);
+	ScheduleAndFlows bestAllEqSchedule(Schedule);
+	cout << "\n Best all equilibrium schedule:\n";
+	//for all new schedules?
+	for (size_t s = 0; s < pow(Maintenance.T - runOutPeriod, Maintenance.M); s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //
+		//adjust schedule
+		cout << s << ':';
+		if (bruteForceSchedule(eqSchedule, Maintenance, Network, s, runOutPeriod)) {//start from t = 1 (t = 0 is equilibrium!) (also adjustsavailableRoute)
+			eqSchedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
+			eqSchedule.pathFlow[0] = equilibrium.pathFlow[0];
+
+
+			//just as above with bestSchedule...
+			for (size_t t = 1; t < Maintenance.T; ++t) { //0 is always equilibrium.
+				if (eqSchedule.binarySchedule[t] != eqSchedule.binarySchedule[t - 1]) {
+					//if schedule has changed, find new equilibrium
+
+					//set all to 0 for this time
+					for (size_t a = 0; a < Network.vertices; ++a) {
+						for (size_t b = 0; b < Network.vertices; ++b) {
+							eqSchedule.arcFlowAll[t][a][b] = 0.0;
+							for (size_t od = 0; od < Network.numberODpairs; ++od)
+								eqSchedule.arcFlow[t][od][a][b] = 0.0;
+						}
+					}
+
+					for (size_t od = 0; od < Network.numberODpairs; ++od)
+						for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
+							eqSchedule.pathFlow[t][od][r] = 0.0;
+						}
+
+					//add the equilibrium flows (so needs all at 0)
+					convexCombinations(eqSchedule, Network, 0.001, 0.0001, t);//convergenceCriterion,  epsilon for stepsize?
+
+				}
+				else {
+					eqSchedule.arcFlowAll[t] = eqSchedule.arcFlowAll[t - 1];//so only arcFlowAll is completely accurate!
+				}
+			}
+			currentEqCosts = costsSchedule(Network, Maintenance.T, eqSchedule.scheduledCapacities, eqSchedule.arcFlowAll);
+
+			cout << currentEqCosts << "  ";
+			if (currentEqCosts < bestEqCosts || bestEqCosts == 0) {
+				bestEqCosts = currentEqCosts;
+				bestAllEqSchedule = eqSchedule;
+			}
+
+		}
+	}
+	cout << "Lowest cost: " << costsSchedule(Network, Maintenance.T, bestAllEqSchedule.scheduledCapacities, bestAllEqSchedule.arcFlowAll) << ' ';
+	ofstream bestAllEq(whichComputer + "bestAllEqBenchmarkB.txt");
+	printRoutes(bestAllEq, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
+	printSchedule(bestAllEq, Maintenance.T, Maintenance.M, bestAllEqSchedule.binarySchedule);
+	printTraffic(bestAllEq, Maintenance.T, Network.vertices, bestAllEqSchedule.arcFlowAll);
+	
+	bestAllEq << bestEqCosts; // costsSchedule(Network, Maintenance.T, bestAllEqSchedule.scheduledCapacities, bestAllEqSchedule.arcFlowAll);
+
 
 	cout << "\nImplementation time: " << time.elapsed() << " seconds\n";
 }

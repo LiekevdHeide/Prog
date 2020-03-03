@@ -8,15 +8,15 @@
 
 using namespace std;
 
-bool bruteForceSchedule(ScheduleAndFlows &Sched, MaintenanceActivities &Maint, RoadNetwork &Net, size_t schedule) {
+bool bruteForceSchedule(ScheduleAndFlows &Sched, MaintenanceActivities &Maint, RoadNetwork &Net, size_t schedule, size_t runOutTime) {
 
 	bool ifFeasible = true;
 	//set binary schedule
 	vector<size_t> startTimes(Maint.M, 0);//start at time 1, 0 is the equilibrium time!
-	wholeScheduleToMaintenance(Maint.T, Maint.M, schedule, startTimes);
+	wholeScheduleToMaintenance(Maint.T - runOutTime, Maint.M, schedule, startTimes);
 
 	for (size_t m = 0; m < Maint.M; ++m) {
-		if (startTimes[m] + Maint.duration[m] > Maint.T) {
+		if (startTimes[m] + Maint.duration[m] > (Maint.T - runOutTime) || startTimes[m] == 0) {
 			ifFeasible = false;
 			break;
 		}

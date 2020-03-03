@@ -31,12 +31,12 @@ vector<size_t> findShortestAlternativeTourist(RoadNetwork& Network, const vector
 			}
 		}
 
-		for (size_t r = 0; r < allPaths[shortestPath].size(); ++r) {
+		/*for (size_t r = 0; r < allPaths[shortestPath].size(); ++r) {
 			cout << allPaths[shortestPath][r] << ' ';
 		}
 		cout << shortestTravelTime;
 		cout << '\n';
-
+		*/
 		returnShortestPath = allPaths[shortestPath];
 	}
 	

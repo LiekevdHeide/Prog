@@ -1,0 +1,15 @@
+MTDurationsCostsLocationsetsCostreductions
+
+3 55
+
+10 10 10
+
+1 1 1
+
+1 4 10
+4 7 10
+3 4 10
+
+0 0 0
+0 0 0 
+0 0 0 

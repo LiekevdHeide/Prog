@@ -14,6 +14,6 @@ double totalTravelTime(RoadNetwork &Network, size_t T, vector<vector<vector<doub
 				}
 			}
 		}
-	cout << travelTime << ' ';
+	//cout << travelTime << ' ';
 	return travelTime;
 }

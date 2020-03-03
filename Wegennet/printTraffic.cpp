@@ -13,7 +13,7 @@ void printTraffic(ofstream &write, size_t T, size_t vertices, vector<vector<vect
 			for (size_t w = 0; w < vertices; ++w) {
 				write << arcFlowsAll[t][v][w] << ' ';
 			}
-			write << '\n';
+			//write << '\n';
 		}
 		write << '\n';
 	}

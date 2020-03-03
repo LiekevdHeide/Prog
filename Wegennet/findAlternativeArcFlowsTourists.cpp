@@ -16,7 +16,7 @@ void findAlternativeArcFlowsTourists(RoadNetwork &Network, const vector<vector<d
 	for (size_t v = 0; v < Network.vertices; ++v) {
 		for (size_t w = 0; w < Network.vertices; ++w) {
 			if (currentCapacities[v][w] < 1 && arcFlows[v][w] > 0) { //FOR NOW < 1!! (check what happens if capacity is set to 0)
-				cout << v << '-' << w << ' ' << arcFlows[v][w] << ' ';
+				//cout << v << '-' << w << ' ' << arcFlows[v][w] << ' ';
 				divertedFlow = arcFlows[v][w];
 				arcFlows[v][w] = 0;
 

@@ -13,7 +13,7 @@ using namespace std;
 
 void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule) { //assumes at 0 no maintenance!
 
-	cout << setprecision(3);
+	//cout << setprecision(3);
 
 	vector<vector<double>> pathTimes(Network.numberODpairs, vector<double>());
 	
@@ -33,25 +33,25 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 	//pathTime is used to determine flows at t + 1 (so equals path durations at t)
 
 	//subtract the tourists from the path flows:
-	cout << "recFLOW ";
+	//cout << "recFLOW ";
 	for (size_t od = 0; od < Network.numberODpairs; ++od) {
-		cout << "od:" << od << "  ";
+		//cout << "od:" << od << "  ";
 		for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 			Schedule.pathFlow[0][od][r] *= (1 - Network.touristPercentage);
-			cout << Schedule.pathFlow[0][od][r] << ' ';
+			//cout << Schedule.pathFlow[0][od][r] << ' ';
 		}
-		cout << ' ';
+		//cout << ' ';
 	}
 	//allArcFlows + arcFlows still include tourists! (pathFlow does not)
 
 	for (size_t t = 0; t < T - 1; ++t) {
 		//start with equilibrium at t=0;
-		cout << t + 1 << ' ';
+		//cout << t + 1 << ' ';
 
-		for (size_t m = 0; m < Schedule.binarySchedule[t].size(); ++m) {
-			cout << Schedule.binarySchedule[t + 1][m];
-		}
-		cout << ' ';
+		//for (size_t m = 0; m < Schedule.binarySchedule[t].size(); ++m) {
+		//	cout << Schedule.binarySchedule[t + 1][m];
+		//}
+		//cout << ' ';
 
 		//------------------------------Find tourist traffic flows
 
@@ -59,7 +59,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 		//add alternative routes for tourists to flows at t+1, current value of arcFlowAll[t+1] is the tourist part of the flow
 
 		//adjust arcFlowAll
-		findAlternativeArcFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.arcFlowAll[t+1]);
+		findAlternativeArcFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.arcFlowAll[t + 1]);
 
 		
 		//------------------------------Recurrent drivers updating:
@@ -69,7 +69,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 			updateExpectedPathTimes(Network, Schedule, t, od, pathTimes);
 			
 			flowAtClosingPath = determineFlowClosingPaths(Schedule, t, od);
-			cout << "CL:" << flowAtClosingPath << ' ';
+			//cout << "CL:" << flowAtClosingPath << ' ';
 			//Find (expected) shortest path for t + 1 (so shortest at t + freeflow times on newly opened ones)
 			size_t indexShortest = findAlternativePathRecurringDrivers(Schedule, t, od, pathTimes);
 
@@ -80,28 +80,13 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 			Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][indexShortest]] += flowAtClosingPath;
 
 		}
-		cout << "recFLOW ";
-		for (size_t od = 0; od < Network.numberODpairs; ++od) {
-			cout << "od:" << od << ' ';
-			for (size_t r = 0; r < Network.numberODpaths[0]; ++r) {
-				//cout << Schedule.binarySchedule[t][0] << "  ";
-				if (Schedule.pathFlow[t + 1][od][r] < 0.00001 && Schedule.pathFlow[t + 1][od][r] > -0.00001) {
-					cout << "0.00" << ' ';
-				}
-				else if (Schedule.pathFlow[t + 1][od][r] < -0.0001) {
-					cerr << "\n\nERR neg flow:" << t + 1 << ' ' << od << ' ' << r << ' ' << Schedule.pathFlow[t + 1][od][r] << "\n\n\n";
-				}
-				else {
-					cout << Schedule.pathFlow[t + 1][od][r] << ' ';
-				}
-			}
-		}
+		
 		
 		//from path flows to arc flows:			 updates Schedule.arcFlowAll[t+1] using pathflow[t+1]
 		//adjust arcFlowAll (which already contains touristFlows), using pathFlow[t+1] (which is the recurrent flows)
 		Schedule.addArcFlowAll(t + 1, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 
-		cout << '\n';
+		//cout << '\n';
 	}
 
 
