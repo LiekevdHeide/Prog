@@ -6,7 +6,7 @@
 using namespace std;
 
 double determineFlowClosingPaths(ScheduleAndFlows &Schedule, size_t t, size_t od) {
-	//finds flow at closing path
+	//finds recurrent flow (i.e. Schedule.pathFlow) at closing path and outputs it. Does not remove it.
 	
 	double flowAtClosingPath = 0.0;
 

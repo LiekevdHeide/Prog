@@ -28,7 +28,7 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 	vector<vector<double>> oldPathFlow = Flow.pathFlow[time];
 
 	double convergenceTest = convergenceCriterion + 2;
-	double alpha = 0.3;//distance
+	double alpha;//distance
 	size_t counter = 0;
 	vector<vector<double>> directionArcFlow(Roads.vertices, vector<double>(Roads.vertices, 0.0));
 	vector<vector<double>> oldArcFlow(Roads.vertices, vector<double>(Roads.vertices, 0.0));
