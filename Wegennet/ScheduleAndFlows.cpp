@@ -4,11 +4,10 @@ using namespace std;
 ScheduleAndFlows::ScheduleAndFlows(size_t T, size_t vertices, size_t M, size_t ODpairs, std::vector<size_t> &numberODpaths, std::vector<std::vector<double>> &standardCapacities) {//constructor
 
 	//initialize arc flows
-	vector<vector<vector<vector<double>>>> aFlows(T, vector<vector<vector<double>>>(ODpairs, vector<vector<double>>(vertices, vector<double>(vertices, 0.0))));
-	arcFlow = aFlows;
-
+	
 	vector<vector<vector<double>>> aAll(T, vector<vector<double>>(vertices, vector<double>(vertices, 0.0)));
 	arcFlowAll = aAll;
+	arcFlowTourist = aAll;
 
 	//initialize path flows
 	vector<vector<vector<double>>> pFlows(T, vector<vector<double>>(ODpairs, vector<double>()));
@@ -19,6 +18,7 @@ ScheduleAndFlows::ScheduleAndFlows(size_t T, size_t vertices, size_t M, size_t O
 		}
 	}
 	pathFlow = pFlows;
+	touristPathFlow = pFlows;
 
 	//initialize schedule
 	vector<vector<size_t>> schedule(T, vector<size_t>(M, 0));

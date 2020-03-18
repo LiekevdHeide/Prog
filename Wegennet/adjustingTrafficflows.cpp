@@ -21,27 +21,15 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 		pathTimes[od] = vector<double>(Network.numberODpaths[od]);//init to eq time
 	}
 
-	//vector<vector<double>> touristFlows(Network.vertices, vector<double>(Network.vertices, 0.0));//tourist flows per arc
-
 	double flowAtClosingPath = 0.0;
 	//check which routes are open -> Schedule.availableRoutes.
 
-	//arcFlow: both drivers, pathflow: only recurrent drivers
-	//arcflow input is ONLY THE TOURIST IN EQUILIBRIUM FLOW
+	//arcFlow: both drivers, pathflow: only recurrent drivers, tourist pathflow: only tourists
+	//arcflow input is 0 flow!
 
 	//pathTime is init to freeFlow time -> if not available at t, but used at t+1: time is eq time
 	//pathTime is used to determine flows at t + 1 (so equals path durations at t)
 
-	//subtract the tourists from the path flows:
-	//cout << "recFLOW ";
-	for (size_t od = 0; od < Network.numberODpairs; ++od) {
-		//cout << "od:" << od << "  ";
-		for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
-			Schedule.pathFlow[0][od][r] *= (1 - Network.touristPercentage);
-			//cout << Schedule.pathFlow[0][od][r] << ' ';
-		}
-		//cout << ' ';
-	}
 	//allArcFlows + arcFlows still include tourists! (pathFlow does not)
 
 	for (size_t t = 0; t < T - 1; ++t) {
@@ -50,9 +38,11 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 		//------------------------------Find tourist traffic flows
 		//add alternative routes for tourists to flows at t+1, current value of arcFlowAll[t+1] is the tourist part of the flow
 		//adjust arcFlowAll t + 1 to incorporate rerouting tourists
-		findAlternativeArcFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.arcFlowAll[t + 1]);
-
 		
+		findAlternativeArcFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.arcFlowTourist[t + 1]);
+		//to do:
+		//findAlternativePathFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.touristPathFlow[t + 1]);
+
 		//------------------------------Recurrent drivers updating:
 
 		//at closing paths:
@@ -91,8 +81,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 			oldFlow = newFlow;
 			//update arcFLows
 			//first reset to tourist flows:
-			arcFlows = Schedule.arcFlowAll[t + 1]; 
-			//!!!! ERRORRRR!!!! now recurrents "know" new tourist flows..
+			arcFlows = Schedule.arcFlowTourist[t]; 
 			for(size_t od = 0; od < Network.numberODpairs; ++od)
 				for(size_t p = 0; p < Network.numberODpaths[od]; ++p)
 					for (size_t a = 0; a < Network.ODpaths[od][p].size() - 1; ++a) {
@@ -107,6 +96,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 
 
 		//from path flows to arc flows:			 updates Schedule.arcFlowAll[t+1] using pathflow[t+1]
+		Schedule.arcFlowAll[t + 1] = Schedule.arcFlowTourist[t + 1];
 		//adjust arcFlowAll (which already contains touristFlows), using pathFlow[t+1] (which is the recurrent flows)
 		Schedule.addArcFlowAll(t + 1, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 

@@ -93,42 +93,48 @@ int main()
 			//cout << "-----------------\n";
 			cout << s << ':';
 			//start at equilibrium.
-			//Schedule.arcFlow[0] = equilibrium.arcFlow[0]; (NOT USED!)
 			Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
-			Schedule.pathFlow[0] = equilibrium.pathFlow[0];
+			for(size_t t = 0; t < Maintenance.T; ++t)
+			for(size_t a = 0; a < Network.vertices; ++a)
+				for (size_t b = 0; b < Network.vertices; ++b) {
+					Schedule.arcFlowTourist[t][a][b] = equilibrium.arcFlowAll[0][a][b] * Network.touristPercentage;
+				}
+			for(size_t od = 0; od < Network.numberODpairs; ++od)
+				for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
+					Schedule.pathFlow[0][od][p] = equilibrium.pathFlow[0][od][p] * (1.00 - Network.touristPercentage);
+					Schedule.touristPathFlow[0][od][p] = equilibrium.touristPathFlow[0][od][p] * Network.touristPercentage;
+				}
 
+			//set to 0 for next ones
 			for (size_t t = 1; t < Maintenance.T; ++t)
 				for (size_t a = 0; a < Network.vertices; ++a) {
 					for (size_t b = 0; b < Network.vertices; ++b) {
-						Schedule.arcFlowAll[t][a][b] = Network.touristPercentage * equilibrium.arcFlowAll[0][a][b];
+						Schedule.arcFlowAll[t][a][b] = 0.0;// Network.touristPercentage* equilibrium.arcFlowAll[0][a][b];
 					}
 				}
 			for (size_t t = 1; t < Maintenance.T; ++t) 
 				for(size_t od = 0; od < Network.numberODpairs; ++od)
 					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 						Schedule.pathFlow[t][od][r] = 0.0;
+						Schedule.touristPathFlow[t][od][r] = 0.0;
 					}
-
-			//cout << "Equilibrium all flows:\n";
-			//print2Dim(Schedule.arcFlowAll[0], Network.vertices);
-			//cout << "-----------------\n";
-			//cout << "Equilibrium tourist flows:\n";
-			//print2Dim(Schedule.arcFlowAll[1], Network.vertices);
-			//cout << "-----------------\n";
-			//cout << "Path flows at equilibrium:\n";
-			//print2Dim(Schedule.pathFlow[0]);
-			//cout << "-----------------\n";
-
-			//print2Dim(Schedule.availableRoutes[0]);
-			//print2Dim(Schedule.numAvailableRoutes);
 
 			//dynamic adjustment function: PSAP
 			//CHECK TIMING!!!
 			adjustingTrafficFlows(Maintenance.T, Network, Schedule);
 
 			for (size_t t = 0; t < Maintenance.T; ++t) {
-				print2Dim(Schedule.pathFlow[t]);
+				//print2Dim(Schedule.pathFlow[t]);
+				//cout << "t";
+				//print2Dim(Schedule.touristPathFlow[t]);
 			}
+			for(size_t t = 0; t < Maintenance.T; ++t)
+				for(size_t a = 0; a < Network.vertices; ++a)
+					for (size_t b = 0; b < Network.vertices; ++b) {
+						if (Schedule.arcFlowTourist[t][a][b] != equilibrium.arcFlowAll[0][a][b] * Network.touristPercentage) {
+							cout << t << ' ' << a << b << "  ";
+						}
+					}
 
 			currentCosts = costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 			cout << currentCosts << "\n";
@@ -188,14 +194,14 @@ int main()
 				for (size_t a = 0; a < Network.vertices; ++a) {
 					for (size_t b = 0; b < Network.vertices; ++b) {
 						equilibriumBenchmark.arcFlowAll[t][a][b] = 0.0;
-						for(size_t od = 0; od < Network.numberODpairs; ++od)
-							equilibriumBenchmark.arcFlow[t][od][a][b] = 0.0;
+						//arcFLowTourist
 					}
 				}
 
 				for (size_t od = 0; od < Network.numberODpairs; ++od)
 					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 						equilibriumBenchmark.pathFlow[t][od][r] = 0.0;
+						equilibriumBenchmark.touristPathFlow[t][od][r] = 0.0;
 					}
 
 			convexCombinations(equilibriumBenchmark, Network, 0.001, 0.0001, t);//convergenceCriterion,  epsilon for stepsize?
@@ -227,7 +233,6 @@ int main()
 			eqSchedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
 			eqSchedule.pathFlow[0] = equilibrium.pathFlow[0];
 
-
 			//just as above with bestSchedule...
 			for (size_t t = 1; t < Maintenance.T; ++t) { //0 is always equilibrium.
 				if (eqSchedule.binarySchedule[t] != eqSchedule.binarySchedule[t - 1]) {
@@ -237,14 +242,13 @@ int main()
 					for (size_t a = 0; a < Network.vertices; ++a) {
 						for (size_t b = 0; b < Network.vertices; ++b) {
 							eqSchedule.arcFlowAll[t][a][b] = 0.0;
-							for (size_t od = 0; od < Network.numberODpairs; ++od)
-								eqSchedule.arcFlow[t][od][a][b] = 0.0;
 						}
 					}
 
 					for (size_t od = 0; od < Network.numberODpairs; ++od)
 						for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 							eqSchedule.pathFlow[t][od][r] = 0.0;
+							eqSchedule.touristPathFlow[t][od][r] = 0.0;
 						}
 
 					//add the equilibrium flows (so needs all at 0)
