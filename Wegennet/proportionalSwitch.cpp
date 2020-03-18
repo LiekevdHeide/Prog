@@ -14,15 +14,14 @@ void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t> &availab
 		size_t p = availableRoutes[q];
 
 		//if route not available at t: flow is 0.0 so OK
-		pathFlowNew = pathFlowOld;//excludes tourists
+		pathFlowNew[p] = pathFlowOld[p];//excludes tourists
 		//Schedule.pathFlow[t + 1][od][p] = Schedule.pathFlow[t][od][p];//still excludes tourists.
 		for (size_t g = 0; g < numAvailableRoutes; ++g) { // if not available flow = 0
 			size_t r = availableRoutes[g];
 			
 			if (r != p) {
-				pathFlowNew[p] += 0.001 * (pathFlowOld[r] * max(pathTimes[r] - pathTimes[p], 0.0) - pathFlowOld[p] * max(pathTimes[p] - pathTimes[r], 0.0));
+				pathFlowNew[p] += 0.0001 * (pathFlowOld[r] * max(pathTimes[r] - pathTimes[p], 0.0) - pathFlowOld[p] * max(pathTimes[p] - pathTimes[r], 0.0));
 				//Schedule.pathFlow[t + 1][od][p] += 0.001 * (Schedule.pathFlow[t][od][r] * max(pathTimes[od][r] - pathTimes[od][p], 0.0) - Schedule.pathFlow[t][od][p] * max(pathTimes[od][p] - pathTimes[od][r], 0.0));
-
 			}
 		}
 	}

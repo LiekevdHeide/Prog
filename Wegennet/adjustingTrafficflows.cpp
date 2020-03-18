@@ -103,7 +103,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 		//add flow to available paths at t + 1
 		for (size_t od = 0; od < Network.numberODpairs; ++od)
 			for (size_t p = 0; p < Schedule.numAvailableRoutes[t + 1][od]; ++p)
-				Schedule.pathFlow[t + 1][od][p] += newFlow[od][p];
+				Schedule.pathFlow[t + 1][od][Schedule.availableRoutes[t + 1][od][p]] += newFlow[od][Schedule.availableRoutes[t + 1][od][p]];
 
 
 		//from path flows to arc flows:			 updates Schedule.arcFlowAll[t+1] using pathflow[t+1]

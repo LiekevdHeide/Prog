@@ -26,20 +26,20 @@ using namespace std;
 
 int main() 
 {
-	string whichComputer{ "X:/My Documents/Wegennetwerk/Experiment 2/" };
-	//string whichComputer{ "C:/Users/lieke/Documents/Wegennetwerk/Prog" };
+	//string whichComputer{ "X:/My Documents/Wegennetwerk/Experiment 2/" };
+	string whichComputer{ "C:/Users/Gebruiker/Documents/Wegennetwerk/Experiment small/" };
 
 	Timer time;
 
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "NetworkInputExperiment2.txt";
+	string roadInput = whichComputer + "NetworkInputExperimentSmall.txt";
 
 	RoadNetwork Network(roadInput);
 	//find all routes
 	depthFirstSearch(Network);
 
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "maintenanceInputExperiment2.txt";
+	string maintenanceInput = whichComputer + "maintenanceInputExperimentSmall.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
@@ -91,7 +91,7 @@ int main()
 		if (bruteForceSchedule(Schedule, Maintenance, Network, s, runOutPeriod)) {//start from t = 1 (t = 0 is equilibrium!) (also adjustsavailableRoute)
 
 			//cout << "-----------------\n";
-			cout << s << ' ';
+			cout << s << ':';
 			//start at equilibrium.
 			//Schedule.arcFlow[0] = equilibrium.arcFlow[0]; (NOT USED!)
 			Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
@@ -126,8 +126,12 @@ int main()
 			//CHECK TIMING!!!
 			adjustingTrafficFlows(Maintenance.T, Network, Schedule);
 
+			for (size_t t = 0; t < Maintenance.T; ++t) {
+				print2Dim(Schedule.pathFlow[t]);
+			}
+
 			currentCosts = costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
-			cout << currentCosts << "  ";
+			cout << currentCosts << "\n";
 			write << s << ' ' <<  currentCosts << '\n';
 			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 			write << '\n';
