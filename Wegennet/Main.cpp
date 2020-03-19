@@ -124,17 +124,17 @@ int main()
 			adjustingTrafficFlows(Maintenance.T, Network, Schedule);
 
 			for (size_t t = 0; t < Maintenance.T; ++t) {
-				//print2Dim(Schedule.pathFlow[t]);
+				print2Dim(Schedule.pathFlow[t]);
 				//cout << "t";
 				//print2Dim(Schedule.touristPathFlow[t]);
 			}
-			for(size_t t = 0; t < Maintenance.T; ++t)
+			/*for(size_t t = 0; t < Maintenance.T; ++t)
 				for(size_t a = 0; a < Network.vertices; ++a)
 					for (size_t b = 0; b < Network.vertices; ++b) {
 						if (Schedule.arcFlowTourist[t][a][b] != equilibrium.arcFlowAll[0][a][b] * Network.touristPercentage) {
 							cout << t << ' ' << a << b << "  ";
 						}
-					}
+					}*/
 
 			currentCosts = costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 			cout << currentCosts << "\n";
