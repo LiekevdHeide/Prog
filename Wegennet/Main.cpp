@@ -81,6 +81,11 @@ int main()
 		cout << '\n';
 	}
 
+	//find alternative routes uninformed using cplex / IP problem
+	findTouristAlternative(Network.vertices, Network.freeFlowTimes, Network.standardCapacities);//should be actualtimes!
+
+
+
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
 

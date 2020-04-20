@@ -3,6 +3,8 @@
 
 #include <algorithm>
 
+//OLD! (before IP)
+
 void touristAlternative(size_t OD, vector<size_t> numRoutes, vector<vector<vector<size_t>>> &odRoutes, size_t M, vector<vector<size_t>> &locations) {
 	//Find alternative tourist flows for all combinations of maintenances
 

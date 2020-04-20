@@ -1,3 +1,6 @@
 #pragma once
+#include <vector>
 
-void touristAlternative(size_t M);
+void findTouristAlternative(size_t N, std::vector<std::vector<double>>& travelTimes, std::vector<std::vector<double>>& standardCapacities);
+
+

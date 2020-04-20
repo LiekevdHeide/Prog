@@ -171,6 +171,9 @@
     <ClCompile Include="touristAlternative.cpp">
       <Filter>Source Files\TouristAlternatives</Filter>
     </ClCompile>
+    <ClCompile Include="findTouristAlternative.cpp">
+      <Filter>Source Files\TouristAlternatives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">
@@ -210,6 +213,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TouristAlternative.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
