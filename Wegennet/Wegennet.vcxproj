@@ -167,6 +167,7 @@
     <ClCompile Include="RoadNetwork.cpp" />
     <ClCompile Include="ScheduleAndFlows.cpp" />
     <ClCompile Include="totalTravelTime.cpp" />
+    <ClCompile Include="touristAlternative.cpp" />
     <ClCompile Include="updateExpectedPathTimes.cpp" />
     <ClCompile Include="wholeScheduleToMaintenance.cpp" />
   </ItemGroup>
@@ -183,6 +184,7 @@
     <ClInclude Include="RoadNetwork.h" />
     <ClInclude Include="ScheduleAndFlows.h" />
     <ClInclude Include="ScheduleCheckFunctions.h" />
+    <ClInclude Include="TouristAlternative.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

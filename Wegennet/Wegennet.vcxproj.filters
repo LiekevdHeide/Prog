@@ -40,6 +40,9 @@
     <Filter Include="Source Files\PrintingFunctions">
       <UniqueIdentifier>{0cff1adf-11c1-40c3-b246-fa1aa520672e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TouristAlternatives">
+      <UniqueIdentifier>{c5049db7-1086-4057-96d4-70053ee6f728}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -165,6 +168,9 @@
     <ClCompile Include="printRoutes.cpp">
       <Filter>Source Files\PrintingFunctions</Filter>
     </ClCompile>
+    <ClCompile Include="touristAlternative.cpp">
+      <Filter>Source Files\TouristAlternatives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">
@@ -201,6 +207,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="printingResults.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TouristAlternative.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

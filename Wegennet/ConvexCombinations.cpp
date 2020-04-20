@@ -30,7 +30,7 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 
 	//ScheduleAndFlows newFlow(0, Roads.vertices, 0, Roads.numberODpairs, Roads.numberODpaths);
 
-	while (convergenceTest > convergenceCriterion && counter < 20 ) {//Flow.pathFlow is the old one, newPathFlow is the next direction
+	while (convergenceTest > convergenceCriterion && counter < 1000 ) {//Flow.pathFlow is the old one, newPathFlow is the next direction
 		//cout << "                 " << counter << '\n';
 		//save old flows
 		//oldPathFlow = Flow.pathFlow[0];
@@ -64,8 +64,9 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 			}
 		
 		//step size
-		alpha = findGoodStepsize(directionArcFlow, oldArcFlow, Roads, Flow.scheduledCapacities[time], accuracyStepsize);
-		
+		//alpha = findGoodStepsize(directionArcFlow, oldArcFlow, Roads, Flow.scheduledCapacities[time], accuracyStepsize);
+		alpha = 2.0 / (counter + 2.0);
+		cout << "stepsize: " << alpha << '\n';
 		//move to new flow using step size
 		for (size_t od = 0; od < Roads.numberODpairs; ++od) {
 			for (size_t r = 0; r < Flow.numAvailableRoutes[time][od]; ++r) {
@@ -89,8 +90,11 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 		
 		convergenceTest = calculateConvergenceTest(oldArcFlow, newArcFlow, Roads, Flow.scheduledCapacities[time], Flow.numAvailableRoutes[time], Flow.availableRoutes[time]);
 		++counter;//for trial
-
-		
+		cout << "pTimes" << counter << ' ';
+		for (size_t p = 0; p < Flow.numAvailableRoutes[0][0]; ++p) {
+			cout << Roads.pathTravelTime(Roads.ODpaths[0][Flow.availableRoutes[0][0][p]], Flow.arcFlowAll[0], Flow.scheduledCapacities[0]) << ' ';
+		}
+		cout << '\n';
 	}
 
 	//Flow and Roads are changed and sent back

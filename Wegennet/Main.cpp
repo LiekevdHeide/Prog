@@ -15,6 +15,8 @@
 #include "PSAP.h"
 #include "DepthFirstSearchFunctions.h"
 
+#include "TouristAlternative.h"
+
 
 #include <vector>
 //#include <functional> //if want to make a standard function that can be different functions (such as policies etc)
@@ -67,9 +69,17 @@ int main()
 	//CONVEX COMBINATIONS:
 	ScheduleAndFlows equilibrium(2, Network.vertices, 0, Network.numberODpairs, Network.numberODpaths, Network.standardCapacities);//all flows 0, no maintenance
 	convexCombinations(equilibrium, Network, 0.001, 0.0001, 0);//convergenceCriterion,  epsilon for stepsize?, time!
-	
-	print2Dim(equilibrium.arcFlowAll[0]);
 
+	cout << "Pathflows eq: \n";
+	print2Dim(equilibrium.pathFlow[0]);
+	cout << "Costs eq:\n";
+	cout << costsSchedule(Network, 1, equilibrium.scheduledCapacities, equilibrium.arcFlowAll) << '\n';
+	for (size_t od = 0; od < Network.numberODpairs; ++od) {
+		for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
+			cout << Network.pathTravelTime(Network.ODpaths[od][p], equilibrium.arcFlowAll[0], Network.standardCapacities) << ' ';
+		}
+		cout << '\n';
+	}
 
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
@@ -85,6 +95,8 @@ int main()
 
 	size_t runOutPeriod = 10;
 
+	//touristAlternative(Maintenance.M);
+
 	//for all new schedules?
 	for (size_t s = 0; s < pow(Maintenance.T - runOutPeriod, Maintenance.M); s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
 		//adjust schedule
@@ -97,14 +109,14 @@ int main()
 			for(size_t t = 0; t < Maintenance.T; ++t)
 			for(size_t a = 0; a < Network.vertices; ++a)
 				for (size_t b = 0; b < Network.vertices; ++b) {
-					Schedule.arcFlowTourist[t][a][b] = equilibrium.arcFlowAll[0][a][b] * Network.touristPercentage;
+					//Schedule.arcFlowTourist[t][a][b] = equilibrium.arcFlowAll[0][a][b] * Network.touristPercentage;
 				}
 			for(size_t od = 0; od < Network.numberODpairs; ++od)
 				for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
 					Schedule.pathFlow[0][od][p] = equilibrium.pathFlow[0][od][p] * (1.00 - Network.touristPercentage);
-					Schedule.touristPathFlow[0][od][p] = equilibrium.touristPathFlow[0][od][p] * Network.touristPercentage;
+					//Schedule.touristPathFlow[0][od][p] = equilibrium.touristPathFlow[0][od][p] * Network.touristPercentage;
 				}
-
+				
 			//set to 0 for next ones
 			for (size_t t = 1; t < Maintenance.T; ++t)
 				for (size_t a = 0; a < Network.vertices; ++a) {
@@ -116,7 +128,7 @@ int main()
 				for(size_t od = 0; od < Network.numberODpairs; ++od)
 					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 						Schedule.pathFlow[t][od][r] = 0.0;
-						Schedule.touristPathFlow[t][od][r] = 0.0;
+						//Schedule.touristPathFlow[t][od][r] = 0.0;
 					}
 
 			//dynamic adjustment function: PSAP
@@ -125,6 +137,12 @@ int main()
 
 			for (size_t t = 0; t < Maintenance.T; ++t) {
 				print2Dim(Schedule.pathFlow[t]);
+				for (size_t od = 0; od < Network.numberODpairs; ++od)
+					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
+						if (Schedule.pathFlow[t][od][r] < -0.0000000000000001) {
+							cout << "NEGFLOW" << Schedule.pathFlow[t][od][r] << ' ';
+						}
+					}
 				//cout << "t";
 				//print2Dim(Schedule.touristPathFlow[t]);
 			}
@@ -201,7 +219,7 @@ int main()
 				for (size_t od = 0; od < Network.numberODpairs; ++od)
 					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 						equilibriumBenchmark.pathFlow[t][od][r] = 0.0;
-						equilibriumBenchmark.touristPathFlow[t][od][r] = 0.0;
+						//equilibriumBenchmark.touristPathFlow[t][od][r] = 0.0;
 					}
 
 			convexCombinations(equilibriumBenchmark, Network, 0.001, 0.0001, t);//convergenceCriterion,  epsilon for stepsize?
@@ -248,7 +266,7 @@ int main()
 					for (size_t od = 0; od < Network.numberODpairs; ++od)
 						for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 							eqSchedule.pathFlow[t][od][r] = 0.0;
-							eqSchedule.touristPathFlow[t][od][r] = 0.0;
+							//eqSchedule.touristPathFlow[t][od][r] = 0.0;
 						}
 
 					//add the equilibrium flows (so needs all at 0)
