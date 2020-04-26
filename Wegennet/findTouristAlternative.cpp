@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vector<vector<double>> &standardCapacities){
+void findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vector<vector<double>> &standardCapacities, vector<size_t> interruptedRoute){
 
 	IloEnv env;
 	IloModel model(env);
@@ -29,7 +29,11 @@ void findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vecto
 	IloExpr objFunction(env);
 	for (size_t i = 0; i < N; ++i) {
 		for (size_t j = 0; j < N; ++j)
-			objFunction += travelTimes[i][j] * arcs[i][j]; // *travelTimes[i][j];
+			objFunction += travelTimes[i][j] * arcs[i][j];
+	}
+
+	for (size_t r = 0; r < interruptedRoute.size() - 1; ++r) {
+		objFunction -= arcs[interruptedRoute[r]][interruptedRoute[r + 1]]; //ADD FACTOR!!
 	}
 
 	model.add(IloMinimize(env, objFunction));

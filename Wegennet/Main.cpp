@@ -82,7 +82,8 @@ int main()
 	}
 
 	//find alternative routes uninformed using cplex / IP problem
-	findTouristAlternative(Network.vertices, Network.freeFlowTimes, Network.standardCapacities);//should be actualtimes!
+	touristAlternative(Network, Maintenance.M, Maintenance.locationSets);
+	
 
 
 

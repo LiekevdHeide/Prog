@@ -2,7 +2,7 @@
 \Problem name: IloCplex
 
 Minimize
- obj1: 2 arc0(1) + 2 arc0(2) + 2 arc1(0) + 2 arc1(2) + 2 arc1(3) + 2 arc2(0)
+ obj1: 2 arc0(1) + arc0(2) + arc1(0) + 2 arc1(2) + 2 arc1(3) + 2 arc2(0)
        + 2 arc2(1) + 2 arc2(3) + 2 arc3(1) + 2 arc3(2)
 Subject To
  c1:  - arc0(1) + arc1(0) + arc1(2) + arc1(3) - arc2(1) - arc3(1)  = 0
@@ -11,7 +11,7 @@ Subject To
  c4:  arc0(3) + arc1(3) + arc2(3) + arc3(3)  = 1
  c5:  arc0(0) <= 0
  c6:  arc0(1) <= 10
- c7:  arc0(2) <= 10
+ c7:  arc0(2) <= 0
  c8:  arc0(3) <= 0
  c9:  arc1(0) <= 8
  c10: arc1(1) <= 0
