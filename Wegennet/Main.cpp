@@ -29,19 +29,19 @@ using namespace std;
 int main() 
 {
 	//string whichComputer{ "X:/My Documents/Wegennetwerk/Experiment 2/" };
-	string whichComputer{ "C:/Users/Gebruiker/Documents/Wegennetwerk/Experiment small/" };
+	string whichComputer{ "C:/Users/Gebruiker/Documents/Wegennetwerk/Experiment big/" };
 
 	Timer time;
 
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "NetworkInputExperimentSmall.txt";
+	string roadInput = whichComputer + "NetworkInputExperiment2.txt";
 
 	RoadNetwork Network(roadInput);
 	//find all routes
 	depthFirstSearch(Network);
 
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "maintenanceInputExperimentSmall.txt";
+	string maintenanceInput = whichComputer + "maintenanceInputExperiment2.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
@@ -81,11 +81,8 @@ int main()
 		cout << '\n';
 	}
 
-	//find alternative routes uninformed using cplex / IP problem
-	touristAlternative(Network, Maintenance.M, Maintenance.locationSets);
-	
-
-
+	//find alternative routes uninformed using cplex / IP problem, returns arcFlows for alternative tourists per M combi: //flows for: s(2^M), v, v
+	vector<vector<vector<double>>> touristAlternativeFlows = touristAlternative(Network, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0]); 
 
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
@@ -101,67 +98,72 @@ int main()
 
 	size_t runOutPeriod = 10;
 
-	//touristAlternative(Maintenance.M);
-
 	//for all new schedules?
 	for (size_t s = 0; s < pow(Maintenance.T - runOutPeriod, Maintenance.M); s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
 		//adjust schedule
-		if (bruteForceSchedule(Schedule, Maintenance, Network, s, runOutPeriod)) {//start from t = 1 (t = 0 is equilibrium!) (also adjustsavailableRoute)
+		if (bruteForceSchedule(Schedule, Maintenance, Network, s, runOutPeriod)) {//start from t = 1 (t = 0 is equilibrium!) (also adjustsavailableRoute) (returns if schedule is feasible + Schedule.binarySchedule)
 
 			//cout << "-----------------\n";
 			cout << s << ':';
+
+			//-----------------------------------------------------------------------------
+			//initialize the arcFlows + pathFlows for informed + tourists
+
 			//start at equilibrium.
 			Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
-			for(size_t t = 0; t < Maintenance.T; ++t)
-			for(size_t a = 0; a < Network.vertices; ++a)
-				for (size_t b = 0; b < Network.vertices; ++b) {
-					//Schedule.arcFlowTourist[t][a][b] = equilibrium.arcFlowAll[0][a][b] * Network.touristPercentage;
-				}
-			for(size_t od = 0; od < Network.numberODpairs; ++od)
+			for (size_t od = 0; od < Network.numberODpairs; ++od)
 				for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
 					Schedule.pathFlow[0][od][p] = equilibrium.pathFlow[0][od][p] * (1.00 - Network.touristPercentage);
-					//Schedule.touristPathFlow[0][od][p] = equilibrium.touristPathFlow[0][od][p] * Network.touristPercentage;
 				}
-				
-			//set to 0 for next ones
+
+			//
+			size_t wholeM;
+			for (size_t t = 0; t < Maintenance.T; ++t) {
+				wholeM = 0;
+				for (size_t m = 0; m < Maintenance.M; ++m) {
+					if (Schedule.binarySchedule[t][m] > 0) {
+						wholeM += pow(2, m);
+					}
+				}
+				Schedule.arcFlowTourist[t] = touristAlternativeFlows[wholeM];//already multiplied by rho
+			}
+	
+			//set informed flow to 0 for next time periods
 			for (size_t t = 1; t < Maintenance.T; ++t)
 				for (size_t a = 0; a < Network.vertices; ++a) {
 					for (size_t b = 0; b < Network.vertices; ++b) {
-						Schedule.arcFlowAll[t][a][b] = 0.0;// Network.touristPercentage* equilibrium.arcFlowAll[0][a][b];
+						Schedule.arcFlowAll[t][a][b] = 0.0;
 					}
 				}
 			for (size_t t = 1; t < Maintenance.T; ++t) 
 				for(size_t od = 0; od < Network.numberODpairs; ++od)
 					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 						Schedule.pathFlow[t][od][r] = 0.0;
-						//Schedule.touristPathFlow[t][od][r] = 0.0;
 					}
+
 
 			//dynamic adjustment function: PSAP
 			//CHECK TIMING!!!
 			adjustingTrafficFlows(Maintenance.T, Network, Schedule);
 
+
+			//----------------------------------------------------------------------------------------------
+			//test
 			for (size_t t = 0; t < Maintenance.T; ++t) {
-				print2Dim(Schedule.pathFlow[t]);
+				//print2Dim(Schedule.pathFlow[t]);
 				for (size_t od = 0; od < Network.numberODpairs; ++od)
 					for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
 						if (Schedule.pathFlow[t][od][r] < -0.0000000000000001) {
 							cout << "NEGFLOW" << Schedule.pathFlow[t][od][r] << ' ';
 						}
 					}
-				//cout << "t";
-				//print2Dim(Schedule.touristPathFlow[t]);
-			}
-			/*for(size_t t = 0; t < Maintenance.T; ++t)
-				for(size_t a = 0; a < Network.vertices; ++a)
-					for (size_t b = 0; b < Network.vertices; ++b) {
-						if (Schedule.arcFlowTourist[t][a][b] != equilibrium.arcFlowAll[0][a][b] * Network.touristPercentage) {
-							cout << t << ' ' << a << b << "  ";
-						}
-					}*/
 
+			}
+
+			//--------------------------------------------------------------------------------------------
+			//print stuff
 			currentCosts = costsSchedule(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
-			cout << currentCosts << "\n";
+			//cout << currentCosts << "\n";
 			write << s << ' ' <<  currentCosts << '\n';
 			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 			write << '\n';
@@ -186,7 +188,7 @@ int main()
 			//check if "best"?
 		}
 		else {
-			cout << ' ';// "IMPOSSIBLE:" << s << ' ';
+			//cout << ' ';// "IMPOSSIBLE:" << s << ' ';
 
 		}
 		

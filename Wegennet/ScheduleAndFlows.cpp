@@ -18,7 +18,7 @@ ScheduleAndFlows::ScheduleAndFlows(size_t T, size_t vertices, size_t M, size_t O
 		}
 	}
 	pathFlow = pFlows;
-	touristPathFlow = pFlows;
+	//touristPathFlow = pFlows;
 
 	//initialize schedule
 	vector<vector<size_t>> schedule(T, vector<size_t>(M, 0));

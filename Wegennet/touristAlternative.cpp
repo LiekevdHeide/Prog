@@ -9,7 +9,7 @@
 using namespace std;
 
 //main function for touristAlternatives: input network, output list for all maintenance combi's: which tourist flows.
-void touristAlternative(RoadNetwork Net, size_t M, vector<vector<size_t>> &locations) {//assumes maintenance => zero capacity
+vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, size_t M, vector<vector<size_t>> &locations, vector<vector<double>> &eqPathFlows) {//assumes maintenance => zero capacity
 	//Find alternative tourist flows for all combinations of maintenances
 
 	//find which paths are interrupted
@@ -23,11 +23,15 @@ void touristAlternative(RoadNetwork Net, size_t M, vector<vector<size_t>> &locat
 	findInterruptedRoutes(M, locations, Net.numberODpairs, Net.numberODpaths, Net.ODpaths, interruptedRoutes);// input: locations is , returns interruptedRoutes (binary):m, od, r.
 
 	//use binary schedule and binary interruptedRoutes to get interrupted routes for this schedule
-
+	
+	vector<vector<vector<double>>> resultingArcFlows(pow(2, M), vector<vector<double>>(Net.vertices, vector<double>(Net.vertices, 0.0)));
+	vector<vector<vector<size_t>>> actualPaths;
 	//for each binary / wholeschedule:
 	cout << "schedules:\n";
 	for (size_t s = 1; s < pow(2, M); ++s) {
 		cout << s << '\n';
+
+		actualPaths = Net.ODpaths;
 
 		//use wholeScheduleToMaintenance to get the binary for it
 		vector<size_t> schedule(M, 0);
@@ -54,20 +58,11 @@ void touristAlternative(RoadNetwork Net, size_t M, vector<vector<size_t>> &locat
 			vector<size_t> whichInterrupted;
 
 			for (size_t m = 0; m < scheduledMaintenance.size(); ++m) {
-				if (s == 3) {
-					cout << "m" << scheduledMaintenance[m] << ' ';
-				}
 				for (size_t p = 0; p < Net.numberODpaths[od]; ++p) {
 					if (interruptedRoutes[m][od][p] == 1) {
 						//if not yet added, add this route
-						if (s == 3) {
-							cout << "p" << p << ' ';
-						}
 						if (find(whichInterrupted.begin(), whichInterrupted.end(), p) == whichInterrupted.end()) {
 							whichInterrupted.push_back(p);
-							if (s == 3) {
-								cout << "int" << p << " ";
-							}
 						}
 					}
 				}
@@ -76,17 +71,32 @@ void touristAlternative(RoadNetwork Net, size_t M, vector<vector<size_t>> &locat
 				cout << "sizes:" << whichInterrupted.size() << '-' << Net.numberODpaths[od] << ' ';
 				for (size_t p = 0; p < whichInterrupted.size(); ++p) {
 					cout << "route" << whichInterrupted[p] << ' ';
-					findTouristAlternative(Net.vertices, Net.freeFlowTimes, actualCapacities, Net.ODpaths[od][whichInterrupted[p]]);//should be actualtimes!
+					if (eqPathFlows[od][whichInterrupted[p]] > 0.0) {
+						actualPaths[od][whichInterrupted[p]] = findTouristAlternative(Net.vertices, Net.freeFlowTimes, actualCapacities, Net.ODpaths[od][whichInterrupted[p]]);//should be actualtimes!
+					}
 				}
 			}
 			else {
-				cout << "Infeasible s \n";
+				cout << "Infeasible s" << s << '\n';
 				break;
 			}
 		}
 		
-
+		//use actualPaths (i.e. standard paths, but replaced with newalternative paths for 1) used in eq 2) blocked paths)
+		for (size_t od = 0; od < Net.numberODpairs; ++od) {
+			for (size_t p = 0; p < Net.numberODpaths[od]; ++p) {
+				//if the path is used in equilibrium
+				if (eqPathFlows[od][p] > 0) {
+					//add the eqPathFlow to the arcs in resultingArcFlow
+					for (size_t j = 0; j < actualPaths[od][p].size() - 1; ++j) {
+						size_t vertice1 = actualPaths[od][p][j];
+						size_t vertice2 = actualPaths[od][p][j + 1];
+						resultingArcFlows[s][vertice1][vertice2] += (Net.touristPercentage *  eqPathFlows[od][p]);
+					}
+				}
+			}
+		}
 	}
 
-	return;
+	return resultingArcFlows;
 }

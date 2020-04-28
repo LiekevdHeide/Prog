@@ -20,7 +20,7 @@ public:
 
 	//path flows
 	std::vector< std::vector<std::vector<double>>> pathFlow; //time, OD pair, path
-	std::vector< std::vector<std::vector<double>>> touristPathFlow; //time, OD pair, path
+	//std::vector< std::vector<std::vector<double>>> touristPathFlow; //time, OD pair, path
 
 	ScheduleAndFlows(size_t T, size_t vertices, size_t M, size_t ODpairs, std::vector<size_t> &numberODpaths, std::vector<std::vector<double>>& standardCapacities);
 

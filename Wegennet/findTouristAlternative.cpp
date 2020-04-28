@@ -7,7 +7,11 @@
 
 using namespace std;
 
-void findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vector<vector<double>> &standardCapacities, vector<size_t> interruptedRoute){
+vector<size_t> findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vector<vector<double>> &standardCapacities, vector<size_t> interruptedRoute){
+
+	for (size_t p = 0; p < interruptedRoute.size(); ++p) {
+		cout << interruptedRoute[p];
+	}
 
 	IloEnv env;
 	IloModel model(env);
@@ -42,29 +46,44 @@ void findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vecto
 
 	//add constraints:
 	//in=out
-	for (size_t i = 1; i < N - 1; ++i) {
-		IloExpr allIn(env);
-		IloExpr allOut(env);
-		for (size_t j = 0; j < N; ++j) {
-			allIn += arcs[i][j];
-			allOut += arcs[j][i];
+	for (size_t i = 0; i < N; ++i) {
+		if (i != interruptedRoute[0] && i != interruptedRoute.back()) {
+			IloExpr allIn(env);
+			IloExpr allOut(env);
+			for (size_t j = 0; j < N; ++j) {
+				allIn += arcs[i][j];
+				allOut += arcs[j][i];
+			}
+			model.add(allIn == allOut);
+			allIn.end();
+			allOut.end();
 		}
-		model.add(allIn == allOut);
-		allIn.end();
-		allOut.end();
 	}
 
 	//leave o = 1, arrive d = 1
 	IloExpr leaveOrigin(env);
 	IloExpr arriveDestination(env);
 	for (size_t j = 0; j < N; ++j) {
-		leaveOrigin += arcs[0][j];
-		arriveDestination += arcs[j][N - 1];
+		leaveOrigin += arcs[interruptedRoute[0]][j];
+		arriveDestination += arcs[j][interruptedRoute.back()];
 	}
 	model.add(leaveOrigin == 1);
 	model.add(arriveDestination == 1);
 	leaveOrigin.end();
 	arriveDestination.end();
+
+	//arrive o = 0, leave d = 0
+	IloExpr leaveDestination(env);
+	IloExpr arriveOrigin(env);
+	for (size_t j = 0; j < N; ++j) {
+		leaveDestination += arcs[interruptedRoute.back()][j];
+		arriveOrigin += arcs[j][interruptedRoute[0]];
+	}
+	model.add(leaveDestination == 0);
+	model.add(arriveOrigin == 0);
+	leaveDestination.end();
+	arriveOrigin.end();
+
 
 	//only use available roads
 	for(size_t i = 0; i < N; ++i)
@@ -87,8 +106,21 @@ void findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vecto
 		cout << '\n';
 	}
 
+	size_t currentVertice = interruptedRoute[0];
+	vector<size_t> newRoute;
+	newRoute.push_back(interruptedRoute[0]);
+	while (currentVertice != interruptedRoute.back()) {//while current != final entry in interruptedRoute
+		for (size_t v = 0; v < N; ++v) {
+			if (cplex.getValue(arcs[currentVertice][v]) > 0) {
+				newRoute.push_back(v);
+				currentVertice = v;
+				break;
+			}
+		}
+	}
+
 
 	model.end();
 	env.end();
-	return;
+	return newRoute;
 }
