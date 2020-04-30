@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<size_t> findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vector<vector<double>> &standardCapacities, vector<size_t> interruptedRoute){
+vector<size_t> findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vector<vector<double>> &actualCapacities, vector<size_t> interruptedRoute){
 
 	for (size_t p = 0; p < interruptedRoute.size(); ++p) {
 		cout << interruptedRoute[p];
@@ -55,6 +55,8 @@ vector<size_t> findTouristAlternative(size_t N, vector<vector<double>> &travelTi
 				allOut += arcs[j][i];
 			}
 			model.add(allIn == allOut);
+			//model.add(allIn <= 1);
+			//model.add(allOut <= 1);
 			allIn.end();
 			allOut.end();
 		}
@@ -88,7 +90,7 @@ vector<size_t> findTouristAlternative(size_t N, vector<vector<double>> &travelTi
 	//only use available roads
 	for(size_t i = 0; i < N; ++i)
 		for (size_t j = 0; j < N; ++j) {
-			model.add(arcs[i][j] <= standardCapacities[i][j]);
+			model.add(arcs[i][j] <= actualCapacities[i][j]);
 		}
 
 

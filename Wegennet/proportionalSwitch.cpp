@@ -5,7 +5,7 @@
 
 using namespace std;
 //Mine
-void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t> &availableRoutes, const vector<double> &pathFlowOld, const vector<double> &pathTimes, vector<double> &pathFlowNew) {
+/*void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t> &availableRoutes, const vector<double> &pathFlowOld, const vector<double> &pathTimes, vector<double> &pathFlowNew) {
 	//implements the classic PSAP, returns pathFlowNew (which is step for pathFlows at t + 1), all else remains equal. Only considers paths available at t + 1 to change from / to
 	
 	//change flows only for recurring drivers (so NOT tourists!), only consider changing from / to available paths at t+1
@@ -26,10 +26,10 @@ void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t> &availab
 		}
 	}
 	return;
-}
+}*/
 
 //From He et al. 2010 with T_w
-/*void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t>& availableRoutes, const vector<double>& pathFlowOld, const vector<double>& pathTimes, vector<double>& pathFlowNew) {
+void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t>& availableRoutes, const vector<double>& pathFlowOld, const vector<double>& pathTimes, vector<double>& pathFlowNew) {
 	//implements the classic PSAP, returns pathFlowNew (which is step for pathFlows at t + 1), all else remains equal. Only considers paths available at t + 1 to change from / to
 
 	//get 1/T_w : step size
@@ -43,10 +43,10 @@ void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t> &availab
 			}
 		}
 	}
-	alpha += 0;//=M?
+	alpha += 0.5;//=M?
 	alpha = 1 / alpha;
-	cout << "alpha=" << alpha << ' ';
-	alpha = 0.001;
+	//cout << "alpha=" << alpha << ' ';
+
 	//change flows only for recurring drivers (so NOT tourists!), only consider changing from / to available paths at t+1
 	for (size_t q = 0; q < numAvailableRoutes; ++q) {
 		//update pathflows based for all available at t + 1, based on t flows (FOR ALL AVAILABLE AT t and t + 1), only for non-tourists
@@ -64,7 +64,7 @@ void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t> &availab
 		}
 	}
 	return;
-}*/
+}
 
 /*
 void proportionalSwitch(ScheduleAndFlows &Schedule, size_t t, size_t od, const vector<vector<double>> &pathTimes) {

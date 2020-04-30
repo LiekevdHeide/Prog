@@ -58,7 +58,7 @@ int main()
 	//print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
 
 	//write results to:
-	ofstream write(whichComputer + "ResultsB.txt");  //, std::ios::app for adding to end of file
+	ofstream write(whichComputer + "ResultsBTw.txt");  //, std::ios::app for adding to end of file
 	write << roadInput << ' ' << maintenanceInput << '\n';
 	printRoutes(write, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 
@@ -82,7 +82,14 @@ int main()
 	}
 
 	//find alternative routes uninformed using cplex / IP problem, returns arcFlows for alternative tourists per M combi: //flows for: s(2^M), v, v
-	vector<vector<vector<double>>> touristAlternativeFlows = touristAlternative(Network, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0]); 
+	vector<vector<double>>eqTravelTimeArcs(Network.vertices, vector<double>(Network.vertices, 0.0));
+	for(size_t i = 0; i < Network.vertices; ++i)
+		for (size_t j = 0; j < Network.vertices; ++j) {
+			if (Network.standardCapacities[i][j] > 0) {
+				eqTravelTimeArcs[i][j] = Network.travelTimeRoad(Network.standardCapacities[i][j], Network.freeFlowTimes[i][j], equilibrium.arcFlowAll[0][i][j]);
+			}
+		}
+	vector<vector<vector<double>>> touristAlternativeFlows = touristAlternative(Network, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0], eqTravelTimeArcs); 
 
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
@@ -195,14 +202,14 @@ int main()
 	}
 	//implement a heuristic GA/ALNS?
 
-	ofstream bestSolution(whichComputer + "BestSolution1B.txt");
+	ofstream bestSolution(whichComputer + "BestSolution1BTw.txt");
 	printRoutes(bestSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 	printSchedule(bestSolution, Maintenance.T, Maintenance.M, bestSchedule.binarySchedule);
 	printTraffic(bestSolution, Maintenance.T, Network.vertices, bestSchedule.arcFlowAll);
 	printRecurringTraffic(bestSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, bestSchedule.pathFlow);
 	bestSolution << bestCosts;
 
-	ofstream worstSolution(whichComputer + "WorstSolution1B.txt");
+	ofstream worstSolution(whichComputer + "WorstSolution1BTw.txt");
 	printRoutes(worstSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 	printSchedule(worstSolution, Maintenance.T, Maintenance.M, worstSchedule.binarySchedule);
 	printTraffic(worstSolution, Maintenance.T, Network.vertices, worstSchedule.arcFlowAll);
@@ -211,6 +218,7 @@ int main()
 
 	//----------------------------------------------------------------
 	//get benchmark: flows always in equilibrium (for best solution)
+	/*
 	ScheduleAndFlows equilibriumBenchmark(bestSchedule);
 	cout << "Benchmark all equilirbium: ";
 	//get all start times: (BRUTE FORCE??)
@@ -303,6 +311,7 @@ int main()
 	
 	bestAllEq << bestEqCosts; // costsSchedule(Network, Maintenance.T, bestAllEqSchedule.scheduledCapacities, bestAllEqSchedule.arcFlowAll);
 
-
+	*/
 	cout << "\nImplementation time: " << time.elapsed() << " seconds\n";
+	write << "\n runtime: " << time.elapsed() << " seconds\n";
 }

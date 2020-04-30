@@ -18,8 +18,13 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 	vector<vector<double>> pathTimes(Network.numberODpairs, vector<double>());
 	
 	for (size_t od = 0; od < Network.numberODpairs; ++od) {
-		pathTimes[od] = vector<double>(Network.numberODpaths[od]);//init to eq time
+		pathTimes[od] = vector<double>(Network.numberODpaths[od]);//init to eq time ????
+		//init to freeFlow time
+		for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
+			pathTimes[od][p] = Network.pathTravelTime(Network.ODpaths[od][p], vector<vector<double>>(Network.vertices, vector<double>(Network.vertices, 0.0)), Network.standardCapacities);
+		}
 	}
+	vector<vector<double>> freeFlowTimes = pathTimes;
 
 	double flowAtClosingPath = 0.0;
 	//check which routes are open -> Schedule.availableRoutes.
@@ -44,10 +49,11 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 		//findAlternativePathFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.touristPathFlow[t + 1]);
 
 		//------------------------------Recurrent drivers updating:
-
 		//at closing paths:
 		for (size_t od = 0; od < Network.numberODpairs; ++od) {
-			//Calculate pathtimes at time t (to base decisions t + 1 on)    based on arcFlowAll @t + currentCap	(set to freeFlow t for paths unavailable at t)	
+			//reset pathTimes: set all pathTimes to free flow time: (set to freeFlow t for ALL paths, then use updateExpected to change for all available
+			pathTimes = freeFlowTimes;
+			//Calculate pathtimes at time t (to base decisions t + 1 on)    based on arcFlowAll @t + currentCap	 ONLY FOR AVAILABLE PATHS!
 			updateExpectedPathTimes(Network, od, Schedule.numAvailableRoutes[t][od], Schedule.availableRoutes[t][od], Schedule.scheduledCapacities[t], Schedule.arcFlowAll[t], pathTimes[od]);
 
 			//determine recurrent flow @ closing paths
@@ -71,6 +77,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 			//find flows for small steps
 			for (size_t od = 0; od < Network.numberODpairs; ++od) {
 				//Calculate pathtimes at time t (to base decisions t + 1 on)    based on arcFlowAll @t + currentCap	(set to freeFlow t for paths unavailable at t)	
+				pathTimes = freeFlowTimes;
 				updateExpectedPathTimes(Network, od, Schedule.numAvailableRoutes[t][od], Schedule.availableRoutes[t][od], Schedule.scheduledCapacities[t], arcFlows, pathTimes[od]);
 
 				//Change recurring traffic flows at t+1 (using only paths available at t + 1). Resets pathFlow at t + 1 to flow at t, then updates it using PSAP.

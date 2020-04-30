@@ -77,7 +77,10 @@ public:
 		//only uses the freeflow + capacities in this class. Flow is input.
 		double travelTime = 0.0;
 		for (size_t a = 0; a < path.size() - 1; ++a) {
-			travelTime += travelTimeRoad(actualCapacities[path[a]][path[a + 1]], freeFlowTimes[path[a]][path[a + 1]], arcFlows[path[a]][path[a + 1]]);
+			size_t b0 = path[a];
+			size_t b1 = path[ a + 1];
+			//travelTime += travelTimeRoad(actualCapacities[path[a]][path[a + 1]], freeFlowTimes[path[a]][path[a + 1]], arcFlows[path[a]][path[a + 1]]);
+			travelTime += travelTimeRoad(actualCapacities[b0][b1], freeFlowTimes[b0][b1], arcFlows[b0][b1]);
 		}
 		return travelTime;
 	}
