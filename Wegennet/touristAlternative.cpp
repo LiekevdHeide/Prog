@@ -11,7 +11,7 @@
 using namespace std;
 
 //main function for touristAlternatives: input network, output list for all maintenance combi's: which tourist flows.
-vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, size_t M, vector<vector<size_t>> &locations, vector<vector<double>> &eqPathFlows, vector<vector<double>> &eqTravelTimeArcs) {//assumes maintenance => zero capacity
+vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, double Mu, size_t M, vector<vector<size_t>> &locations, vector<vector<double>> &eqPathFlows, vector<vector<double>> &eqTravelTimeArcs) {//assumes maintenance => zero capacity
 	//Find alternative tourist flows for all combinations of maintenances
 
 	//find which paths are interrupted
@@ -40,12 +40,14 @@ vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, size_t M, vec
 		vector<size_t> scheduledMaintenance;
 		wholeScheduleToMaintenance(2, M, s, schedule);
 		//find which maintenance (in number) is scheduled
+		cout << "scheduled maintenance:";
 		for (size_t m = 0; m < M; ++m) {
 			if (schedule[m] > 0) {
 				scheduledMaintenance.push_back(m);
+				cout << m;
 			}
 		}
-
+		cout << '\n';
 		//update capacities for this schedule!
 		vector<vector<double>> actualCapacities = Net.standardCapacities;
 		for (size_t m = 0; m < scheduledMaintenance.size(); ++m) {
@@ -60,7 +62,7 @@ vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, size_t M, vec
 
 			for (size_t m = 0; m < scheduledMaintenance.size(); ++m) {
 				for (size_t p = 0; p < Net.numberODpaths[od]; ++p) {
-					if (interruptedRoutes[m][od][p] == 1) {
+					if (interruptedRoutes[scheduledMaintenance[m]][od][p] == 1) {
 						//if not yet added, add this route
 						if (find(whichInterrupted.begin(), whichInterrupted.end(), p) == whichInterrupted.end()) {
 							whichInterrupted.push_back(p);
@@ -73,7 +75,7 @@ vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, size_t M, vec
 				for (size_t p = 0; p < whichInterrupted.size(); ++p) {
 					cout << "od" << od << "route" << whichInterrupted[p] << ' ';
 					if (eqPathFlows[od][whichInterrupted[p]] > 0.0) {
-						actualPaths[od][whichInterrupted[p]] = findTouristAlternative(Net.vertices, eqTravelTimeArcs, actualCapacities, Net.ODpaths[od][whichInterrupted[p]]);//should be actualtimes!
+						actualPaths[od][whichInterrupted[p]] = findTouristAlternative(Net.vertices, Mu, eqTravelTimeArcs, actualCapacities, Net.ODpaths[od][whichInterrupted[p]]);//should be actualtimes!
 					}
 				}
 			}

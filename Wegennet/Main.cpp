@@ -89,7 +89,9 @@ int main()
 				eqTravelTimeArcs[i][j] = Network.travelTimeRoad(Network.standardCapacities[i][j], Network.freeFlowTimes[i][j], equilibrium.arcFlowAll[0][i][j]);
 			}
 		}
-	vector<vector<vector<double>>> touristAlternativeFlows = touristAlternative(Network, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0], eqTravelTimeArcs); 
+
+	double Mu = 1.0;
+	vector<vector<vector<double>>> touristAlternativeFlows = touristAlternative(Network, Mu, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0], eqTravelTimeArcs); 
 
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";

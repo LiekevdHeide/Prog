@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<size_t> findTouristAlternative(size_t N, vector<vector<double>> &travelTimes, vector<vector<double>> &actualCapacities, vector<size_t> interruptedRoute){
+vector<size_t> findTouristAlternative(size_t N, double Mu, vector<vector<double>> &travelTimes, vector<vector<double>> &actualCapacities, vector<size_t> interruptedRoute){
 
 	for (size_t p = 0; p < interruptedRoute.size(); ++p) {
 		cout << interruptedRoute[p];
@@ -37,7 +37,7 @@ vector<size_t> findTouristAlternative(size_t N, vector<vector<double>> &travelTi
 	}
 
 	for (size_t r = 0; r < interruptedRoute.size() - 1; ++r) {
-		objFunction -= arcs[interruptedRoute[r]][interruptedRoute[r + 1]]; //ADD FACTOR!!
+		objFunction -= Mu * travelTimes[interruptedRoute[r]][interruptedRoute[r + 1]] * arcs[interruptedRoute[r]][interruptedRoute[r + 1]]; //ADD FACTOR!!
 	}
 
 	model.add(IloMinimize(env, objFunction));

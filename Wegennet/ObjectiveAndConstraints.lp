@@ -2,18 +2,16 @@
 \Problem name: IloCplex
 
 Minimize
- obj1: 2.04576519233974 arc0(1) + 2.732421875 arc0(3)
-       + 2.04576519233974 arc1(0) + 2.04576519233974 arc1(2)
-       + 1.732421875 arc1(4) + 2.04576519233974 arc2(1) + 2.732421875 arc2(5)
-       + 2 arc3(0) + 2.04578754408162 arc3(4) + 2.732421875 arc3(6) + 2 arc4(1)
-       + 2.04578754408162 arc4(3) + 2.04578754408162 arc4(5)
-       + 1.732421875 arc4(7) + 2 arc5(2) + 2.04578754408162 arc5(4)
-       + 2.732421875 arc5(8) + 2 arc6(3) + 2 arc6(7) + 2 arc7(4) + 2 arc7(6)
-       + 2 arc7(8) + 2 arc8(5) + 2 arc8(7)
+ obj1: 2.04576519233974 arc0(1) + 2.04576519233974 arc1(0)
+       + 2.04576519233974 arc1(2) + 2.732421875 arc1(4)
+       + 2.04576519233974 arc2(1) + 2.732421875 arc2(5) + 2 arc3(0)
+       + 2.732421875 arc3(6) + 2 arc4(1) + 2.04578754408162 arc4(3)
+       + 2.732421875 arc4(7) + 2 arc5(2) + 2.04578754408162 arc5(4) + 2 arc6(3)
+       + 2 arc6(7) + 2 arc7(4) + 2 arc7(6) + 2 arc7(8) + 2 arc8(5) + 2 arc8(7)
 Subject To
- c1:  arc0(1) + arc0(2) + arc0(3) + arc0(4) + arc0(5) + arc0(6) + arc0(7)
-      + arc0(8) - arc1(0) - arc2(0) - arc3(0) - arc4(0) - arc5(0) - arc6(0)
-      - arc7(0) - arc8(0)  = 0
+ c1:  - arc0(1) + arc1(0) + arc1(2) + arc1(3) + arc1(4) + arc1(5) + arc1(6)
+      + arc1(7) + arc1(8) - arc2(1) - arc3(1) - arc4(1) - arc5(1) - arc6(1)
+      - arc7(1) - arc8(1)  = 0
  c2:  - arc0(2) - arc1(2) + arc2(0) + arc2(1) + arc2(3) + arc2(4) + arc2(5)
       + arc2(6) + arc2(7) + arc2(8) - arc3(2) - arc4(2) - arc5(2) - arc6(2)
       - arc7(2) - arc8(2)  = 0
@@ -29,17 +27,17 @@ Subject To
  c6:  - arc0(6) - arc1(6) - arc2(6) - arc3(6) - arc4(6) - arc5(6) + arc6(0)
       + arc6(1) + arc6(2) + arc6(3) + arc6(4) + arc6(5) + arc6(7) + arc6(8)
       - arc7(6) - arc8(6)  = 0
- c7:  - arc0(8) - arc1(8) - arc2(8) - arc3(8) - arc4(8) - arc5(8) - arc6(8)
-      - arc7(8) + arc8(0) + arc8(1) + arc8(2) + arc8(3) + arc8(4) + arc8(5)
-      + arc8(6) + arc8(7)  = 0
- c8:  arc1(0) + arc1(1) + arc1(2) + arc1(3) + arc1(4) + arc1(5) + arc1(6)
-      + arc1(7) + arc1(8)  = 1
- c9:  arc0(7) + arc1(7) + arc2(7) + arc3(7) + arc4(7) + arc5(7) + arc6(7)
-      + arc7(7) + arc8(7)  = 1
- c10: arc7(0) + arc7(1) + arc7(2) + arc7(3) + arc7(4) + arc7(5) + arc7(6)
-      + arc7(7) + arc7(8)  = 0
- c11: arc0(1) + arc1(1) + arc2(1) + arc3(1) + arc4(1) + arc5(1) + arc6(1)
-      + arc7(1) + arc8(1)  = 0
+ c7:  - arc0(7) - arc1(7) - arc2(7) - arc3(7) - arc4(7) - arc5(7) - arc6(7)
+      + arc7(0) + arc7(1) + arc7(2) + arc7(3) + arc7(4) + arc7(5) + arc7(6)
+      + arc7(8) - arc8(7)  = 0
+ c8:  arc0(0) + arc0(1) + arc0(2) + arc0(3) + arc0(4) + arc0(5) + arc0(6)
+      + arc0(7) + arc0(8)  = 1
+ c9:  arc0(8) + arc1(8) + arc2(8) + arc3(8) + arc4(8) + arc5(8) + arc6(8)
+      + arc7(8) + arc8(8)  = 1
+ c10: arc8(0) + arc8(1) + arc8(2) + arc8(3) + arc8(4) + arc8(5) + arc8(6)
+      + arc8(7) + arc8(8)  = 0
+ c11: arc0(0) + arc1(0) + arc2(0) + arc3(0) + arc4(0) + arc5(0) + arc6(0)
+      + arc7(0) + arc8(0)  = 0
  c12: arc0(0) <= 0
  c13: arc0(1) <= 8
  c14: arc0(2) <= 0
@@ -53,7 +51,7 @@ Subject To
  c22: arc1(1) <= 0
  c23: arc1(2) <= 8
  c24: arc1(3) <= 0
- c25: arc1(4) <= 0
+ c25: arc1(4) <= 8
  c26: arc1(5) <= 0
  c27: arc1(6) <= 0
  c28: arc1(7) <= 0
@@ -83,7 +81,7 @@ Subject To
  c52: arc4(4) <= 0
  c53: arc4(5) <= 8
  c54: arc4(6) <= 0
- c55: arc4(7) <= 0
+ c55: arc4(7) <= 8
  c56: arc4(8) <= 0
  c57: arc5(0) <= 0
  c58: arc5(1) <= 0
