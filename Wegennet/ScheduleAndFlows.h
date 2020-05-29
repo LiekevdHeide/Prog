@@ -33,7 +33,7 @@ public:
 	}
 	
 	void addArcFlowAll(size_t time, size_t numPairs, const std::vector<size_t > &numPaths, const std::vector< std::vector< std::vector<size_t>>> &paths) {
-		//ASSUMES ARCFLOW at time is 0!!
+		//ASSUMES ARCFLOW at time is 0!! / adds to it
 		for(size_t od = 0; od < numPairs; ++od)
 			for (size_t p = 0; p < numPaths[od]; ++p) 
 				for (size_t a = 0; a < paths[od][p].size() - 1; a++){

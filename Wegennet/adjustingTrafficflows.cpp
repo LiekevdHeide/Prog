@@ -11,7 +11,7 @@
 #include <iomanip> // set precision
 using namespace std;
 
-void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule) { //assumes at 0 no maintenance!
+void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule, size_t numSmallStep) { //assumes at 0 no maintenance!
 
 	//cout << setprecision(3);
 
@@ -68,7 +68,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 
 
 		//at paths available at t + 1, do small steps:
-		size_t numSmallStep = 10;
+		
 		vector<vector<double>> oldFlow = Schedule.pathFlow[t];//od, path
 		vector<vector<double>> newFlow = Schedule.pathFlow[t];//od, path
 		vector<vector<double>> arcFlows = Schedule.arcFlowAll[t];
@@ -104,9 +104,9 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 
 		//from path flows to arc flows:			 updates Schedule.arcFlowAll[t+1] using pathflow[t+1]
 		Schedule.arcFlowAll[t + 1] = Schedule.arcFlowTourist[t + 1];
+		
 		//adjust arcFlowAll (which already contains touristFlows), using pathFlow[t+1] (which is the recurrent flows)
 		Schedule.addArcFlowAll(t + 1, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
-
 		//cout << '\n';
 	}
 

@@ -138,11 +138,11 @@
   <ItemGroup>
     <ClCompile Include="adjustAvailableRoutes.cpp" />
     <ClCompile Include="adjustingTrafficflows.cpp" />
+    <ClCompile Include="adjustTouristArcFlows.cpp" />
     <ClCompile Include="binaryToCapacities.cpp" />
     <ClCompile Include="bruteForceSchedule.cpp" />
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
-    <ClCompile Include="costsSchedule.cpp" />
     <ClCompile Include="depthFirstSearch.cpp" />
     <ClCompile Include="determineFlowClosingPaths.cpp" />
     <ClCompile Include="dfsRecursive.cpp" />
@@ -154,6 +154,7 @@
     <ClCompile Include="findShortestAlternativeTourist.cpp" />
     <ClCompile Include="findShortestPath.cpp" />
     <ClCompile Include="findTouristAlternative.cpp" />
+    <ClCompile Include="findTouristAlternative1.cpp" />
     <ClCompile Include="initializeSchedule.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MaintenanceActivities.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="proportionalSwitch.cpp" />
     <ClCompile Include="RoadNetwork.cpp" />
     <ClCompile Include="ScheduleAndFlows.cpp" />
+    <ClCompile Include="timeMoveNeighbourhood.cpp" />
     <ClCompile Include="totalTravelTime.cpp" />
     <ClCompile Include="touristAlternative.cpp" />
     <ClCompile Include="updateExpectedPathTimes.cpp" />
@@ -195,6 +197,7 @@
     <ClInclude Include="ScheduleAndFlows.h" />
     <ClInclude Include="ScheduleCheckFunctions.h" />
     <ClInclude Include="TouristAlternative.h" />
+    <ClInclude Include="VNS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

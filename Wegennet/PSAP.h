@@ -2,7 +2,7 @@
 #include "ScheduleAndFlows.h"
 #include "RoadNetwork.h"
 
-void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule); //assumes at 0 no maintenance!
+void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule, size_t numSmallSteps); //assumes at 0 no maintenance!
 
 //void updateExpectedPathTimes(RoadNetwork& Network, ScheduleAndFlows& Schedule, size_t t, size_t od, vector<vector<double>>& pathTimes);
 //void proportionalSwitch(ScheduleAndFlows& Schedule, size_t t, size_t od, const vector<vector<double>>& pathTimes);

@@ -14,7 +14,6 @@ void printRoutes(ofstream& write, size_t OD, vector<size_t> &numRoutes, vector<v
 			}
 			write << '\n';
 		}
-		write << '\n';
 	}
 	return;
 }

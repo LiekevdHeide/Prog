@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<size_t> findTouristAlternative(size_t N, double Mu, vector<vector<double>> &travelTimes, vector<vector<double>> &actualCapacities, vector<size_t> interruptedRoute){
+vector<size_t> findTouristAlternative1(size_t N, double Mu, vector<vector<double>>& travelTimes, vector<vector<double>>& actualCapacities, vector<size_t> interruptedRoute) {
 
 	for (size_t p = 0; p < interruptedRoute.size(); ++p) {
 		cout << interruptedRoute[p];
@@ -15,7 +15,7 @@ vector<size_t> findTouristAlternative(size_t N, double Mu, vector<vector<double>
 
 	IloEnv env;
 	IloModel model(env);
-	
+
 
 	//create variables:
 	IloArray<IloNumVarArray> arcs(env, N);
@@ -28,7 +28,7 @@ vector<size_t> findTouristAlternative(size_t N, double Mu, vector<vector<double>
 		model.add(arcs[i]);
 	}
 
-	
+
 	//objective function:
 	IloExpr objFunction(env);
 	for (size_t i = 0; i < N; ++i) {
@@ -47,48 +47,35 @@ vector<size_t> findTouristAlternative(size_t N, double Mu, vector<vector<double>
 	//add constraints:
 	//in=out
 	for (size_t i = 0; i < N; ++i) {
-		if (i != interruptedRoute[0] && i != interruptedRoute.back()) {//if not origin / destination
+		if (i != interruptedRoute.back()) {//if not origin / destination
 			IloExpr allIn(env);
 			IloExpr allOut(env);
 			for (size_t j = 0; j < N; ++j) {
-				allIn += arcs[i][j];
-				allOut += arcs[j][i];
+				allOut += arcs[i][j];
+				allIn += arcs[j][i];
 			}
-			model.add(allIn == allOut);
-			//model.add(allIn <= 1);
-			//model.add(allOut <= 1);
+			if (i == interruptedRoute[0]) {
+				model.add(allOut == allIn + 1);
+			}
+			else {
+				model.add(allIn == allOut);
+			}
 			allIn.end();
 			allOut.end();
 		}
 	}
 
 	//leave o = 1, arrive d = 1
-	IloExpr leaveOrigin(env);
 	IloExpr arriveDestination(env);
 	for (size_t j = 0; j < N; ++j) {
-		leaveOrigin += arcs[interruptedRoute[0]][j];
 		arriveDestination += arcs[j][interruptedRoute.back()];
 	}
-	model.add(leaveOrigin == 1);
 	model.add(arriveDestination == 1);
-	leaveOrigin.end();
 	arriveDestination.end();
-
-	//arrive o = 0, leave d = 0
-	IloExpr leaveDestination(env);
-	IloExpr arriveOrigin(env);
-	for (size_t j = 0; j < N; ++j) {
-		leaveDestination += arcs[interruptedRoute.back()][j];
-		arriveOrigin += arcs[j][interruptedRoute[0]];
-	}
-	model.add(leaveDestination == 0);
-	model.add(arriveOrigin == 0);
-	leaveDestination.end();
-	arriveOrigin.end();
 
 
 	//only use available roads
-	for(size_t i = 0; i < N; ++i)
+	for (size_t i = 0; i < N; ++i)
 		for (size_t j = 0; j < N; ++j) {
 			model.add(arcs[i][j] <= actualCapacities[i][j]);
 		}

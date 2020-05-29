@@ -10,7 +10,7 @@
 
 using namespace std;
 
-//main function for touristAlternatives: input network, output list for all maintenance combi's: which tourist flows.
+//main function for touristAlternatives: input network, output list for all maintenance combi's: which tourist flows (total tourist flows, not just the rerouted)
 vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, double Mu, size_t M, vector<vector<size_t>> &locations, vector<vector<double>> &eqPathFlows, vector<vector<double>> &eqTravelTimeArcs) {//assumes maintenance => zero capacity
 	//Find alternative tourist flows for all combinations of maintenances
 
@@ -30,7 +30,7 @@ vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, double Mu, si
 	vector<vector<vector<size_t>>> actualPaths;
 	//for each binary / wholeschedule:
 	cout << "schedules:\n";
-	for (size_t s = 1; s < pow(2, M); ++s) {
+	for (size_t s = 0; s < pow(2, M); ++s) {
 		cout << s << '\n';
 
 		actualPaths = Net.ODpaths;
@@ -75,7 +75,7 @@ vector<vector<vector<double>>> touristAlternative(RoadNetwork Net, double Mu, si
 				for (size_t p = 0; p < whichInterrupted.size(); ++p) {
 					cout << "od" << od << "route" << whichInterrupted[p] << ' ';
 					if (eqPathFlows[od][whichInterrupted[p]] > 0.0) {
-						actualPaths[od][whichInterrupted[p]] = findTouristAlternative(Net.vertices, Mu, eqTravelTimeArcs, actualCapacities, Net.ODpaths[od][whichInterrupted[p]]);//should be actualtimes!
+						actualPaths[od][whichInterrupted[p]] = findTouristAlternative1(Net.vertices, Mu, eqTravelTimeArcs, actualCapacities, Net.ODpaths[od][whichInterrupted[p]]);//should be actualtimes!
 					}
 				}
 			}
