@@ -40,13 +40,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 	for (size_t t = 0; t < T - 1; ++t) {
 		//start with equilibrium at t=0;
 
-		//------------------------------Find tourist traffic flows
-		//add alternative routes for tourists to flows at t+1, current value of arcFlowAll[t+1] is the tourist part of the flow
-		//adjust arcFlowAll t + 1 to incorporate rerouting tourists
-		
-		findAlternativeArcFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.arcFlowTourist[t + 1]);
-		//to do:
-		//findAlternativePathFlowsTourists(Network, Schedule.scheduledCapacities[t + 1], Schedule.touristPathFlow[t + 1]);
+		//already found the cplex tourist flows (are in Schedule.arcFlowTourists)
 
 		//------------------------------Recurrent drivers updating:
 		//at closing paths:

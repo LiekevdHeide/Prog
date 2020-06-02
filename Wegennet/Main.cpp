@@ -35,14 +35,14 @@ int main()
 	Timer time;
 
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "NetworkInputTrialsS.txt";
+	string roadInput = whichComputer + "NetworkInputTrials1.txt";
 
 	RoadNetwork Network(roadInput);
 	//find all routes
 	depthFirstSearch(Network);
 
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "maintenanceInputTrialsS.txt";
+	string maintenanceInput = whichComputer + "maintenanceInputTrials1.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
@@ -59,7 +59,7 @@ int main()
 	//print2Dim(Schedule.binarySchedule, Maintenance.T, Maintenance.M);
 
 	//write results to:
-	ofstream write(whichComputer + "ResultsAllHeurS.txt");  //, std::ios::app for adding to end of file
+	ofstream write(whichComputer + "ResultsAllEnum1.txt");  //, std::ios::app for adding to end of file
 	write << roadInput << ' ' << maintenanceInput << '\n';
 	printRoutes(write, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 
@@ -111,7 +111,7 @@ int main()
 
 	cout << totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll) << '\n';
 	//implement VNS
-	ofstream VNSPerformance(whichComputer + "VNSperformanceS.txt");
+	ofstream VNSPerformance(whichComputer + "VNSperformance1.txt");
 	printSchedule(VNSPerformance, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 	size_t iteration = 0;
 	size_t maxIterations = 100;
@@ -134,7 +134,7 @@ int main()
 	}
 	VNSPerformance.close();
 
-	ofstream bestHeur(whichComputer + "BestSolutionHeurS.txt");
+	ofstream bestHeur(whichComputer + "BestSolutionHeur1.txt");
 	bestHeur << roadInput << '_' << maintenanceInput << '\n';
 	bestHeur << "T M OD\n";
 	bestHeur << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs << '\n';
@@ -151,9 +151,13 @@ int main()
 
 	printTraffic(bestHeur, Maintenance.T, Network.vertices, Schedule.arcFlowAll);
 	printRecurringTraffic(bestHeur, Maintenance.T, Network.numberODpairs, Network.numberODpaths, Schedule.pathFlow);
+	bestHeur << "Tourist arc flows:\n";
+	printTraffic(bestHeur, Maintenance.T, Network.vertices, Schedule.arcFlowTourist);
 	bestHeur << totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 	bestHeur.close();
 
+
+	
 	cout << "\nComplete enumeration:\n";
 
 	//Complete enumeration init
@@ -165,8 +169,8 @@ int main()
 
 	//brute force:
 	size_t totalSchedule = pow(Maintenance.T - runOutPeriod, Maintenance.M);
-	for (size_t s = 0; s < totalSchedule; s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
-		//adjust schedule
+	for (size_t s = 1; s < totalSchedule; ++s) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
+	//for(size_t s = 181260; s < 189980; ++s){											 //adjust schedule
 		if (s % 1000 == 0) {
 			cout << s << ':';
 		}
@@ -175,15 +179,14 @@ int main()
 			//initialize the arcFlows + pathFlows for informed + tourists
 
 			//start at equilibrium.
-			Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
 			for (size_t od = 0; od < Network.numberODpairs; ++od)
 				for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
 					Schedule.pathFlow[0][od][p] = equilibrium.pathFlow[0][od][p] * (1.00 - Network.touristPercentage);
 				}
 
 			//init tourist flows (from t=0 until T)
-			adjustTouristArcFLows(0, Maintenance.T, Maintenance.M, Schedule.binarySchedule, touristAlternativeFlowsPerwholeState, Schedule.arcFlowTourist);
-	
+			adjustTouristArcFLows(Maintenance.T, Maintenance.M, Schedule.binarySchedule, touristAlternativeFlowsPerwholeState, Schedule.arcFlowTourist);
+			
 			//set informed flow to 0 for next time periods
 			for (size_t t = 1; t < Maintenance.T; ++t)
 				for (size_t a = 0; a < Network.vertices; ++a) {
@@ -197,11 +200,10 @@ int main()
 						Schedule.pathFlow[t][od][r] = 0.0;
 					}
 
-
 			//dynamic adjustment function: PSAP
 			//CHECK TIMING!!!
 			adjustingTrafficFlows(Maintenance.T, Network, Schedule, numSmallStep);
-
+			
 			//----------------------------------------------------------------------------------------------
 			//test
 			for (size_t t = 0; t < Maintenance.T; ++t) {
@@ -222,10 +224,16 @@ int main()
 			write << s << ' ' <<  currentCosts << '\n';
 			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 			write << '\n';
+			write << "All arc flows:\n";
 			//printTraffic(write, Maintenance.T, Network.vertices, Schedule.arcFlowAll);
+			//write << "Tourist arc flows:\n";
+			printTraffic(write, Maintenance.T, Network.vertices, Schedule.arcFlowTourist);
 			printRecurringTraffic(write, Maintenance.T, Network.numberODpairs, Network.numberODpaths, Schedule.pathFlow);
 			write << '\n';
 			
+
+		
+
 			write << "++++++++++++++++++++++++++++\n";
 
 			if (currentCosts < bestCosts || bestCosts == 0) {
@@ -250,7 +258,7 @@ int main()
 	}
 	
 
-	ofstream bestSolution(whichComputer + "BestSolutionEnumS.txt");
+	ofstream bestSolution(whichComputer + "BestSolutionEnum1.txt");
 	bestSolution << roadInput << '_'<< maintenanceInput << '\n';
 	bestSolution << "T M OD\n";
 	bestSolution << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs << '\n';
@@ -269,7 +277,7 @@ int main()
 	printRecurringTraffic(bestSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, bestSchedule.pathFlow);
 	bestSolution << bestCosts;
 
-	ofstream worstSolution(whichComputer + "WorstSolutionHeurS.txt");
+	ofstream worstSolution(whichComputer + "WorstSolutionEnum1.txt");
 	printRoutes(worstSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 	printSchedule(worstSolution, Maintenance.T, Maintenance.M, worstSchedule.binarySchedule);
 	printTraffic(worstSolution, Maintenance.T, Network.vertices, worstSchedule.arcFlowAll);

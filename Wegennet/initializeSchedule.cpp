@@ -16,8 +16,8 @@ void initializeSchedule(ScheduleAndFlows &Schedule, ScheduleAndFlows &equilibriu
 	//create initial schedule in the ScheduleAndFlows class (binary) + adds the corresponding traffic flows (touristArcFlow, pathFlow, arcFlowAll)
 	//doesn't check if it's a feasible schedule..
 	
-	//For now quick and easy, are better initialization heuristics +- 
-	size_t t = 1; 
+	//For now quick and easy, are better initialization heuristics +-   (all maintenance sequential)
+	/*size_t t = 1; 
 	for (size_t m = 0; m < Maintenance.M; ++m) {
 		if (t > (Maintenance.T - Maintenance.duration[m])) {
 			t = 1;
@@ -26,13 +26,19 @@ void initializeSchedule(ScheduleAndFlows &Schedule, ScheduleAndFlows &equilibriu
 			Schedule.binarySchedule[t + d][m] = 1;
 		}
 		t += Maintenance.duration[m] ;	
+	}*/
+
+	for (size_t m = 0; m < Maintenance.M; ++m) {
+		Schedule.binarySchedule[1][m] = 1;
 	}
 	//ADD CHECK IF STILL ALL DEMANDS POSSIBLE!
 
 	//change the available capacities in the network corr to the binary schedule.
 	binaryToCapacities(Maintenance.T, Maintenance.M, Schedule.binarySchedule, Maintenance.locationSets, Network.standardCapacities , Schedule.scheduledCapacities);
-	adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes);
-	adjustTouristArcFLows(0, Maintenance.T, Maintenance.M, Schedule.binarySchedule, touristAltPerWholeState, Schedule.arcFlowTourist);
+	if (!adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes)) {
+		cerr << "INFEASIBLE START";
+	}
+	adjustTouristArcFLows(Maintenance.T, Maintenance.M, Schedule.binarySchedule, touristAltPerWholeState, Schedule.arcFlowTourist);
 	//set informed pathFlows / arcFlows to 0 for t> 0
 
 	Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];

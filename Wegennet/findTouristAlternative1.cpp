@@ -47,7 +47,7 @@ vector<size_t> findTouristAlternative1(size_t N, double Mu, vector<vector<double
 	//add constraints:
 	//in=out
 	for (size_t i = 0; i < N; ++i) {
-		if (i != interruptedRoute.back()) {//if not origin / destination
+		if (i != interruptedRoute.back()) {//if not destination
 			IloExpr allIn(env);
 			IloExpr allOut(env);
 			for (size_t j = 0; j < N; ++j) {
@@ -65,7 +65,7 @@ vector<size_t> findTouristAlternative1(size_t N, double Mu, vector<vector<double
 		}
 	}
 
-	//leave o = 1, arrive d = 1
+	//arrive d = 1
 	IloExpr arriveDestination(env);
 	for (size_t j = 0; j < N; ++j) {
 		arriveDestination += arcs[j][interruptedRoute.back()];

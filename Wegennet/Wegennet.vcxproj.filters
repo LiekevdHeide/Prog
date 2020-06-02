@@ -135,9 +135,6 @@
     <ClCompile Include="findAllPaths.cpp">
       <Filter>Source Files\DepthFirstSearch</Filter>
     </ClCompile>
-    <ClCompile Include="findAlternativeArcFlowsTourists.cpp">
-      <Filter>Source Files\PSAP</Filter>
-    </ClCompile>
     <ClCompile Include="findShortestAlternativeTourist.cpp">
       <Filter>Source Files\DepthFirstSearch</Filter>
     </ClCompile>
@@ -171,17 +168,14 @@
     <ClCompile Include="touristAlternative.cpp">
       <Filter>Source Files\TouristAlternatives</Filter>
     </ClCompile>
-    <ClCompile Include="findTouristAlternative.cpp">
-      <Filter>Source Files\TouristAlternatives</Filter>
-    </ClCompile>
     <ClCompile Include="findTouristAlternative1.cpp">
       <Filter>Source Files\TouristAlternatives</Filter>
     </ClCompile>
-    <ClCompile Include="adjustTouristArcFlows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="timeMoveNeighbourhood.cpp">
       <Filter>Source Files\VNS</Filter>
+    </ClCompile>
+    <ClCompile Include="adjustTouristArcFlows.cpp">
+      <Filter>Source Files\TouristAlternatives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

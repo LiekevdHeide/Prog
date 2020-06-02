@@ -13,4 +13,4 @@ void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t>& availab
 double determineFlowClosingPaths(ScheduleAndFlows& Schedule, size_t t, size_t od);
 size_t findAlternativePathRecurringDrivers(ScheduleAndFlows &Schedule, size_t t, size_t od, vector<vector<double>> &pathTimes);
 
-void findAlternativeArcFlowsTourists(RoadNetwork& Network, const vector<vector<double>>& currentCapacities, vector<vector<double>>& arcFlows);
+//void findAlternativeArcFlowsTourists(RoadNetwork& Network, const vector<vector<double>>& currentCapacities, vector<vector<double>>& arcFlows); Unused: now use the CPLEX variant in TouristAlternative.h

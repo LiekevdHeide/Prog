@@ -16,7 +16,7 @@ bool timeMoveNeighbourhood(RoadNetwork &Network, ScheduleAndFlows &Schedule, Mai
 
 	double originalCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 	double currentCosts = originalCosts;
-	ScheduleAndFlows NbSched = Schedule; //(change: binarySchedule, scheduledCapacities, availableRoutes, numAvailableRoutes, arcFlowALl, arcFLowTourists, pathFlow(informed)
+	ScheduleAndFlows NbSched = Schedule; //(to change: binarySchedule, scheduledCapacities, availableRoutes, numAvailableRoutes, arcFlowALl, arcFLowTourists, pathFlow(informed)
 	ScheduleAndFlows bestSchedule = Schedule;
 	vector<vector<size_t>> noMBinarySchedule = NbSched.binarySchedule;
 
@@ -34,7 +34,7 @@ bool timeMoveNeighbourhood(RoadNetwork &Network, ScheduleAndFlows &Schedule, Mai
 	}
 
 	//for (size_t t = max(int(currentT - 5), 1); t <= min(currentT + 5, Maintenance.T); ++t) {
-	for(size_t t = 1; t < Maintenance.T - runoutPeriod; ++t){
+	for(size_t t = 1; t < Maintenance.T - runoutPeriod - Maintenance.duration[mToShift]; ++t){
 		if (t != currentT && t + Maintenance.duration[mToShift] < Maintenance.T) {			// <=? (everything in Schedule is changed => don't need to reinitialize
 			//set binary schedule to zero
 			NbSched.binarySchedule = noMBinarySchedule;
@@ -50,7 +50,7 @@ bool timeMoveNeighbourhood(RoadNetwork &Network, ScheduleAndFlows &Schedule, Mai
 			if (adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, NbSched.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, NbSched.availableRoutes, NbSched.numAvailableRoutes)) {
 
 				//adjust uninformed routing in arcFlowTourists
-				adjustTouristArcFLows(t, Maintenance.T, Maintenance.M, NbSched.binarySchedule, touristAltPerwholeState, NbSched.arcFlowTourist);//uses assignment, not +=
+				adjustTouristArcFLows(Maintenance.T, Maintenance.M, NbSched.binarySchedule, touristAltPerwholeState, NbSched.arcFlowTourist);//uses assignment, not +=
 
 				//set informed pathFlows / arcFlows to 0 for t> 0
 				for (size_t t = 1; t < Maintenance.T; ++t)
@@ -84,6 +84,9 @@ bool timeMoveNeighbourhood(RoadNetwork &Network, ScheduleAndFlows &Schedule, Mai
 
 					//steepest descent
 					originalCosts = currentCosts;
+
+					//not steepest descent
+					//break;
 				}
 			}
 		}
