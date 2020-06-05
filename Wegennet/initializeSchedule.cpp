@@ -29,7 +29,9 @@ void initializeSchedule(ScheduleAndFlows &Schedule, ScheduleAndFlows &equilibriu
 	}*/
 
 	for (size_t m = 0; m < Maintenance.M; ++m) {
-		Schedule.binarySchedule[1][m] = 1;
+		for (size_t t = 1; t <= Maintenance.duration[m]; ++t) {
+			Schedule.binarySchedule[t][m] = 1;
+		}
 	}
 	//ADD CHECK IF STILL ALL DEMANDS POSSIBLE!
 

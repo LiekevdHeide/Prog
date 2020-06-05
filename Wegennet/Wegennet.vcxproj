@@ -143,6 +143,7 @@
     <ClCompile Include="bruteForceSchedule.cpp" />
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
+    <ClCompile Include="costFromSchedule.cpp" />
     <ClCompile Include="depthFirstSearch.cpp" />
     <ClCompile Include="determineFlowClosingPaths.cpp" />
     <ClCompile Include="dfsRecursive.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="proportionalSwitch.cpp" />
     <ClCompile Include="RoadNetwork.cpp" />
     <ClCompile Include="ScheduleAndFlows.cpp" />
+    <ClCompile Include="shakeTimeNBH.cpp" />
     <ClCompile Include="timeMoveNeighbourhood.cpp" />
     <ClCompile Include="totalTravelTime.cpp" />
     <ClCompile Include="touristAlternative.cpp" />

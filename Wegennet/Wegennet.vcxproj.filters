@@ -177,6 +177,12 @@
     <ClCompile Include="adjustTouristArcFlows.cpp">
       <Filter>Source Files\TouristAlternatives</Filter>
     </ClCompile>
+    <ClCompile Include="costFromSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shakeTimeNBH.cpp">
+      <Filter>Source Files\VNS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">

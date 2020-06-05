@@ -16,5 +16,5 @@ bool adjustAvailableRoutes(size_t T, size_t M, size_t ODpairs, std::vector<size_
 void findInterruptedRoutes(size_t M, const std::vector<std::vector<size_t>>& locations, size_t ODpairs, const std::vector<size_t>& numberODpaths, const std::vector<std::vector<std::vector<size_t>>>& ODpaths, std::vector<std::vector<std::vector<size_t>>>& interruptedRoutes);//set the routes interrupted for each maintenance activity);//find which routes are interrupted by the maintenance action.
 
 
-bool bruteForceSchedule(ScheduleAndFlows& Sched, MaintenanceActivities& Maint, RoadNetwork& Net, size_t schedule, size_t runOutTime);
+bool bruteForceSchedule(MaintenanceActivities& Maint, size_t schedule, size_t runOutTime, std::vector<std::vector<size_t>>& binarySchedule);
 void wholeScheduleToMaintenance(size_t T, size_t M, size_t scheduleValue, vector<size_t>& startTimes);
