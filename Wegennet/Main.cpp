@@ -132,6 +132,7 @@ int main()
 			for (size_t t = 1; t < Maintenance.T - runOutPeriod; ++t) {
 				checkSched += Schedule.binarySchedule[t][m];
 			}
+			//just a check
 			if (checkSched != Maintenance.duration[m]) {
 				cerr << '\n' << m << ' ' << checkSched << "ERRR SHAKE ERRRRRRR";
 			}
@@ -140,6 +141,7 @@ int main()
 		//local search in timeMove
 		improvementFound = timeMoveNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod);
 		
+		//just to check:
 		for (size_t m = 0; m < Maintenance.M; ++m) {
 			checkSched = 0;
 			for (size_t t = 1; t < Maintenance.T - runOutPeriod; ++t) {

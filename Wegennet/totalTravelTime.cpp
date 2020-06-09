@@ -10,7 +10,7 @@ double totalTravelTime(RoadNetwork &Network, size_t T, vector<vector<vector<doub
 		for (size_t v = 0; v < Network.vertices; ++v) {
 			for (size_t w = 0; w < Network.vertices; ++w) {
 				if (arcFlows[t][v][w] > 0) {
-					travelTime += Network.travelTimeRoad(scheduledCapacities[t][v][w], Network.freeFlowTimes[v][w], arcFlows[t][v][w]);
+					travelTime += arcFlows[t][v][w] * Network.travelTimeRoad(scheduledCapacities[t][v][w], Network.freeFlowTimes[v][w], arcFlows[t][v][w]);
 				}
 			}
 		}

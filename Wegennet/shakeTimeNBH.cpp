@@ -29,7 +29,7 @@ void shakeTimeNBH(MaintenanceActivities &Maintenance, ScheduleAndFlows &Sched, s
 		}
 	}
 
-	print2Dim(Sched.binarySchedule);
+	//print2Dim(Sched.binarySchedule);
 
 	return;
 }
