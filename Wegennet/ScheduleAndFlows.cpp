@@ -23,6 +23,8 @@ ScheduleAndFlows::ScheduleAndFlows(size_t T, size_t vertices, size_t M, size_t O
 	//initialize schedule
 	vector<vector<size_t>> schedule(T, vector<size_t>(M, 0));
 	binarySchedule = schedule;
+	vector<size_t> starts(M, 0);
+	startTimes = starts;
 
 	vector<vector<vector<double>>> caps(T, vector<vector<double>>(vertices, vector<double>(vertices, 0.0)));
 	for (size_t t = 0; t < T; ++t)

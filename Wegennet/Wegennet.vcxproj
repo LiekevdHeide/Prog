@@ -144,6 +144,7 @@
     <ClCompile Include="calculateConvergenceTest.cpp" />
     <ClCompile Include="ConvexCombinations.cpp" />
     <ClCompile Include="costFromSchedule.cpp" />
+    <ClCompile Include="costFromStarttimes.cpp" />
     <ClCompile Include="depthFirstSearch.cpp" />
     <ClCompile Include="determineFlowClosingPaths.cpp" />
     <ClCompile Include="dfsRecursive.cpp" />
@@ -171,11 +172,13 @@
     <ClCompile Include="printRecurringTraffic.cpp" />
     <ClCompile Include="printRoutes.cpp" />
     <ClCompile Include="printSchedule.cpp" />
+    <ClCompile Include="printSchedule1.cpp" />
     <ClCompile Include="printTraffic.cpp" />
     <ClCompile Include="proportionalSwitch.cpp" />
     <ClCompile Include="RoadNetwork.cpp" />
     <ClCompile Include="ScheduleAndFlows.cpp" />
     <ClCompile Include="shakeTimeNBH.cpp" />
+    <ClCompile Include="swapNeighbourhood.cpp" />
     <ClCompile Include="timeMoveNeighbourhood.cpp" />
     <ClCompile Include="totalTravelTime.cpp" />
     <ClCompile Include="touristAlternative.cpp" />

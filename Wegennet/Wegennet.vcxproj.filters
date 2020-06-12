@@ -46,6 +46,9 @@
     <Filter Include="Source Files\VNS">
       <UniqueIdentifier>{b9000547-e96c-48ec-95d5-0d3ca1dfc981}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\CostCalculationFunctions">
+      <UniqueIdentifier>{9f57e1bc-1f83-45d1-a6aa-602037890992}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -147,9 +150,6 @@
     <ClCompile Include="print2DimDouble0.cpp">
       <Filter>Source Files\Debugging</Filter>
     </ClCompile>
-    <ClCompile Include="totalTravelTime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="printTraffic.cpp">
       <Filter>Source Files\PrintingFunctions</Filter>
     </ClCompile>
@@ -177,11 +177,23 @@
     <ClCompile Include="adjustTouristArcFlows.cpp">
       <Filter>Source Files\TouristAlternatives</Filter>
     </ClCompile>
-    <ClCompile Include="costFromSchedule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="shakeTimeNBH.cpp">
       <Filter>Source Files\VNS</Filter>
+    </ClCompile>
+    <ClCompile Include="swapNeighbourhood.cpp">
+      <Filter>Source Files\VNS</Filter>
+    </ClCompile>
+    <ClCompile Include="totalTravelTime.cpp">
+      <Filter>Source Files\CostCalculationFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="costFromSchedule.cpp">
+      <Filter>Source Files\CostCalculationFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="costFromStarttimes.cpp">
+      <Filter>Source Files\CostCalculationFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="printSchedule1.cpp">
+      <Filter>Source Files\PrintingFunctions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

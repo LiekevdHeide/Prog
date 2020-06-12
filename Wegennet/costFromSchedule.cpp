@@ -11,7 +11,7 @@
 #include <vector>
 
 using namespace std;
-double costFromSchedule(RoadNetwork &Network, MaintenanceActivities& Maintenance, ScheduleAndFlows& Schedule, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep) {
+double costFromSchedule(RoadNetwork &Network, MaintenanceActivities& Maintenance, ScheduleAndFlows& Schedule, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double bigCost) {
 	//already changed: binarySchedule
 
 	//(to change: scheduledCapacities, availableRoutes, numAvailableRoutes, arcFlowALl, arcFLowTourists, pathFlow(informed)
@@ -52,7 +52,7 @@ double costFromSchedule(RoadNetwork &Network, MaintenanceActivities& Maintenance
 		costs = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 	}
 	else {
-		costs = 10000;//BIG M since infeasible
+		costs = bigCost;//BIG M since infeasible
 	}
 
 	return costs;

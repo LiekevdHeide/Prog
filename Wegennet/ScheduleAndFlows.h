@@ -7,6 +7,7 @@ class ScheduleAndFlows
 public:
 	//schedule of maintenance projects
 	std::vector<std::vector<size_t>> binarySchedule;//time, activities planned (binary)
+	std::vector<size_t> startTimes;//maintenance (yields startingTime for each maintenance activity)
 	std::vector<std::vector<std::vector<double>>> scheduledCapacities;//time, capacities
 
 	std::vector<std::vector<std::vector<size_t>>> availableRoutes;//t, OD, routeNum

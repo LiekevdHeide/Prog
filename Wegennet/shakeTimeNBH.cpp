@@ -9,7 +9,8 @@
 #include <vector>
 
 using namespace std;
-void shakeTimeNBH(MaintenanceActivities &Maintenance, ScheduleAndFlows &Sched, size_t runoutT) {
+void shakeTimeNBH(MaintenanceActivities &Maintenance, ScheduleAndFlows &Sched, size_t runoutT) {//adjusts Schedule.startTimes, but not Schedule.binary
+	//selects random maintenance activity + random startTime (between 1 and, T-runout-duration!)
 	random_device rd;
 	mt19937 randomGenerator(rd());
 	uniform_int_distribution<std::mt19937::result_type> chooseM(0, Maintenance.M - 1);
@@ -20,16 +21,8 @@ void shakeTimeNBH(MaintenanceActivities &Maintenance, ScheduleAndFlows &Sched, s
 	size_t shiftT = chooseT(randomGenerator);
 	cout << shiftT << '\n';
 	//shift them in binarySchedule:
-	for (size_t t = 1; t < Maintenance.T; ++t) {
-		if (t < shiftT || t >= shiftT + Maintenance.duration[mToShift]) {
-			Sched.binarySchedule[t][mToShift] = 0;
-		}
-		else {
-			Sched.binarySchedule[t][mToShift] = 1;
-		}
-	}
 
-	//print2Dim(Sched.binarySchedule);
+	Sched.startTimes[mToShift] = shiftT;
 
 	return;
 }
