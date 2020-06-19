@@ -30,10 +30,10 @@ bool timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, Mai
 						foundImprovement = true;
 						bestSchedule = NbSched;
 						//steepest descent
-						//bestCosts = currentCosts;
+						bestCosts = currentCosts;
 
 						//not steepest descent
-						break;
+						//break;
 					}
 
 				}
