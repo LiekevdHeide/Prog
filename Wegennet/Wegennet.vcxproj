@@ -177,6 +177,7 @@
     <ClCompile Include="proportionalSwitch.cpp" />
     <ClCompile Include="RoadNetwork.cpp" />
     <ClCompile Include="ScheduleAndFlows.cpp" />
+    <ClCompile Include="shakeSwapNBH.cpp" />
     <ClCompile Include="shakeTimeNBH.cpp" />
     <ClCompile Include="swapNeighbourhood.cpp" />
     <ClCompile Include="timeMoveNeighbourhood.cpp" />

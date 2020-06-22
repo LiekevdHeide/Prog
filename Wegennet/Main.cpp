@@ -85,7 +85,7 @@ int main()
 	//find alternative routes uninformed using cplex / IP problem, returns arcFlows for alternative tourists per M combi: //flows for: s(2^M), v, v
 	cout << "EqTravelTimes\n";
 	vector<vector<double>>eqTravelTimeArcs(Network.vertices, vector<double>(Network.vertices, 0.0));
-	for (size_t i = 0; i < Network.vertices; ++i){
+	for (size_t i = 0; i < Network.vertices; ++i) {
 		for (size_t j = 0; j < Network.vertices; ++j) {
 			if (Network.standardCapacities[i][j] > 0) {
 				eqTravelTimeArcs[i][j] = Network.travelTimeRoad(Network.standardCapacities[i][j], Network.freeFlowTimes[i][j], equilibrium.arcFlowAll[0][i][j]);
@@ -100,131 +100,109 @@ int main()
 	size_t numSmallStep = 1;
 	double Mu = 0.0;
 	double bigCost = 100000;
-	vector<vector<vector<double>>> touristAlternativeFlowsPerwholeState = touristAlternative(Network, Mu, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0], eqTravelTimeArcs); 
+	vector<vector<vector<double>>> touristAlternativeFlowsPerwholeState = touristAlternative(Network, Mu, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0], eqTravelTimeArcs);
 
 
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
 	ofstream VNSPerformance(whichComputer + "VNSperformance1.txt");
 	ofstream bestHeur(whichComputer + "BestSolutionHeur1.txt");
-	for (size_t testNum = 0; testNum < 30; ++testNum) {
+	
 
-		initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep);
-		cout << costFromStarttimes(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
+	initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep);
+	cout << costFromStarttimes(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
+	double bestHeurCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
+	ScheduleAndFlows bestHeurSchedule = Schedule;
+	ScheduleAndFlows overallBestHeurSchedule = Schedule;
+	double overallBestHeurCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
+	double maxTime = 120;
+	size_t maxIterations = 100;
+	size_t actualNoImprovementsFor = 0;
 		//implement VNS
-		
+	while(time.elapsed() < maxTime){
 		printSchedule(VNSPerformance, Maintenance.T, Maintenance.M, Schedule.startTimes);
 		size_t iteration = 0;
-		size_t maxIterations = 100;
-		bool improvementFound = true;
-		size_t actualNoImprovementsFor = 0;
-		size_t noImprovementsFor = 0;
-		ScheduleAndFlows bestHeurSchedule = Schedule;
-		double bestHeurCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
+		//bestHeurSchedule = Schedule;
 		double improvedCosts;
 		size_t neighbourhood = 0;
+		if (actualNoImprovementsFor > 100) {
+			cout << "restart\n";
+			actualNoImprovementsFor = 0;
+			initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep);
+			bestHeurCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
+			VNSPerformance << "--------------restart-----------------------\n";
+		}
 		while (iteration < maxIterations && neighbourhood < 2) { //Maintenance.M  actualNoImprovementsFor < 50
 			cout << "NBH" << neighbourhood << ' ';
 			iteration++;
-			++actualNoImprovementsFor;
+			
 			if (neighbourhood == 0) {
 				//shake + adjust startTimes
 				shakeTimeNBH(Maintenance, Schedule, runOutPeriod);//only adjusts startTimes
-
 				//local search in timeMove
-				improvementFound = timeMoveNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
-								
-				/*if (!improvementFound) {
-					neighbourhood = 1;
-				}*/
-				//just to check:
-				size_t checkSched;
-				for (size_t m = 0; m < Maintenance.M; ++m) {
-					checkSched = 0;
-					for (size_t t = 1; t < Maintenance.T - runOutPeriod; ++t) {
-						checkSched += Schedule.binarySchedule[t][m];
-					}
-					if (checkSched != Maintenance.duration[m]) {
-						cerr << '\n' << m << ' ' << checkSched << "ERRR TIMEMOVE ERRRRRRR";
-					}
-				}
+				timeMoveNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
+				
 			}
 			if (neighbourhood == 1) {//swap neighbourhood
 				//shake
-				shakeTimeNBH(Maintenance, Schedule, runOutPeriod);//only adjusts startTimes
-				
+				shakeSwapNBH(Maintenance, Schedule);//only adjusts startTimes
 				//local search in swap neighbourhood
-				improvementFound = swapNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
-				/*if (improvementFound ) {
-					neighbourhood = 0;
-				}*/
-				//just to check:
-				size_t checkSched = 0;
-				for (size_t m = 0; m < Maintenance.M; ++m) {
-					checkSched = 0;
-					for (size_t t = 1; t < Maintenance.T - runOutPeriod; ++t) {
-						checkSched += Schedule.binarySchedule[t][m];
-					}
-					if (checkSched != Maintenance.duration[m]) {
-						cerr << '\n' << m << ' ' << checkSched << "ERRR SwabMOVE ERRRRRRR";
-					}
-				}
+				swapNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
+				
 			}
-			VNSPerformance << "it" << iteration << ' ' << totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll) << ' ' << costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+			VNSPerformance << "it" << iteration << ' ' <<  costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
 			printSchedule(VNSPerformance, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 
-			if (improvementFound) {//improvement wrt schedule after shaking!
-				improvedCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
-				//cout << "\nImprovement after shake:" << improvedCosts << '\n';
-				if (improvedCosts < bestHeurCosts) {
-					cout << "\nNew best:" << improvedCosts << " OLD:" << bestHeurCosts << '\n';
-					bestHeurSchedule = Schedule;
-					bestHeurCosts = improvedCosts;
-					actualNoImprovementsFor = 0;
-					neighbourhood = 0;
+			improvedCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
+			//cout << "\nImprovement after shake:" << improvedCosts << '\n';
+			if (improvedCosts < bestHeurCosts) {
+				cout << "\nNew best:" << improvedCosts << " OLD:" << bestHeurCosts << '\n';
+				bestHeurSchedule = Schedule;
+				bestHeurCosts = improvedCosts;
+				if (improvedCosts < overallBestHeurCosts) {
+					overallBestHeurSchedule = Schedule;
+					overallBestHeurCosts = improvedCosts;
 				}
-				else {
-					++neighbourhood;
-					Schedule = bestHeurSchedule;
-				}
-				noImprovementsFor = 0;
+				actualNoImprovementsFor = 0;
+				neighbourhood = 0;
 			}
 			else {
-				noImprovementsFor += 1;
+				++actualNoImprovementsFor;
 				++neighbourhood;
 				Schedule = bestHeurSchedule;
 			}
 
 		}
-		cout << testNum << "--------------------------------------------------------------------------\n";
+
 		VNSPerformance << "\n--------------------------------------------------------------------------------\n";
+
 		
-		bestHeur << roadInput << '_' << maintenanceInput << '\n';
-		bestHeur << "T M OD\n";
-		bestHeur << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs << '\n';
-		for (size_t od = 0; od < Network.numberODpairs; ++od) {
-			bestHeur << "pathsOD" << od;
-		}
-		bestHeur << '\n';
-		for (size_t od = 0; od < Network.numberODpairs; ++od) {
-			bestHeur << Network.numberODpaths[od] << ' ';
-		}
-		bestHeur << '\n';
-		printSchedule(bestHeur, Maintenance.T, Maintenance.M, bestHeurSchedule.binarySchedule);
-		print2Dim(bestHeurSchedule.binarySchedule, Maintenance.T, bestHeur);
-		printRoutes(bestHeur, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
-
-		printTraffic(bestHeur, Maintenance.T, Network.vertices, bestHeurSchedule.arcFlowAll);
-		printRecurringTraffic(bestHeur, Maintenance.T, Network.numberODpairs, Network.numberODpaths, bestHeurSchedule.pathFlow);
-		bestHeur << "Tourist arc flows:\n";
-		printTraffic(bestHeur, Maintenance.T, Network.vertices, bestHeurSchedule.arcFlowTourist);
-		bestHeur << totalTravelTime(Network, Maintenance.T, bestHeurSchedule.scheduledCapacities, bestHeurSchedule.arcFlowAll);
-
 	}
+	bestHeur << roadInput << '_' << maintenanceInput << '\n';
+	bestHeur << "T M OD\n";
+	bestHeur << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs << '\n';
+	for (size_t od = 0; od < Network.numberODpairs; ++od) {
+		bestHeur << "pathsOD" << od;
+	}
+	bestHeur << '\n';
+	for (size_t od = 0; od < Network.numberODpairs; ++od) {
+		bestHeur << Network.numberODpaths[od] << ' ';
+	}
+	bestHeur << '\n';
+	printSchedule(bestHeur, Maintenance.T, Maintenance.M, overallBestHeurSchedule.binarySchedule);
+	print2Dim(overallBestHeurSchedule.binarySchedule, Maintenance.T, bestHeur);
+	printRoutes(bestHeur, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
+
+	printTraffic(bestHeur, Maintenance.T, Network.vertices, overallBestHeurSchedule.arcFlowAll);
+	printRecurringTraffic(bestHeur, Maintenance.T, Network.numberODpairs, Network.numberODpaths, overallBestHeurSchedule.pathFlow);
+	bestHeur << "Tourist arc flows:\n";
+	printTraffic(bestHeur, Maintenance.T, Network.vertices, overallBestHeurSchedule.arcFlowTourist);
+	bestHeur << totalTravelTime(Network, Maintenance.T, overallBestHeurSchedule.scheduledCapacities, overallBestHeurSchedule.arcFlowAll);
+
 	bestHeur.close();
 	VNSPerformance.close();
 
-	
+
 	cout << "\nComplete enumeration:\n";
 
 	//Complete enumeration init
@@ -236,6 +214,7 @@ int main()
 
 	//-----------------------------------------------------------------------------------------------------------
 	//brute force:
+	/*
 	size_t totalSchedule = pow(Maintenance.T - runOutPeriod, Maintenance.M);
 	for (size_t s = 1; s < totalSchedule; ++s) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
 	//for(size_t s = 181260; s < 189980; ++s){											 //adjust schedule
@@ -254,7 +233,7 @@ int main()
 
 			currentCosts = costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);//updates capacities, availableRoutes, touristFlows, recurrentFlows + calculates costs
 
-	
+
 			//test
 			for (size_t t = 0; t < Maintenance.T; ++t) {
 				//print2Dim(Schedule.pathFlow[t]);
@@ -268,9 +247,9 @@ int main()
 			}
 			//print stuff
 			//currentCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
-			
+
 			//cout << currentCosts << "\n";
-			write << s << ' ' <<  currentCosts << '\n';
+			write << s << ' ' << currentCosts << '\n';
 			printSchedule(write, Maintenance.T, Maintenance.M, Schedule.binarySchedule);
 			write << '\n';
 			write << "All arc flows:\n";
@@ -279,9 +258,9 @@ int main()
 			printTraffic(write, Maintenance.T, Network.vertices, Schedule.arcFlowTourist);
 			printRecurringTraffic(write, Maintenance.T, Network.numberODpairs, Network.numberODpaths, Schedule.pathFlow);
 			write << '\n';
-			
 
-		
+
+
 
 			write << "++++++++++++++++++++++++++++\n";
 
@@ -295,7 +274,7 @@ int main()
 			}
 
 			//cost function: return total travel time + joint costs of maintenance
-			
+
 			//save cost
 			//check if "best"?
 		}
@@ -303,12 +282,13 @@ int main()
 			//cout << ' ';// "IMPOSSIBLE:" << s << ' ';
 
 		}
-		
+
 	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 
 	ofstream bestSolution(whichComputer + "BestSolutionEnum1.txt");
-	bestSolution << roadInput << '_'<< maintenanceInput << '\n';
+	bestSolution << roadInput << '_' << maintenanceInput << '\n';
 	bestSolution << "T M OD\n";
 	bestSolution << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs << '\n';
 	for (size_t od = 0; od < Network.numberODpairs; ++od) {
@@ -321,7 +301,7 @@ int main()
 	bestSolution << '\n';
 	printSchedule(bestSolution, Maintenance.T, Maintenance.M, bestSchedule.binarySchedule);
 	printRoutes(bestSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
-	
+
 	printTraffic(bestSolution, Maintenance.T, Network.vertices, bestSchedule.arcFlowAll);
 	printRecurringTraffic(bestSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, bestSchedule.pathFlow);
 	bestSolution << bestCosts;
@@ -332,7 +312,8 @@ int main()
 	printTraffic(worstSolution, Maintenance.T, Network.vertices, worstSchedule.arcFlowAll);
 	printRecurringTraffic(worstSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, worstSchedule.pathFlow);
 	worstSolution << worstCosts;
-	
+
+	*/
 
 	//----------------------------------------------------------------
 	//get benchmark: flows always in equilibrium (for best solution)

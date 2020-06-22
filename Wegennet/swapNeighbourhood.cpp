@@ -49,9 +49,9 @@ bool swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, Mainten
 					foundImprovement = true;
 					bestSchedule = currentSchedule;
 					//steepest descent
-					bestSoFarCosts = currentCosts;
+					//bestSoFarCosts = currentCosts;
 					//not steepest descent
-					//break;
+					break;
 				}
 
 			//}

@@ -195,6 +195,9 @@
     <ClCompile Include="printSchedule1.cpp">
       <Filter>Source Files\PrintingFunctions</Filter>
     </ClCompile>
+    <ClCompile Include="shakeSwapNBH.cpp">
+      <Filter>Source Files\VNS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">

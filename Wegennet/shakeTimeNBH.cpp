@@ -3,8 +3,6 @@
 #include "MaintenanceActivities.h"
 #include "ScheduleAndFlows.h"
 
-#include "generalPrintingFunctions.h"
-
 #include <random>
 #include <vector>
 
@@ -20,7 +18,7 @@ void shakeTimeNBH(MaintenanceActivities &Maintenance, ScheduleAndFlows &Sched, s
 	uniform_int_distribution<std::mt19937::result_type> chooseT(1, Maintenance.T - runoutT - Maintenance.duration[mToShift]);
 	size_t shiftT = chooseT(randomGenerator);
 	cout << shiftT << '\n';
-	//shift them in binarySchedule:
+	
 
 	Sched.startTimes[mToShift] = shiftT;
 
