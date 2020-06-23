@@ -2,6 +2,7 @@
 
 #include "MaintenanceActivities.h"
 #include "ScheduleAndFlows.h"
+#include "costCalculationFunctions.h"
 
 #include <random>
 #include <vector>
@@ -23,6 +24,8 @@ void shakeSwapNBH(MaintenanceActivities Maintenance, ScheduleAndFlows Sched) {//
 
 	Sched.startTimes[main1] = minStart + maxEnd - Sched.startTimes[main1] - Maintenance.duration[main1];
 	Sched.startTimes[main2] = minStart + maxEnd - Sched.startTimes[main2] - Maintenance.duration[main2];
+
+	shiftToOne(Maintenance.M, Sched.startTimes);
 
 	cout << Sched.startTimes[main1] << ' ' << Sched.startTimes[main2] << '\n';
 	return;

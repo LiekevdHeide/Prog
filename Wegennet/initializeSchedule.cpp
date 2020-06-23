@@ -4,70 +4,38 @@
 
 #include "InitializationFunctions.h"
 #include "ScheduleCheckFunctions.h"
+#include "costCalculationFunctions.h"
 #include "TouristAlternative.h"
 #include "PSAP.h"
 
 #include <iostream>
+#include <random>
 #include <vector>
 
 using namespace std;
 
-void initializeSchedule(ScheduleAndFlows &Schedule, ScheduleAndFlows &equilibrium, MaintenanceActivities &Maintenance, RoadNetwork &Network, vector<vector<vector<double>>> & touristAltPerWholeState, size_t numSmallStep){
+void initializeSchedule(ScheduleAndFlows &Schedule, ScheduleAndFlows &equilibrium, MaintenanceActivities &Maintenance, RoadNetwork &Network, vector<vector<vector<double>>> & touristAltPerWholeState, size_t numSmallStep, size_t runoutTime, double bigCosts){
 	//create initial schedule in the ScheduleAndFlows class (binary) + adds the corresponding traffic flows (touristArcFlow, pathFlow, arcFlowAll)
 	//doesn't check if it's a feasible schedule..
-	
-	//For now quick and easy, are better initialization heuristics +-   (all maintenance sequential)
-	/*size_t t = 1; 
-	for (size_t m = 0; m < Maintenance.M; ++m) {
-		if (t > (Maintenance.T - Maintenance.duration[m])) {
-			t = 1;
-		}
-		for (size_t d = 0; d < Maintenance.duration[m]; ++d) {
-			Schedule.binarySchedule[t + d][m] = 1;
-		}
-		t += Maintenance.duration[m] ;	
-	}*/
 
+	//set random startTimes
+	random_device rd;
+	mt19937 randomGenerator(rd());
 	for (size_t m = 0; m < Maintenance.M; ++m) {
-		Schedule.binarySchedule[0][m] = 0;
-		for (size_t t = 1; t <= Maintenance.duration[m]; ++t) {
-			Schedule.binarySchedule[t][m] = 1;
-		}
-		for (size_t t = Maintenance.duration[m] + 1; t < Maintenance.T; ++t) {
-			Schedule.binarySchedule[t][m] = 0;
-		}
-		Schedule.startTimes[m] = 1;
+		uniform_int_distribution<mt19937::result_type> chooseT(1, Maintenance.T - runoutTime - Maintenance.duration[m]);
+		Schedule.startTimes[m] = chooseT(randomGenerator);
 	}
-	//ADD CHECK IF STILL ALL DEMANDS POSSIBLE!
-
-	//change the available capacities in the network corr to the binary schedule.
-	binaryToCapacities(Maintenance.T, Maintenance.M, Schedule.binarySchedule, Maintenance.locationSets, Network.standardCapacities , Schedule.scheduledCapacities);
-	if (!adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Schedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, Schedule.availableRoutes, Schedule.numAvailableRoutes)) {
-		cerr << "INFEASIBLE START";
-	}
-	adjustTouristArcFLows(Maintenance.T, Maintenance.M, Schedule.binarySchedule, touristAltPerWholeState, Schedule.arcFlowTourist);
-	//set informed pathFlows / arcFlows to 0 for t> 0
+	shiftToOne(Maintenance.M, Schedule.startTimes);
 
 	Schedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
-	for(size_t od = 0; od < Network.numberODpairs; ++od)
+	for (size_t od = 0; od < Network.numberODpairs; ++od)
 		for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
 			Schedule.pathFlow[0][od][p] = (1.00 - Network.touristPercentage) * equilibrium.pathFlow[0][od][p];
 		}
+
+	//update binary, adjustavailable, adjustTourists, adjustingTrafficFlows + returns Costs!
+	costFromStarttimes(Network, Maintenance, Schedule, touristAltPerWholeState, numSmallStep, bigCosts);//bigCost??
+
 	
-	for (size_t t = 1; t < Maintenance.T; ++t)
-		for (size_t a = 0; a < Network.vertices; ++a) {
-			for (size_t b = 0; b < Network.vertices; ++b) {
-				Schedule.arcFlowAll[t][a][b] = 0.0;
-			}
-		}
-	for (size_t t = 1; t < Maintenance.T; ++t)
-		for (size_t od = 0; od < Network.numberODpairs; ++od)
-			for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
-				Schedule.pathFlow[t][od][r] = 0.0;
-			}
-
-	adjustingTrafficFlows(Maintenance.T, Network, Schedule, numSmallStep);
-
-
 	return;
 }

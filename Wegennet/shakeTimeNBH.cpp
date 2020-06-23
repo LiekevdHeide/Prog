@@ -2,6 +2,7 @@
 
 #include "MaintenanceActivities.h"
 #include "ScheduleAndFlows.h"
+#include "costCalculationFunctions.h"
 
 #include <random>
 #include <vector>
@@ -15,12 +16,13 @@ void shakeTimeNBH(MaintenanceActivities &Maintenance, ScheduleAndFlows &Sched, s
 
 	size_t mToShift = chooseM(randomGenerator);
 	cout << "shake:" << mToShift << ' ';
-	uniform_int_distribution<std::mt19937::result_type> chooseT(1, Maintenance.T - runoutT - Maintenance.duration[mToShift]);
+	uniform_int_distribution<mt19937::result_type> chooseT(1, Maintenance.T - runoutT - Maintenance.duration[mToShift]);
 	size_t shiftT = chooseT(randomGenerator);
 	cout << shiftT << '\n';
 	
 
 	Sched.startTimes[mToShift] = shiftT;
+	shiftToOne(Maintenance.M, Sched.startTimes);
 
 	return;
 }

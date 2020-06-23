@@ -6,16 +6,17 @@
 
 #include "costCalculationFunctions.h"
 
+
 #include <vector>
 #include <algorithm>
 
-bool timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, size_t runoutPeriod, double bigCost) {
-	bool foundImprovement = false;
+void timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, size_t runoutPeriod, double bigCost) {
 
 	double bestCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 	double currentCosts = bestCosts;
 	ScheduleAndFlows NbSched = Schedule; 
 	ScheduleAndFlows bestSchedule = Schedule;
+	vector<size_t> originalstartTimes = Schedule.startTimes;
 
 		for (size_t mToShift = 0; mToShift < Maintenance.M; ++mToShift) {
 			for (size_t t = 1; t < Maintenance.T - runoutPeriod - Maintenance.duration[mToShift]; ++t) {
@@ -23,28 +24,27 @@ bool timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, Mai
 
 					//set startTime to t
 					NbSched.startTimes[mToShift] = t;
+
+					shiftToOne(Maintenance.M, NbSched.startTimes);
 					currentCosts = costFromStarttimes(Network, Maintenance, NbSched, touristAltPerwholeState, numSmallStep, bigCost);//uses binarySchedule to calc: capacities, availableRoutes, touristFlows + PSAP: returns costs
 
 					 //if found improvement:
 					if (currentCosts < bestCosts) {
-						foundImprovement = true;
 						bestSchedule = NbSched;
 						//steepest descent
-						//bestCosts = currentCosts;
+						bestCosts = currentCosts;
 
 						//not steepest descent
-						break;
+						//break;
 					}
 
 				}
+				NbSched.startTimes = originalstartTimes;
 			}
 
-
 		}
 
-		if (foundImprovement) {
-			Schedule = bestSchedule;
-		}
+	Schedule = bestSchedule;
 
-	return foundImprovement;
+	return;
 }

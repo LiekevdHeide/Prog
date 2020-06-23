@@ -11,3 +11,6 @@ double costFromSchedule(RoadNetwork& Network, MaintenanceActivities& Maintenance
 
 //Replaces everything in Schedule, using startTimes + returns double costs
 double costFromStarttimes(RoadNetwork& Network, MaintenanceActivities& Maintenance, ScheduleAndFlows& Schedule, std::vector<std::vector<std::vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double biGC);
+
+
+void shiftToOne(size_t M, std::vector<size_t>& startTimes);

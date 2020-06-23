@@ -109,7 +109,7 @@ int main()
 	ofstream bestHeur(whichComputer + "BestSolutionHeur1.txt");
 	
 
-	initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep);
+	initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
 	cout << costFromStarttimes(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
 	double bestHeurCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 	ScheduleAndFlows bestHeurSchedule = Schedule;
@@ -117,18 +117,19 @@ int main()
 	double overallBestHeurCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 	double maxTime = 120;
 	size_t maxIterations = 100;
-	size_t actualNoImprovementsFor = 0;
+	size_t NoImprovementsFor = 0;
+	size_t noOverallImprovements = 0;
 		//implement VNS
-	while(time.elapsed() < maxTime){
+	while(noOverallImprovements < 500){
 		printSchedule(VNSPerformance, Maintenance.T, Maintenance.M, Schedule.startTimes);
 		size_t iteration = 0;
 		//bestHeurSchedule = Schedule;
 		double improvedCosts;
 		size_t neighbourhood = 0;
-		if (actualNoImprovementsFor > 100) {
+		if (NoImprovementsFor > 100) {
 			cout << "restart\n";
-			actualNoImprovementsFor = 0;
-			initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep);
+			NoImprovementsFor = 0;
+			initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
 			bestHeurCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 			VNSPerformance << "--------------restart-----------------------\n";
 		}
@@ -155,6 +156,8 @@ int main()
 
 			improvedCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
 			//cout << "\nImprovement after shake:" << improvedCosts << '\n';
+			
+			++noOverallImprovements;
 			if (improvedCosts < bestHeurCosts) {
 				cout << "\nNew best:" << improvedCosts << " OLD:" << bestHeurCosts << '\n';
 				bestHeurSchedule = Schedule;
@@ -162,12 +165,13 @@ int main()
 				if (improvedCosts < overallBestHeurCosts) {
 					overallBestHeurSchedule = Schedule;
 					overallBestHeurCosts = improvedCosts;
+					noOverallImprovements = 0;
 				}
-				actualNoImprovementsFor = 0;
+				NoImprovementsFor = 0;
 				neighbourhood = 0;
 			}
 			else {
-				++actualNoImprovementsFor;
+				++NoImprovementsFor;
 				++neighbourhood;
 				Schedule = bestHeurSchedule;
 			}
@@ -214,7 +218,7 @@ int main()
 
 	//-----------------------------------------------------------------------------------------------------------
 	//brute force:
-	/*
+	
 	size_t totalSchedule = pow(Maintenance.T - runOutPeriod, Maintenance.M);
 	for (size_t s = 1; s < totalSchedule; ++s) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
 	//for(size_t s = 181260; s < 189980; ++s){											 //adjust schedule
@@ -313,7 +317,7 @@ int main()
 	printRecurringTraffic(worstSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, worstSchedule.pathFlow);
 	worstSolution << worstCosts;
 
-	*/
+	
 
 	//----------------------------------------------------------------
 	//get benchmark: flows always in equilibrium (for best solution)

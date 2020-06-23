@@ -179,6 +179,7 @@
     <ClCompile Include="ScheduleAndFlows.cpp" />
     <ClCompile Include="shakeSwapNBH.cpp" />
     <ClCompile Include="shakeTimeNBH.cpp" />
+    <ClCompile Include="shiftToOne.cpp" />
     <ClCompile Include="swapNeighbourhood.cpp" />
     <ClCompile Include="timeMoveNeighbourhood.cpp" />
     <ClCompile Include="totalTravelTime.cpp" />

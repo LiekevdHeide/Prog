@@ -198,6 +198,9 @@
     <ClCompile Include="shakeSwapNBH.cpp">
       <Filter>Source Files\VNS</Filter>
     </ClCompile>
+    <ClCompile Include="shiftToOne.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">
