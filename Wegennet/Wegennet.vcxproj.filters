@@ -201,6 +201,9 @@
     <ClCompile Include="shiftToOne.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="printCostsPerTime.cpp">
+      <Filter>Source Files\PrintingFunctions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">

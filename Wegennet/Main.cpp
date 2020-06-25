@@ -35,14 +35,14 @@ int main()
 	Timer time;
 
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "NetworkInputTrials1.txt";
+	string roadInput = whichComputer + "NetworkInputExperiment2.txt";
 
 	RoadNetwork Network(roadInput);
 	//find all routes
 	depthFirstSearch(Network);
 
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "maintenanceInputTrials1.txt";
+	string maintenanceInput = whichComputer + "maintenanceInputExperiment2.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 	print2Dim(Maintenance.locationSets, Maintenance.M, 2);
 
@@ -106,7 +106,7 @@ int main()
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
 	ofstream VNSPerformance(whichComputer + "VNSperformance1.txt");
-	ofstream bestHeur(whichComputer + "BestSolutionHeur1.txt");
+	ofstream bestHeur(whichComputer + "BestHeurSolutionBigstep1.txt");
 	
 
 	initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
@@ -126,7 +126,7 @@ int main()
 		//bestHeurSchedule = Schedule;
 		double improvedCosts;
 		size_t neighbourhood = 0;
-		if (NoImprovementsFor > 100) {
+		if (NoImprovementsFor > 80) {
 			cout << "restart\n";
 			NoImprovementsFor = 0;
 			initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
@@ -193,6 +193,7 @@ int main()
 		bestHeur << Network.numberODpaths[od] << ' ';
 	}
 	bestHeur << '\n';
+	bestHeur << totalTravelTime(Network, Maintenance.T, overallBestHeurSchedule.scheduledCapacities, overallBestHeurSchedule.arcFlowAll) << '\n';
 	printSchedule(bestHeur, Maintenance.T, Maintenance.M, overallBestHeurSchedule.binarySchedule);
 	print2Dim(overallBestHeurSchedule.binarySchedule, Maintenance.T, bestHeur);
 	printRoutes(bestHeur, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
@@ -201,8 +202,8 @@ int main()
 	printRecurringTraffic(bestHeur, Maintenance.T, Network.numberODpairs, Network.numberODpaths, overallBestHeurSchedule.pathFlow);
 	bestHeur << "Tourist arc flows:\n";
 	printTraffic(bestHeur, Maintenance.T, Network.vertices, overallBestHeurSchedule.arcFlowTourist);
-	bestHeur << totalTravelTime(Network, Maintenance.T, overallBestHeurSchedule.scheduledCapacities, overallBestHeurSchedule.arcFlowAll);
-
+	printCostsPerTime(bestHeur, Network, Maintenance.T, overallBestHeurSchedule.scheduledCapacities, overallBestHeurSchedule.arcFlowAll);
+	
 	bestHeur.close();
 	VNSPerformance.close();
 
@@ -291,7 +292,7 @@ int main()
 	
 	//-----------------------------------------------------------------------------------------------------------------
 
-	ofstream bestSolution(whichComputer + "BestSolutionEnum1.txt");
+	ofstream bestSolution(whichComputer + "BestSolutionBigstep1.txt");
 	bestSolution << roadInput << '_' << maintenanceInput << '\n';
 	bestSolution << "T M OD\n";
 	bestSolution << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs << '\n';

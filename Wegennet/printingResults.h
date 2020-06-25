@@ -15,3 +15,5 @@ void printInput(std::ofstream& write, RoadNetwork& Network, MaintenanceActivitie
 void printRoutes(std::ofstream& write, size_t OD, std::vector<size_t>& numRoutes, std::vector<std::vector<std::vector<size_t>>>& Routes);
 
 void printRecurringTraffic(std::ofstream& write, size_t T, size_t OD, std::vector<size_t>& numPaths, std::vector<std::vector<std::vector<double>>>& pathFlow);//od,path,t
+
+void printCostsPerTime(std::ofstream& write, RoadNetwork& Network, size_t T, vector<vector<vector<double>>>& scheduledCapacities, vector<vector<vector<double>>>& arcFlows);

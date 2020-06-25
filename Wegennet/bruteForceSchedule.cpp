@@ -7,17 +7,24 @@ using namespace std;
 
 bool bruteForceSchedule(MaintenanceActivities &Maint, size_t schedule, size_t runOutTime, vector<vector<size_t>>& binarySchedule) {
 	//returns if schedule from wholenumber is feasible wrt ends before timeHorizon + returns the binarySchedule
-	bool ifFeasible = true;
+	bool ifFeasible = false;
 	//set binary schedule
 	vector<size_t> startTimes(Maint.M, 0);//start at time 1, 0 is the equilibrium time!
 	wholeScheduleToMaintenance(Maint.T - runOutTime, Maint.M, schedule, startTimes);
 
+	for (size_t m = 0; m < Maint.M; ++m) {
+		if (startTimes[m] == 1) {
+			ifFeasible = true;
+			break;
+		}
+	}
 	for (size_t m = 0; m < Maint.M; ++m) {
 		if (startTimes[m] + Maint.duration[m] > (Maint.T - runOutTime) || startTimes[m] == 0) {
 			ifFeasible = false;
 			break;
 		}
 	}
+
 	if (ifFeasible) {
 		for (size_t t = 1; t < Maint.T; ++t)
 			for (size_t m = 0; m < Maint.M; ++m) {
