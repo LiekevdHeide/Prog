@@ -10,9 +10,9 @@
 #include <vector>
 #include <algorithm>
 
-void timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, size_t runoutPeriod, double bigCost) {
+double timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, size_t runoutPeriod, double bigCost) {
 
-	double bestCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
+	double bestCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAltPerwholeState, numSmallStep, bigCost);
 	double currentCosts = bestCosts;
 	ScheduleAndFlows NbSched = Schedule; 
 	ScheduleAndFlows bestSchedule = Schedule;
@@ -46,5 +46,5 @@ void timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, Mai
 
 	Schedule = bestSchedule;
 
-	return;
+	return bestCosts;
 }

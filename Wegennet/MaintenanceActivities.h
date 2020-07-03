@@ -18,12 +18,11 @@ public:
 	vector<vector<size_t>> locationSets;//size=M, numLocationsOfM, location set per maintenance activity
 
 	vector<vector<vector<size_t>>> interruptedRoutes;//maintenance, OD pair, routes that are interrupted (binary)
-	
-	vector<double> costs;//costs per maintenance activity
 
+	//NOT USED!:
 	//matrix of reduction of costs if scheduled simultaneously
 	vector<vector<double>> costReduction;//size=MxM, reduction if 2 at the same time.
-
+	vector<double> costs;//costs per maintenance activity
 	
 };
 

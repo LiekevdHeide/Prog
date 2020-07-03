@@ -204,6 +204,9 @@
     <ClCompile Include="printCostsPerTime.cpp">
       <Filter>Source Files\PrintingFunctions</Filter>
     </ClCompile>
+    <ClCompile Include="VNS.cpp">
+      <Filter>Source Files\VNS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">

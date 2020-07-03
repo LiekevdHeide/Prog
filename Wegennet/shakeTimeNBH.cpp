@@ -15,10 +15,9 @@ void shakeTimeNBH(MaintenanceActivities &Maintenance, ScheduleAndFlows &Sched, s
 	uniform_int_distribution<std::mt19937::result_type> chooseM(0, Maintenance.M - 1);
 
 	size_t mToShift = chooseM(randomGenerator);
-	cout << "shake:" << mToShift << ' ';
+	//cout << "shake:" << mToShift << ' ';
 	uniform_int_distribution<mt19937::result_type> chooseT(1, Maintenance.T - runoutT - Maintenance.duration[mToShift]);
 	size_t shiftT = chooseT(randomGenerator);
-	cout << shiftT << '\n';
 	
 
 	Sched.startTimes[mToShift] = shiftT;

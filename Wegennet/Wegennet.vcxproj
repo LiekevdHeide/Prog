@@ -186,6 +186,7 @@
     <ClCompile Include="totalTravelTime.cpp" />
     <ClCompile Include="touristAlternative.cpp" />
     <ClCompile Include="updateExpectedPathTimes.cpp" />
+    <ClCompile Include="VNS.cpp" />
     <ClCompile Include="wholeScheduleToMaintenance.cpp" />
   </ItemGroup>
   <ItemGroup>

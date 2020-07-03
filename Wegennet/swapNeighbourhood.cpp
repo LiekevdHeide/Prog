@@ -9,9 +9,9 @@
 #include <algorithm>
 
 using namespace std;
-void swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, size_t runoutPeriod, double bigCost) {
+double swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, size_t runoutPeriod, double bigCost) {
 
-	double bestSoFarCosts = totalTravelTime(Network, Maintenance.T, Schedule.scheduledCapacities, Schedule.arcFlowAll);
+	double bestSoFarCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAltPerwholeState, numSmallStep, bigCost);
 	double currentCosts = bestSoFarCosts;
 	ScheduleAndFlows currentSchedule = Schedule;
 	ScheduleAndFlows bestSchedule = Schedule;
@@ -45,5 +45,5 @@ void swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, Mainten
 
 	Schedule = bestSchedule;
 
-	return;
+	return bestSoFarCosts;
 }

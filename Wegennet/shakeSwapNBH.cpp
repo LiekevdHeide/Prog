@@ -17,7 +17,7 @@ void shakeSwapNBH(MaintenanceActivities Maintenance, ScheduleAndFlows Sched) {//
 
 	size_t main1 = chooseM(randomGenerator);
 	size_t main2 = chooseM(randomGenerator);
-	cout << "shake:" << main1 << ' ' << main2 << "oldTimes: " << Sched.startTimes[main1] << ' ' << Sched.startTimes[main2] << " newTimes: ";
+	//cout << "shake:" << main1 << ' ' << main2 << "oldTimes: " << Sched.startTimes[main1] << ' ' << Sched.startTimes[main2] << " newTimes: ";
 
 	size_t minStart = min(Sched.startTimes[main1], Sched.startTimes[main2]);
 	size_t maxEnd = max(Sched.startTimes[main1] + Maintenance.duration[main1], Sched.startTimes[main2] + Maintenance.duration[main2]);
@@ -27,6 +27,5 @@ void shakeSwapNBH(MaintenanceActivities Maintenance, ScheduleAndFlows Sched) {//
 
 	shiftToOne(Maintenance.M, Sched.startTimes);
 
-	cout << Sched.startTimes[main1] << ' ' << Sched.startTimes[main2] << '\n';
 	return;
 }
