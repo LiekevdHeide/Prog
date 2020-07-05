@@ -10,13 +10,13 @@ Subject To
  c3:  arc0(2) + arc1(2) - arc2(0) - arc2(1) - arc2(3) + arc3(2)  = 0
  c4:  arc0(3) + arc1(3) + arc2(3) + arc3(3)  = 1
  c5:  arc0(0) <= 0
- c6:  arc0(1) <= 0
- c7:  arc0(2) <= 10
+ c6:  arc0(1) <= 10
+ c7:  arc0(2) <= 0
  c8:  arc0(3) <= 0
  c9:  arc1(0) <= 0
  c10: arc1(1) <= 0
- c11: arc1(2) <= 0
- c12: arc1(3) <= 10
+ c11: arc1(2) <= 10
+ c12: arc1(3) <= 0
  c13: arc2(0) <= 0
  c14: arc2(1) <= 0
  c15: arc2(2) <= 0

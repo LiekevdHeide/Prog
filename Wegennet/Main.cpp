@@ -44,14 +44,14 @@ int main()
 
 
 	Timer time;
-	ofstream allResults(whichComputer + "overallResults3.txt");
+	ofstream allResults(whichComputer + "overallResults4.txt");
 	allResults << "dem opt bruteM m0 m1 m2 m3 m4 m5 Hsched0 Hsched1 Hsched2 Hsched3 Hsched4 Hsched5 Hcost Bsched0 Bsched1 Bsched2 Bsched3 Bsched4 Bsched5 Bcost time\n";
 	allResults.close();
 	for(size_t dem = 0; dem < 2; ++dem)
 		for (size_t opt = 0; opt < 3; opt++) 
-			for (size_t bruteForceMaintenance = 1; bruteForceMaintenance < pow(3, 6); ++bruteForceMaintenance) {//
+			for (size_t bruteForceMaintenance = 100; bruteForceMaintenance < 130; ++bruteForceMaintenance) {//pow(3, 6)
 				cout << dem << ' ' << opt << ' ' << bruteForceMaintenance << '\n';
-				ofstream allResults(whichComputer + "overallResults3.txt", std::ios::app); //for adding to end of file);
+				ofstream allResults(whichComputer + "overallResults4.txt", std::ios::app); //for adding to end of file);
 			time.reset();
 			Network.ODdemands[0] = 10 + 10 * dem;
 			allResults << Network.ODdemands[0] << ' ' << opt << ' ';
@@ -161,7 +161,7 @@ int main()
 				}
 
 				//NECESSARY PARAMETERS!!
-				size_t runOutPeriod = 30;
+				size_t runOutPeriod = 20;
 				size_t numSmallStep = 1;
 				double Mu = 0.0;
 				double bigCost = 100000;
@@ -177,7 +177,7 @@ int main()
 
 
 				//implement VNS
-				string bestHeursol = whichComputer + "BestHeurSolution" + to_string(bruteForceMaintenance) + ".txt";
+				string bestHeursol = whichComputer + "BestHeurSolution" + to_string(bruteForceMaintenance) + "N4" + ".txt";
 
 				VNS(Network, Schedule, Maintenance, equilibrium, touristAlternativeFlowsPerwholeState, bestHeursol, runOutPeriod, numSmallStep, bigCost, maxTimeVNS, maxIterationsVNS);
 				size_t currentM = 0;
@@ -276,7 +276,7 @@ int main()
 
 				//-----------------------------------------------------------------------------------------------------------------
 
-				ofstream bestSolution(whichComputer + "BestSolution" + to_string(opt) + '_' +  to_string(Network.ODdemands[0]) + '_' + to_string(bruteForceMaintenance) + ".txt");
+				ofstream bestSolution(whichComputer + "BestSolution" + to_string(opt) + '_' +  to_string(Network.ODdemands[0]) + '_' + to_string(bruteForceMaintenance)+ "N4" + ".txt");
 				bestSolution << roadInput << '_' << maintenanceInput << '\n';
 				bestSolution << "T M OD\n";
 				bestSolution << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs << '\n';
