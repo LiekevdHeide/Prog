@@ -21,8 +21,8 @@ public:
 
 	//NOT USED!:
 	//matrix of reduction of costs if scheduled simultaneously
-	vector<vector<double>> costReduction;//size=MxM, reduction if 2 at the same time.
-	vector<double> costs;//costs per maintenance activity
+	//vector<vector<double>> costReduction;//size=MxM, reduction if 2 at the same time.
+	//vector<double> costs;//costs per maintenance activity
 	
 };
 

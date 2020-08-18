@@ -24,12 +24,6 @@ MaintenanceActivities::MaintenanceActivities(string maintenanceInput, size_t ver
 	}
 	duration = mDurations;
 
-	vector<double> mCosts(M, 0.0);
-	for (size_t m = 0; m < M; ++m) {
-		readFrom >> mCosts[m];
-	}
-	costs = mCosts;
-
 	//find all locations for all maintenance projects.
 	size_t loc = 0;
 	vector<vector<size_t>> perM(M, vector<size_t>());
@@ -46,16 +40,7 @@ MaintenanceActivities::MaintenanceActivities(string maintenanceInput, size_t ver
 	}
 	locationSets = perM;
 
-	//costReductions if combined maintenance
-	vector<vector<double>> reductions(M, vector<double>(M, 0.0));
-	for(size_t m = 0; m < M; ++m)
-		for (size_t n = 0; n < M; ++n) {
-			readFrom >> reductions[m][n];
-		}
-	costReduction = reductions;
-
-
-
+	
 	//initialize interruptedRoutes;
 	vector<vector<vector<size_t>>> initInterruptedRoutes(M, vector<vector<size_t>>(ODpairs, vector<size_t>()));
 	for(size_t m = 0; m < M; ++m)
