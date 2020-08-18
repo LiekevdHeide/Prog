@@ -6,7 +6,7 @@
 
 #include "costCalculationFunctions.h"
 
-
+#include <cstddef> //necessery for size_t!!
 #include <vector>
 #include <algorithm>
 

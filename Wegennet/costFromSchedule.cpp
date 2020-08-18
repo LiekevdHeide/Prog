@@ -9,6 +9,7 @@
 #include "ScheduleCheckFunctions.h"
 
 #include <vector>
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 double costFromSchedule(RoadNetwork &Network, MaintenanceActivities& Maintenance, ScheduleAndFlows& Schedule, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double bigCost) {

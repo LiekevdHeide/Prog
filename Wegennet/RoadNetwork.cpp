@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <cassert>//assertion of ifstream
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 

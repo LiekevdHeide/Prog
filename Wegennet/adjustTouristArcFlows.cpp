@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cstddef> //necessery for size_t!!
 using namespace std;
 
 void adjustTouristArcFLows(size_t T, size_t M, const vector<vector<size_t>> &binarySchedule, const vector<vector<vector<double>>> &touristAlternativeFlowsperWholeState, vector<vector<vector<double>>> &arcFlowTourist) {

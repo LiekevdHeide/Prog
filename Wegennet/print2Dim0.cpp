@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 void print2Dim(vector<vector<size_t>> toPrint) {

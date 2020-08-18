@@ -1,0 +1,3 @@
+MaxitsameNBHItsbeforerestartMaxnonewbest
+
+100 80 500

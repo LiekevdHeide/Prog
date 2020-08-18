@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
 #include <vector>
+#include <cstddef> 
 
 #include "RoadNetwork.h"
 #include "MaintenanceActivities.h"

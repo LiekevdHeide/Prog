@@ -6,6 +6,7 @@
 
 #include <random>
 #include <vector>
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 void shakeSwapNBH(MaintenanceActivities Maintenance, ScheduleAndFlows Sched) {//adjusts Schedule.startTimes, but not Schedule.binary

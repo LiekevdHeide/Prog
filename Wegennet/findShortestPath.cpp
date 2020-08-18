@@ -2,6 +2,7 @@
 #include "RoadNetwork.h"
 
 #include <vector>
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 size_t findShortestPath(RoadNetwork Roads, size_t od, vector<vector<double>> arcFlows, vector<vector<double>> actualCapacities, size_t numberAvailablePaths, vector<size_t> availablePaths, double &lengthReturn) { //No longer assumes t = 0?

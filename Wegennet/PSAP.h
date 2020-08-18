@@ -2,6 +2,9 @@
 #include "ScheduleAndFlows.h"
 #include "RoadNetwork.h"
 
+#include <vector>
+#include <cstddef> 
+
 void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule, size_t numSmallSteps); //assumes at 0 no maintenance!
 
 //void updateExpectedPathTimes(RoadNetwork& Network, ScheduleAndFlows& Schedule, size_t t, size_t od, vector<vector<double>>& pathTimes);

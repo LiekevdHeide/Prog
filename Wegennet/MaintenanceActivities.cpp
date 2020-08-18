@@ -4,6 +4,7 @@
 #include <fstream> //for reading
 #include <vector>
 #include <string>
+#include <cstddef> //necessery for size_t!!
 #include <cassert>//assertion of ifstream
 
 

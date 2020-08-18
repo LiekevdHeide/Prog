@@ -4,6 +4,8 @@
 #include "generalPrintingFunctions.h"
 
 #include <iostream>
+#include <cstddef> //necessery for size_t!!
+#include <vector>
 
 void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double convergenceCriterion, double accuracyStepsize, size_t time) {
 	//all path & arc flows are 0

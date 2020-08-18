@@ -2,6 +2,7 @@
 #include "RoadNetwork.h"
 
 #include <vector>
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 double totalTravelTime(RoadNetwork &Network, size_t T, vector<vector<vector<double>>> &scheduledCapacities, vector<vector<vector<double>>> &arcFlows) {

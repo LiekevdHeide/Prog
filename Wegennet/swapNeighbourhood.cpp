@@ -7,6 +7,7 @@
 #include "costCalculationFunctions.h"
 #include <vector>
 #include <algorithm>
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 double swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double bigCost) {

@@ -24,25 +24,26 @@
 //#include <random>
 #include <iostream>
 #include <fstream>
+#include <cstddef> //necessery for size_t!!
 
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
 	//string whichComputer{ "X:/My Documents/Wegennetwerk/Experiment 2/" };
 	string whichComputer{ "C:/Users/Gebruiker/Documents/Wegennetwerk/Experiment trials/" };
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "NetworkInputTrials1.txt";
+	string roadInput = argv[1]; // whichComputer + "NetworkInputTrials1.txt";
 	RoadNetwork Network(roadInput);
 	//find all routes
 	depthFirstSearch(Network);
 
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "maintenanceInputTrials1.txt";
+	string maintenanceInput = argv[2];// whichComputer + "maintenanceInputTrials1.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 	
-	string VNSparametersInput = whichComputer + "VNSinputTrial.txt";
+	string VNSparametersInput = argv[3]; // whichComputer + "VNSinputTrial.txt";
 	VNSparameters VNSpars(VNSparametersInput);
 
 
@@ -113,17 +114,16 @@ int main()
 
 					allResults << costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << ' ';
 					//cout << "\nComplete enumeration:\n";
+				
 
+					//-----------------------------------------------------------------------------------------------------------
 					//Complete enumeration init
 					double currentCosts = 0.0;
 					double bestCosts = 0.0;
-					
-					ScheduleAndFlows bestSchedule(Schedule);
-					
 
-					//-----------------------------------------------------------------------------------------------------------
-					//brute force: !!add shift to one!!
-					/*
+					ScheduleAndFlows bestSchedule(Schedule);
+
+					//brute force:					
 					size_t totalSchedule = pow(Maintenance.T - Maintenance.runOutPeriod, Maintenance.M);
 					for (size_t s = 1; s < totalSchedule; ++s) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
 					//for(size_t s = 181260; s < 189980; ++s){											 //adjust schedule
@@ -177,11 +177,7 @@ int main()
 								bestCosts = currentCosts;
 								bestSchedule = Schedule;
 							}
-							if (currentCosts > worstCosts) {
-								worstCosts = currentCosts;
-								worstSchedule = Schedule;
-							}
-
+							
 							//cost function: return total travel time + joint costs of maintenance
 
 							//save cost
@@ -193,7 +189,7 @@ int main()
 						}
 
 					}
-					*/
+					
 					//-----------------------------------------------------------------------------------------------------------------
 
 					ofstream bestSolution(whichComputer + "BestSolution" + '_' + to_string(Network.ODdemands[0]) + '_' + to_string(Maintenance.duration[0]) + "comparison" + ".txt");

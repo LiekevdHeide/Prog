@@ -4,7 +4,7 @@
 #include <ilcplex/ilocplex.h>
 #include <vector>
 #include <string>
-
+#include <cstddef> //necessery for size_t!!
 using namespace std;
 
 vector<size_t> findTouristAlternative1(size_t N, double Mu, vector<vector<double>>& travelTimes, vector<vector<double>>& actualCapacities, vector<size_t> interruptedRoute) {

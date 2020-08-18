@@ -4,6 +4,7 @@
 #include "MaintenanceActivities.h"
 
 #include <vector>
+#include <cstddef> 
 
 double totalTravelTime(RoadNetwork &Network, size_t T, std::vector<std::vector<std::vector<double>>>& scheduledCapacities, std::vector<std::vector<std::vector<double>>>& arcFlows);
 

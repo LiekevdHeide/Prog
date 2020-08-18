@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <vector>
-
+#include <cstddef> //necessery for size_t!!
 using namespace std;
 
 void printRecurringTraffic(ofstream& write, size_t T, size_t OD, vector<size_t>& numPaths, vector<vector<vector<double>>>& pathFlow) {//t,od,path,t

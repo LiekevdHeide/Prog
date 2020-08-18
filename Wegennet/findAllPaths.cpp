@@ -2,6 +2,7 @@
 #include "RoadNetwork.h"
 #include "generalPrintingFunctions.h"
 #include <vector>
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 

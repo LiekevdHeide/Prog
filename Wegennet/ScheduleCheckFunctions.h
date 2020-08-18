@@ -4,7 +4,8 @@
 #include "RoadNetwork.h"
 #include "ScheduleAndFlows.h"
 
-
+#include <vector>
+#include <cstddef> 
 //function if all demands still possible (all ODs connected)
 
 // function from schedule to capacities

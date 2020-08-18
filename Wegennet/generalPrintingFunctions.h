@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <fstream>
+#include <cstddef> 
 
 void print2Dim(std::vector<std::vector<size_t>> toPrint);
 void print2Dim(std::vector<std::vector<double>> toPrint);

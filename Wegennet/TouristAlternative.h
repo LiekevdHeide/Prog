@@ -1,6 +1,7 @@
 #pragma once
 #include "RoadNetwork.h"
 #include <vector>
+#include <cstddef> 
 
 //std::vector<size_t> findTouristAlternativeOld(size_t N, double Mu, std::vector<std::vector<double>>& travelTimes, std::vector<std::vector<double>>& standardCapacities, std::vector<size_t> interrupted);
 std::vector<size_t> findTouristAlternative1(size_t N, double Mu, std::vector<std::vector<double>>& travelTimes, std::vector<std::vector<double>>& standardCapacities, std::vector<size_t> interrupted);

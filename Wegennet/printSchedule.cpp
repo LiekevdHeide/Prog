@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <fstream>
-
+#include <cstddef> //necessery for size_t!!
 using namespace std;
 
 void printSchedule(ofstream &write, size_t T, size_t M, vector<vector<size_t>> &binarySchedule) {//print schedule: maintenance, time

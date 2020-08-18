@@ -1,8 +1,9 @@
 #include "MaintenanceActivities.h"
 
-
 #include "ScheduleCheckFunctions.h"
 
+#include <cstddef> //necessery for size_t!!
+#include <vector>
 using namespace std;
 
 bool bruteForceSchedule(MaintenanceActivities &Maint, size_t schedule, size_t runOutTime, vector<vector<size_t>>& binarySchedule) {

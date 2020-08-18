@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cstddef> //necessery for size_t!!
 using namespace std;
 double calculateConvergenceTest(vector<vector<double>> &oldArcFlows, vector<vector<double>> &newArcFlows, RoadNetwork &Roads, vector<vector<double>> &actualCapacities, vector<size_t> &numberAvailablePaths, vector<vector<size_t>> &availablePaths) {
 	

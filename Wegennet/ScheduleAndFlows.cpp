@@ -1,5 +1,8 @@
 #include "ScheduleAndFlows.h"
 
+#include <cstddef> //necessery for size_t!!
+#include <vector>
+
 using namespace std;
 ScheduleAndFlows::ScheduleAndFlows(size_t T, size_t vertices, size_t M, size_t ODpairs, std::vector<size_t> &numberODpaths, std::vector<std::vector<double>> &standardCapacities) {//constructor
 

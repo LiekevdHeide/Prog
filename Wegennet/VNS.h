@@ -4,6 +4,9 @@
 #include "ScheduleAndFlows.h"
 #include "VNSparameters.h"
 
+#include <cstddef> 
+#include <vector>
+
 
 double timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, std::vector<std::vector<std::vector<double>>>& touristAltPerwholeState, size_t numSmallStep,  double bigC);
 void shakeTimeNBH(MaintenanceActivities& Maintenance, ScheduleAndFlows& Sched);

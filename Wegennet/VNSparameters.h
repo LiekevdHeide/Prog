@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cstddef> 
 
 using namespace std;
 class VNSparameters

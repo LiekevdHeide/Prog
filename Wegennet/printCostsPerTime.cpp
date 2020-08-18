@@ -3,6 +3,7 @@
 #include "printingResults.h"
 
 #include <vector>
+#include <cstddef> //necessery for size_t!!
 
 using namespace std;
 void printCostsPerTime(ofstream &write, RoadNetwork& Network, size_t T, vector<vector<vector<double>>>& scheduledCapacities, vector<vector<vector<double>>>& arcFlows) {
