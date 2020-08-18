@@ -187,6 +187,7 @@
     <ClCompile Include="touristAlternative.cpp" />
     <ClCompile Include="updateExpectedPathTimes.cpp" />
     <ClCompile Include="VNS.cpp" />
+    <ClCompile Include="VNSparameters.cpp" />
     <ClCompile Include="wholeScheduleToMaintenance.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +206,7 @@
     <ClInclude Include="ScheduleCheckFunctions.h" />
     <ClInclude Include="TouristAlternative.h" />
     <ClInclude Include="VNS.h" />
+    <ClInclude Include="VNSparameters.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

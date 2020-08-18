@@ -207,6 +207,9 @@
     <ClCompile Include="VNS.cpp">
       <Filter>Source Files\VNS</Filter>
     </ClCompile>
+    <ClCompile Include="VNSparameters.cpp">
+      <Filter>Source Files\Constructors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="performanceTimer.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="VNS.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNSparameters.h">
+      <Filter>Header Files\Classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

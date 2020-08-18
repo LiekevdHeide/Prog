@@ -5,4 +5,4 @@
 #include "RoadNetwork.h"
 
 
-void initializeSchedule(ScheduleAndFlows&, ScheduleAndFlows&,  MaintenanceActivities&, RoadNetwork&, std::vector<std::vector<std::vector<double>>>& touristAltPerWholeState, size_t numSmallStep, size_t runoutP, double bigC);
+void initializeSchedule(ScheduleAndFlows&, ScheduleAndFlows&,  MaintenanceActivities&, RoadNetwork&, std::vector<std::vector<std::vector<double>>>& touristAltPerWholeState, size_t numSmallStep, double bigC);

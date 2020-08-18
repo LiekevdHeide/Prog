@@ -9,7 +9,7 @@
 #include <algorithm>
 
 using namespace std;
-double swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, size_t runoutPeriod, double bigCost) {
+double swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double bigCost) {
 
 	double bestSoFarCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAltPerwholeState, numSmallStep, bigCost);
 	double currentCosts = bestSoFarCosts;

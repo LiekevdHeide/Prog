@@ -5,6 +5,7 @@
 #include "RoadNetwork.h"
 #include "MaintenanceActivities.h"
 #include "ScheduleAndFlows.h"
+#include "VNSparameters.h"
 
 #include "ScheduleCheckFunctions.h"
 #include "costCalculationFunctions.h"
@@ -32,102 +33,23 @@ int main()
 	//string whichComputer{ "X:/My Documents/Wegennetwerk/Experiment 2/" };
 	string whichComputer{ "C:/Users/Gebruiker/Documents/Wegennetwerk/Experiment trials/" };
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
-	string roadInput = whichComputer + "NetworkInputExperiment2.txt";
+	string roadInput = whichComputer + "NetworkInputTrials1.txt";
 	RoadNetwork Network(roadInput);
 	//find all routes
 	depthFirstSearch(Network);
 
 	//read data file with maintenance action info    //should be inputs: data for maintenance projects (location sets, durations, reduction of cap, time frame)
-	string maintenanceInput = whichComputer + "maintenanceInputExperiment2.txt";
+	string maintenanceInput = whichComputer + "maintenanceInputTrials1.txt";
 	MaintenanceActivities Maintenance(maintenanceInput, Network.vertices, Network.numberODpairs, Network.numberODpaths);
 	
-	//vector<vector<size_t>> possibleMlocations{ {0,1}, {1,2}, {2,1}, {0,2}, {1,3}, {2,3} };
+	string VNSparametersInput = whichComputer + "VNSinputTrial.txt";
+	VNSparameters VNSpars(VNSparametersInput);
 
 
 	Timer time;
-	ofstream allResults(whichComputer + "maintenanceTimecomparison.txt");
+	ofstream allResults(whichComputer + "maintenanceTimecomparison.txt"); //std::ios::app
 	allResults << "#step dem opt bruteM m0 m1 m2 m3 m4 m5 Hsched0 Hsched1 Hsched2 Hsched3 Hsched4 Hsched5 Hcost Bsched0 Bsched1 Bsched2 Bsched3 Bsched4 Bsched5 Bcost time\n";
 	//allResults.close();
-
-	//for (size_t numSmallStep = 1; numSmallStep++; numSmallStep < 4)
-	//for(size_t dem = 0; dem < 2; ++dem)
-		//for (size_t opt = 0; opt < 3; opt++) 
-			//for (size_t bruteForceMaintenance = 1; bruteForceMaintenance < pow(3,6); ++bruteForceMaintenance) {//pow(3, 6)
-	/*size_t numSmallStep = 1;
-	size_t dem = 0;
-	size_t opt = 0;
-	cout << numSmallStep << ' ' << dem << ' ' << opt << ' ' <<  '\n';
-	//ofstream allResults(whichComputer + "maintenanceTimeComparison.txt", std::ios::app); //for adding to end of file);
-			time.reset();
-			Network.ODdemands[0] = 10 + 10 * dem;
-			allResults << numSmallStep << ' ' << Network.ODdemands[0] << ' ' << opt << ' ';
-			for (size_t v = 0; v < Network.vertices; ++v)
-				for (size_t w = 0; w < Network.vertices; ++w) {
-					if (Network.standardCapacities[v][w] > 0) {
-						Network.standardCapacities[v][w] = 10;
-					}
-			}
-
-			if (opt == 1) {
-				Network.standardCapacities[0][2] = 5;
-				Network.standardCapacities[2][3] = 5;
-			}
-			else if (opt == 2) {
-				Network.standardCapacities[1][2] = 5;
-				Network.standardCapacities[2][1] = 5;
-			}
-
-			
-				//allResults << bruteForceMaintenance << ' ';
-				vector<size_t> maintenanceInstanceOptions(6, 1);
-				//wholeScheduleToMaintenance(3, 6, bruteForceMaintenance, maintenanceInstanceOptions);
-				//change: Maintenance.M
-				Maintenance.M = 6;
-
-				for (size_t i = 0; i < maintenanceInstanceOptions.size(); ++i) {
-					allResults << maintenanceInstanceOptions[i] << ' ';
-					if (maintenanceInstanceOptions[i] > 0) {
-						Maintenance.M++;
-					}
-				}
-				if (Maintenance.M <= 6) {
-					//change Maintenance.duration, maintenance.locationSets, maintenance.Costs
-					Maintenance.duration = vector<size_t>(Maintenance.M, 0);
-					Maintenance.locationSets = vector<vector<size_t>>(Maintenance.M, vector<size_t>(2, 0));
-					Maintenance.costs = vector<double>(Maintenance.M, 100);
-
-					Maintenance.interruptedRoutes.resize(Maintenance.M);
-					for (size_t m = 0; m < Maintenance.M; ++m) {
-						Maintenance.interruptedRoutes[m].resize(Network.numberODpairs);
-						for (size_t od = 0; od < Network.numberODpairs; ++od) {
-							Maintenance.interruptedRoutes[m][od].resize(Network.numberODpaths[od]);
-							for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
-								Maintenance.interruptedRoutes[m][od][r] = 0;
-							}
-						}
-					}
-
-
-					size_t netMaintenance = 0;
-					for (size_t i = 0; i < maintenanceInstanceOptions.size(); ++i) {
-						if (maintenanceInstanceOptions[i] > 0) {
-							cout << "m";
-							cout << possibleMlocations[i][0] << ' ' << possibleMlocations[i][1] << ' ';
-							cout << Maintenance.locationSets[netMaintenance][0] << ' ' << Maintenance.locationSets[netMaintenance][1] << ' ';
-							Maintenance.locationSets[netMaintenance][0] = possibleMlocations[i][0];
-							Maintenance.locationSets[netMaintenance][1] = possibleMlocations[i][1];
-							cout << ':' << Maintenance.locationSets[netMaintenance][0] << ' ' << Maintenance.locationSets[netMaintenance][1] << '\n';
-							if (maintenanceInstanceOptions[i] == 1) {
-								Maintenance.duration[netMaintenance] = 5;
-							}
-							else {
-								Maintenance.duration[netMaintenance] = 10;
-							}
-							netMaintenance++;
-						}
-					}
-
-					*/
 
 					//find which maintenance interrupts which route:
 					findInterruptedRoutes(Maintenance.M, Maintenance.locationSets, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, Maintenance.interruptedRoutes);
@@ -168,50 +90,47 @@ int main()
 					}
 
 					//NECESSARY PARAMETERS!!
-					size_t runOutPeriod = 20;
 					size_t numSmallStep = 1;
-					double Mu = 0.5;
-					double bigCost = 100000;
-					vector<vector<vector<double>>> touristAlternativeFlowsPerwholeState = touristAlternative(Network, Mu, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0], eqTravelTimeArcs);
-					double maxTimeVNS = 120;
-					size_t maxIterationsVNS = 100;
+
+					double bigCost = 10000000;
+					vector<vector<vector<double>>> touristAlternativeFlowsPerwholeState = touristAlternative(Network, Network.muCostUninformed, Maintenance.M, Maintenance.locationSets, equilibrium.pathFlow[0], eqTravelTimeArcs);
+					//double maxTimeVNS = VNSpars.maxTime;
+					//size_t maxIterationsVNS = VNSpars.maxIterations;
 
 					//Make initial schedule solution 
 					cout << "--------------Create initial schedule ----------------\n";
-					initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep, runOutPeriod, bigCost);
+					initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
 					cout << costFromStarttimes(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
-
-
 
 					//implement VNS
 					string bestHeursol = whichComputer + "BestHeurSolution" + to_string(Maintenance.duration[0]) + "comparison" + ".txt";
 
-					VNS(Network, Schedule, Maintenance, equilibrium, touristAlternativeFlowsPerwholeState, bestHeursol, runOutPeriod, numSmallStep, bigCost, maxTimeVNS, maxIterationsVNS);
+					VNS(Network, Schedule, Maintenance, VNSpars, equilibrium, touristAlternativeFlowsPerwholeState, bestHeursol, numSmallStep, bigCost);
 					size_t currentM = 0;
 					for (size_t m = 0; m < Maintenance.M; ++m) {
 							allResults << Schedule.startTimes[m] << ' ';
 					}
 
 					allResults << costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << ' ';
-					cout << "\nComplete enumeration:\n";
+					//cout << "\nComplete enumeration:\n";
 
 					//Complete enumeration init
 					double currentCosts = 0.0;
 					double bestCosts = 0.0;
-					double worstCosts = 0.0;
+					
 					ScheduleAndFlows bestSchedule(Schedule);
-					ScheduleAndFlows worstSchedule(Schedule);
+					
 
 					//-----------------------------------------------------------------------------------------------------------
-					//brute force:
+					//brute force: !!add shift to one!!
 					/*
-					size_t totalSchedule = pow(Maintenance.T - runOutPeriod, Maintenance.M);
+					size_t totalSchedule = pow(Maintenance.T - Maintenance.runOutPeriod, Maintenance.M);
 					for (size_t s = 1; s < totalSchedule; ++s) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //pow(Maintenance.T, Maintenance.M)
 					//for(size_t s = 181260; s < 189980; ++s){											 //adjust schedule
 						if (s % 1000 == 0) {
 							cout << s << ':';
 						}
-						if (bruteForceSchedule(Maintenance, s, runOutPeriod, Schedule.binarySchedule)) {//start from t = 1 (t = 0 is equilibrium!) (returns if schedule is feasible wrt time + Schedule.binarySchedule)		
+						if (bruteForceSchedule(Maintenance, s, Maintenance.runOutPeriod, Schedule.binarySchedule)) {//start from t = 1 (t = 0 is equilibrium!) (returns if schedule is feasible wrt time + Schedule.binarySchedule)		
 							//initialize the start for  pathFlows for informed
 
 							//start at equilibrium. 
@@ -294,15 +213,9 @@ int main()
 
 					printTraffic(bestSolution, Maintenance.T, Network.vertices, bestSchedule.arcFlowAll);
 					printRecurringTraffic(bestSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, bestSchedule.pathFlow);
-					bestSolution << bestCosts;
+					bestSolution << costFromSchedule(Network, Maintenance, bestSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
 
-					/*ofstream worstSolution(whichComputer + "WorstSolution" + to_string(opt) + '_' + to_string(Network.ODdemands[0]) + '_'+  to_string(bruteForceMaintenance) + ".txt");
-					printRoutes(worstSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
-					printSchedule(worstSolution, Maintenance.T, Maintenance.M, worstSchedule.binarySchedule);
-					printTraffic(worstSolution, Maintenance.T, Network.vertices, worstSchedule.arcFlowAll);
-					printRecurringTraffic(worstSolution, Maintenance.T, Network.numberODpairs, Network.numberODpaths, worstSchedule.pathFlow);
-					worstSolution << worstCosts;
-					*/
+					
 					//generalresultsoutput
 					currentM = 0;
 					for (size_t allM = 0; allM < Maintenance.M; ++allM) {

@@ -10,7 +10,7 @@
 #include <vector>
 #include <algorithm>
 
-double timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, size_t runoutPeriod, double bigCost) {
+double timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double bigCost) {
 
 	double bestCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAltPerwholeState, numSmallStep, bigCost);
 	double currentCosts = bestCosts;
@@ -19,7 +19,7 @@ double timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, M
 	vector<size_t> originalstartTimes = Schedule.startTimes;
 
 		for (size_t mToShift = 0; mToShift < Maintenance.M; ++mToShift) {
-			for (size_t t = 1; t < Maintenance.T - runoutPeriod - Maintenance.duration[mToShift]; ++t) {
+			for (size_t t = 1; t < Maintenance.T - Maintenance.runOutPeriod - Maintenance.duration[mToShift]; ++t) {
 				if (t != Schedule.startTimes[mToShift]) {			//  <=? 
 
 					//set startTime to t

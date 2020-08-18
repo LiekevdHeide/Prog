@@ -17,6 +17,7 @@ MaintenanceActivities::MaintenanceActivities(string maintenanceInput, size_t ver
 
 	readFrom >> M;
 	readFrom >> T;
+	readFrom >> runOutPeriod;
 
 	vector<size_t> mDurations(M, 0);
 	for (size_t m = 0; m < M; ++m) {

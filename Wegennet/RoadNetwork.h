@@ -45,6 +45,7 @@ public:
 
 	size_t vertices; //vertices in the network
 	double touristPercentage;
+	double muCostUninformed;
 
 	//OD pairs
 	size_t numberODpairs;

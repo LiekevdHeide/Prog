@@ -12,6 +12,7 @@ public:
 
 	size_t M; //number of activities
 	size_t T; //time horizon
+	size_t runOutPeriod;
 	
 	vector<size_t> duration;//size=M, duration per maintenance
 	
