@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstddef> 
+#include <algorithm> //for pow
 
 using namespace std;
 class RoadNetwork

@@ -87,7 +87,7 @@ void VNS(RoadNetwork &Network, ScheduleAndFlows &Schedule, MaintenanceActivities
 
 
 	}
-	bestHeur << "bestHeur results";//roadInput << '_' << maintenanceInput << '\n';
+	bestHeur << "bestHeur results\n";//roadInput << '_' << maintenanceInput << '\n';
 	bestHeur << "T M OD\n";
 	bestHeur << Maintenance.T << ' ' << Maintenance.M << ' ' << Network.numberODpairs << '\n';
 	for (size_t od = 0; od < Network.numberODpairs; ++od) {

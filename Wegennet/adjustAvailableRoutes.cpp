@@ -14,7 +14,7 @@ bool adjustAvailableRoutes(size_t T, size_t M, size_t ODpairs, vector<size_t> &n
 	bool feasibleSchedule = true;
 	
 	vector<size_t> availables;
-	vector<size_t>::const_iterator locRoute;
+	vector<size_t>::iterator locRoute;
 
 	for(size_t t = 0; t < T; ++t)
 		for (size_t od = 0; od < ODpairs; ++od) {

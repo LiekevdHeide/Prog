@@ -105,9 +105,6 @@
     <ClCompile Include="findShortestPath.cpp">
       <Filter>Source Files\ConvexCombi</Filter>
     </ClCompile>
-    <ClCompile Include="adjustAvailableRoutes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="findInterruptedRoutes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -209,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="VNSparameters.cpp">
       <Filter>Source Files\Constructors</Filter>
+    </ClCompile>
+    <ClCompile Include="adjustAvailableRoutes.cpp">
+      <Filter>Source Files\CostCalculationFunctions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
