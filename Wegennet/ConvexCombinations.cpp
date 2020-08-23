@@ -69,7 +69,7 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 		//step size
 		alpha = findGoodStepsize(directionArcFlow, oldArcFlow, Roads, Flow.scheduledCapacities[time], accuracyStepsize);
 		//alpha = 2.0 / (counter + 2.0);
-		cout << "stepsize: " << alpha << '\n';
+		//cout << "stepsize: " << alpha << '\n';
 		//move to new flow using step size
 		for (size_t od = 0; od < Roads.numberODpairs; ++od) {
 			for (size_t r = 0; r < Flow.numAvailableRoutes[time][od]; ++r) {
@@ -87,6 +87,7 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 		
 		//---------------------------------------------------------------
 		//trail so print
+		/*
 		cout << "pTimes" << counter << ':' << convergenceTest << ' ';
 		for (size_t od = 0; od < Roads.numberODpairs; ++od) {
 			for (size_t p = 0; p < Flow.numAvailableRoutes[time][od]; ++p) {
@@ -95,8 +96,9 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 			}
 			cout << '\n';
 		}
+		*/
 	}
-	cout << "count:" << counter << ' ';
+	//cout << "count:" << counter << ' ';
 	//Flow and Roads are changed and sent back
 
 	return;

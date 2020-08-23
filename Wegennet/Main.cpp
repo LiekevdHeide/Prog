@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 
 
 	Timer time;
-	ofstream allResults(whichComputer + "maintenanceTimecomparison.txt"); //std::ios::app
+	ofstream allResults(whichComputer + "overallResults.txt", ios::app); //std::ios::app
 	allResults << "#step dem opt bruteM m0 m1 m2 m3 m4 m5 Hsched0 Hsched1 Hsched2 Hsched3 Hsched4 Hsched5 Hcost Bsched0 Bsched1 Bsched2 Bsched3 Bsched4 Bsched5 Bcost time\n";
 	//allResults.close();
 
@@ -120,6 +120,7 @@ int main(int argc, char* argv[])
 
 					//-----------------------------------------------------------------------------------------------------------
 					//Complete enumeration init
+					
 					double currentCosts = 0.0;
 					double bestCosts = 0.0;
 
@@ -167,6 +168,7 @@ int main(int argc, char* argv[])
 
 					}
 					
+					
 					//-----------------------------------------------------------------------------------------------------------------
 
 					ofstream bestSolution(whichComputer + "BestSolution" + '_' + to_string(Network.ODdemands[0]) + '_' + to_string(Maintenance.duration[0]) + "comparison" + ".txt");
@@ -202,7 +204,7 @@ int main(int argc, char* argv[])
 					bestSolution.close();
 					//worstSolution.close();
 
-			//	}
+			//	}  
 			
 			//}
 		
@@ -243,74 +245,84 @@ int main(int argc, char* argv[])
 	allEq << costsSchedule(Network, Maintenance.T, equilibriumBenchmark.scheduledCapacities, equilibriumBenchmark.arcFlowAll);
 	*/
 	//---------------------------------------------------------------
+	//find the new equilibrium for all maintenance combination's capacities
+
+	vector<vector<vector<double>>> eqFlowsPerWholestate(pow(2, Maintenance.M), vector<vector<double>>(Network.vertices, vector<double>(Network.vertices, 0.0)));
+
+	for (size_t s = 0; s < pow(2, Maintenance.M); ++s) {
+		ScheduleAndFlows eqIteration(1, Network.vertices, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.standardCapacities);//all flows 0, no maintenance
+
+		wholeScheduleToMaintenance(2, Maintenance.M, s, eqIteration.binarySchedule[0]); // get binary vector of scheduled maintenance activities
+		
+		//need to reset eqSchedule.scheduledCapacities??
+		binaryToCapacities(1, Maintenance.M, eqIteration.binarySchedule, Maintenance.locationSets, Network.standardCapacities, eqIteration.scheduledCapacities);
+		
+		if (adjustAvailableRoutes(1, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, eqIteration.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, eqIteration.availableRoutes, eqIteration.numAvailableRoutes)) {
+			//use convexCombi to get equilibrium flows
+			cout << "here";
+			convexCombinations(eqIteration, Network, 0.001, 0.0001, 0);//check this... + if it uses actualCapacities!!
+			eqFlowsPerWholestate[s] = eqIteration.arcFlowAll[0];
+			cout << totalTravelTime(Network, 1, eqIteration.scheduledCapacities, eqIteration.arcFlowAll) << ' ';
+		}
+		
+	}
+	//-------------------------
 	//brute force opt for allEqual
 	double currentEqCosts = 0.0;
 	double bestEqCosts = 0.0;
-	ScheduleAndFlows eqSchedule(Schedule);
-	ScheduleAndFlows bestAllEqSchedule(Schedule);
-
 	cout << "\n Best all equilibrium schedule:\n";
+	ScheduleAndFlows eqSchedule(Schedule);
+	ScheduleAndFlows bestEqSchedule(Schedule);
+	cout << costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << ' ';
+
 	//for all new schedules?
-	for (size_t s = 0; s < totalSchedule; s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //
+	for (size_t s = 0; s < pow(Maintenance.T - Maintenance.runOutPeriod, Maintenance.M); s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //
 		//adjust schedule
-		cout << s << ':';
+		wholeScheduleToMaintenance(Maintenance.T - Maintenance.runOutPeriod, Maintenance.M, s, eqSchedule.startTimes);
 		if (bruteForceSchedule(Maintenance, s, eqSchedule.binarySchedule)) {//start from t = 1 (t = 0 is equilibrium!) (also adjustsavailableRoute)
 			eqSchedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
 			eqSchedule.pathFlow[0] = equilibrium.pathFlow[0];
 			//adjust scheduled capacities
 			binaryToCapacities(Maintenance.T, Maintenance.M, eqSchedule.binarySchedule, Maintenance.locationSets, Network.standardCapacities, eqSchedule.scheduledCapacities);
 
-			//check feasibility?
+			//check feasibility
 			if (adjustAvailableRoutes(Maintenance.T, Maintenance.M, Network.numberODpairs, Network.numberODpaths, Network.ODpaths, eqSchedule.binarySchedule, Maintenance.locationSets, Maintenance.interruptedRoutes, eqSchedule.availableRoutes, eqSchedule.numAvailableRoutes)) {
+				
+				//add the eqFlowsPerWholestate for the correct wholeState to arcFLowAll!
+				adjustTouristArcFLows(Maintenance.T, Maintenance.M, eqSchedule.binarySchedule, eqFlowsPerWholestate, eqSchedule.arcFlowAll);
 
-				//just as above with bestSchedule...
-				for (size_t t = 1; t < Maintenance.T; ++t) { //0 is always equilibrium.
-					if (eqSchedule.binarySchedule[t] != eqSchedule.binarySchedule[t - 1]) {
-						//if schedule has changed, find new equilibrium
-
-						//set all to 0 for this time
-						for (size_t a = 0; a < Network.vertices; ++a) {
-							for (size_t b = 0; b < Network.vertices; ++b) {
-								eqSchedule.arcFlowAll[t][a][b] = 0.0;
-							}
-						}
-
-						for (size_t od = 0; od < Network.numberODpairs; ++od)
-							for (size_t r = 0; r < Network.numberODpaths[od]; ++r) {
-								eqSchedule.pathFlow[t][od][r] = 0.0;
-								//eqSchedule.touristPathFlow[t][od][r] = 0.0;
-							}
-
-						//add the equilibrium flows (so needs all at 0)
-						convexCombinations(eqSchedule, Network, 0.001, 0.0001, t);//convergenceCriterion,  epsilon for stepsize?
-
-					}
-					else {
-						eqSchedule.arcFlowAll[t] = eqSchedule.arcFlowAll[t - 1];//so only arcFlowAll is completely accurate!
-					}
-				}
 				//Check!! if scheduledCapacities is changed...
 				currentEqCosts = totalTravelTime(Network, Maintenance.T, eqSchedule.scheduledCapacities, eqSchedule.arcFlowAll);
-				cout << currentEqCosts << "  ";
 				if (currentEqCosts < bestEqCosts || bestEqCosts == 0) {
 					bestEqCosts = currentEqCosts;
-					bestAllEqSchedule = eqSchedule;
+					bestEqSchedule = eqSchedule;
+					for (size_t m = 0; m < Maintenance.M; ++m) {
+						cout << eqSchedule.startTimes[m] << '-';
+					}
+					cout << ' ';
+					Schedule.startTimes = eqSchedule.startTimes;
+					cout << currentEqCosts << ' ';
 				}
 			}
 		}
 	}
-	cout << "Lowest cost: " << totalTravelTime(Network, Maintenance.T, bestAllEqSchedule.scheduledCapacities, bestAllEqSchedule.arcFlowAll) << ' ';
+	cout << "Lowest cost: " << totalTravelTime(Network, Maintenance.T, bestEqSchedule.scheduledCapacities, bestEqSchedule.arcFlowAll) << ':';
+	for (size_t m = 0; m < Maintenance.M; ++m) {
+		cout << bestEqSchedule.startTimes[m] << '-';
+	}
 	ofstream bestAllEq(whichComputer + "bestAllEqBenchmarkB.txt");
 	printRoutes(bestAllEq, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
-	printSchedule(bestAllEq, Maintenance.T, Maintenance.M, bestAllEqSchedule.binarySchedule);
-	printTraffic(bestAllEq, Maintenance.T, Network.vertices, bestAllEqSchedule.arcFlowAll);
-	
+	printSchedule(bestAllEq, Maintenance.T, Maintenance.M, bestEqSchedule.binarySchedule);
+	printTraffic(bestAllEq, Maintenance.T, Network.vertices, bestEqSchedule.arcFlowAll);	
+	cout << " actualCost " << costFromSchedule(Network, Maintenance, bestEqSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << ' '; //changes the flows!!
 	bestAllEq << bestEqCosts; // costsSchedule(Network, Maintenance.T, bestAllEqSchedule.scheduledCapacities, bestAllEqSchedule.arcFlowAll);
+	printTraffic(bestAllEq, Maintenance.T, Network.vertices, bestEqSchedule.arcFlowAll);
+
 
 	for (size_t allM = 0; allM < Maintenance.M; ++allM) {
-		allResults << bestAllEqSchedule.startTimes[allM] << ' ';
+		allResults << bestEqSchedule.startTimes[allM] << ' ';
 	}
-	allResults << totalTravelTime(Network, Maintenance.T, bestAllEqSchedule.scheduledCapacities, bestAllEqSchedule.arcFlowAll) << ' ';
+	allResults <<bestEqCosts << ' ' << costFromSchedule(Network, Maintenance, bestEqSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << ' ';
 	allResults << time.elapsed() << '\n';
 	time.reset();
 

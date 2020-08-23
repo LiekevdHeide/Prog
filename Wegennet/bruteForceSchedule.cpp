@@ -44,6 +44,6 @@ bool bruteForceSchedule(MaintenanceActivities &Maint, size_t schedule, vector<ve
 		//update route availability, based on binarySchedule, return false if not a feasibleSchedule
 		//ifFeasible = adjustAvailableRoutes(Maint.T, Maint.M, Net.numberODpairs, Net.numberODpaths, Net.ODpaths, Sched.binarySchedule, Maint.locationSets, Maint.interruptedRoutes, Sched.availableRoutes, Sched.numAvailableRoutes);
 	}
-
+	
 	return ifFeasible;
 }
