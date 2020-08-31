@@ -32,8 +32,8 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	//string whichComputer{ "X:/My Documents/Wegennetwerk/Experiment 2/" };
-	//string whichComputer{ "C:/Users/Gebruiker/Documents/Wegennetwerk/Experiment trials/" };
-	string whichComputer{ "/home/p279495/Wegennet/outputFiles/" };
+	string whichComputer{ "C:/Users/Gebruiker/Documents/Wegennetwerk/Experiments/finding err in costs/" };
+	//string whichComputer{ "/home/p279495/Wegennet/outputFiles/" };
 	
 	//read the data file with road network    //should be inputs: road network configurations (set of vertices, arcs (directed), OD-pairs, constant for traffic time per arc)
 	string roadInput = argv[1]; // whichComputer + "NetworkInputTrials1.txt";
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 
 	Timer time;
 	
-	for (size_t odDemands = 0; odDemands < 2; ++odDemands) {
+	for (size_t odDemands = 1; odDemands < 2; ++odDemands) {
 		for (size_t odPairs = 0; odPairs < Network.numberODpairs; ++odPairs) {
 			if (odDemands == 0) {
 				Network.ODdemands[odPairs] = 10;
@@ -61,58 +61,68 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		for (size_t capBC = 0; capBC < 10; ++capBC) {
+		for (size_t capBC = 7; capBC < 8; ++capBC) {
 			switch (capBC) {
 			case 0:
 				Network.standardCapacities[1][2] = 5;
 				Network.freeFlowTimes[1][2] = 1;
 				Network.standardCapacities[2][1] = 5;
 				Network.freeFlowTimes[2][1] = 1;
+				break;
 			case 1:
 				Network.standardCapacities[1][2] = 10;
 				Network.freeFlowTimes[1][2] = 1;
 				Network.standardCapacities[2][1] = 10;
 				Network.freeFlowTimes[2][1] = 1;
+				break;
 			case 2:
 				Network.standardCapacities[1][2] = 15;
 				Network.freeFlowTimes[1][2] = 1;
 				Network.standardCapacities[2][1] = 15;
 				Network.freeFlowTimes[2][1] = 1;
+				break;
 			case 3:
 				Network.standardCapacities[1][2] = 5;
 				Network.freeFlowTimes[1][2] = 5;
 				Network.standardCapacities[2][1] = 5;
 				Network.freeFlowTimes[2][1] = 5;
+				break;
 			case 4:
 				Network.standardCapacities[1][2] = 10;
 				Network.freeFlowTimes[1][2] = 5;
 				Network.standardCapacities[2][1] = 10;
 				Network.freeFlowTimes[2][1] = 5;
+				break;
 			case 5:
 				Network.standardCapacities[1][2] = 15;
 				Network.freeFlowTimes[1][2] = 5;
 				Network.standardCapacities[2][1] = 15;
 				Network.freeFlowTimes[2][1] = 5;
+				break;
 			case 6:
 				Network.standardCapacities[1][2] = 5;
 				Network.freeFlowTimes[1][2] = 10;
 				Network.standardCapacities[2][1] = 5;
 				Network.freeFlowTimes[2][1] = 10;
+				break;
 			case 7:
 				Network.standardCapacities[1][2] = 10;
 				Network.freeFlowTimes[1][2] = 10;
 				Network.standardCapacities[2][1] = 10;
 				Network.freeFlowTimes[2][1] = 10;
+				break;
 			case 8:
 				Network.standardCapacities[1][2] = 15;
 				Network.freeFlowTimes[1][2] = 10;
 				Network.standardCapacities[2][1] = 15;
 				Network.freeFlowTimes[2][1] = 10;
+				break;
 			case 9:
 				Network.standardCapacities[1][2] = 5;
 				Network.freeFlowTimes[1][2] = 1;
 				Network.standardCapacities[2][1] = 10;
 				Network.freeFlowTimes[2][1] = 10;
+				break;
 			}
 
 			ofstream allResults(whichComputer + "overallResults.txt", ios::app); 
@@ -203,16 +213,16 @@ int main(int argc, char* argv[])
 				if (s % 10000 == 0) {
 					cout << s << ':';
 				}
-				if (bruteForceSchedule(Maintenance, s, Schedule.binarySchedule)) {//start from t = 1 (t = 0 is equilibrium!) (returns if schedule is feasible wrt time + Schedule.binarySchedule)		
+				if (bruteForceSchedule(Maintenance, s, Schedule.startTimes, Schedule.binarySchedule)) {//start from t = 1 (t = 0 is equilibrium!) (returns if schedule is feasible wrt time + Schedule.binarySchedule)		
 					//initialize the start for  pathFlows for informed
 
 					//start at equilibrium. 
 					//(not necessary?)
-					for (size_t od = 0; od < Network.numberODpairs; ++od)
+					/*for (size_t od = 0; od < Network.numberODpairs; ++od)
 						for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
 							Schedule.pathFlow[0][od][p] = equilibrium.pathFlow[0][od][p] * (1.00 - Network.touristPercentage);
 						}
-
+						*/
 					currentCosts = costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);//updates capacities, availableRoutes, touristFlows, recurrentFlows + calculates costs
 
 					//test
@@ -349,7 +359,7 @@ allEq << costsSchedule(Network, Maintenance.T, equilibriumBenchmark.scheduledCap
 			for (size_t s = 0; s < pow(Maintenance.T - Maintenance.runOutPeriod, Maintenance.M); s++) { // s < time periods ^ maintenance activities = pow(Maint.T, Maint.M) //
 				//adjust schedule
 				wholeScheduleToMaintenance(Maintenance.T - Maintenance.runOutPeriod, Maintenance.M, s, eqSchedule.startTimes);
-				if (bruteForceSchedule(Maintenance, s, eqSchedule.binarySchedule)) {//start from t = 1 (t = 0 is equilibrium!) (also adjustsavailableRoute)
+				if (bruteForceSchedule(Maintenance, s, eqSchedule.startTimes, eqSchedule.binarySchedule)) {//start from t = 1 (t = 0 is equilibrium!) (also adjustsavailableRoute)
 					eqSchedule.arcFlowAll[0] = equilibrium.arcFlowAll[0];
 					eqSchedule.pathFlow[0] = equilibrium.pathFlow[0];
 					//adjust scheduled capacities

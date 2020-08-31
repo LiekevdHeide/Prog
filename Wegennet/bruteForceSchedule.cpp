@@ -6,7 +6,7 @@
 #include <vector>
 using namespace std;
 
-bool bruteForceSchedule(MaintenanceActivities &Maint, size_t schedule, vector<vector<size_t>>& binarySchedule) {
+bool bruteForceSchedule(MaintenanceActivities &Maint, size_t schedule, vector<size_t> &returnedStartTimes, vector<vector<size_t>>& binarySchedule) {
 	//returns if schedule from wholenumber is feasible wrt ends before timeHorizon + returns the binarySchedule
 	bool ifFeasible = false;
 	//set binary schedule
@@ -45,5 +45,8 @@ bool bruteForceSchedule(MaintenanceActivities &Maint, size_t schedule, vector<ve
 		//ifFeasible = adjustAvailableRoutes(Maint.T, Maint.M, Net.numberODpairs, Net.numberODpaths, Net.ODpaths, Sched.binarySchedule, Maint.locationSets, Maint.interruptedRoutes, Sched.availableRoutes, Sched.numAvailableRoutes);
 	}
 	
+	if (ifFeasible) {
+		returnedStartTimes = startTimes;
+	}
 	return ifFeasible;
 }

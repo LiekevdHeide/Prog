@@ -2,173 +2,48 @@
 \Problem name: IloCplex
 
 Minimize
- obj1: 1.01287529627721 arc0(1) + 1.03784484904085 arc0(3) + arc1(0)
-       + 1.08437954168233 arc1(2) + 0.68310546875 arc1(4) + 10 arc2(1)
-       + 1.01287529627721 arc2(5) + arc3(0) + 1.03784484904085 arc3(4)
-       + arc4(1) + arc4(3) + 1.03478381504694 arc4(5)
-       + 0.691925007158946 arc4(6) + arc5(2) + arc5(4)
-       + 1.34918688744452 arc5(7) + arc6(4) + 1.00000000717256 arc6(7)
-       + arc7(5) + arc7(6)
+ obj1: 1.67561603079236 arc0(1) + 1.01016678417558 arc0(2) + arc1(0)
+       + 10 arc1(2) + 0.573476001924523 arc1(3) + arc2(0) + 10 arc2(1)
+       + 3.48800564042764 arc2(3) + arc3(1) + arc3(2)
 Subject To
- c1:  - arc0(1) - arc0(2) - arc0(3) - arc0(4) - arc0(5) - arc0(6) - arc0(7)
-      + arc1(0) + arc2(0) + arc3(0) + arc4(0) + arc5(0) + arc6(0) + arc7(0)
-       = 0
- c2:  - arc0(1) + arc1(0) + arc1(2) + arc1(3) + arc1(4) + arc1(5) + arc1(6)
-      + arc1(7) - arc2(1) - arc3(1) - arc4(1) - arc5(1) - arc6(1) - arc7(1)
-       = 1
- c3:  arc0(2) + arc1(2) - arc2(0) - arc2(1) - arc2(3) - arc2(4) - arc2(5)
-      - arc2(6) - arc2(7) + arc3(2) + arc4(2) + arc5(2) + arc6(2) + arc7(2)
-       = 0
- c4:  arc0(3) + arc1(3) + arc2(3) - arc3(0) - arc3(1) - arc3(2) - arc3(4)
-      - arc3(5) - arc3(6) - arc3(7) + arc4(3) + arc5(3) + arc6(3) + arc7(3)
-       = 0
- c5:  arc0(4) + arc1(4) + arc2(4) + arc3(4) - arc4(0) - arc4(1) - arc4(2)
-      - arc4(3) - arc4(5) - arc4(6) - arc4(7) + arc5(4) + arc6(4) + arc7(4)
-       = 0
- c6:  arc0(5) + arc1(5) + arc2(5) + arc3(5) + arc4(5) - arc5(0) - arc5(1)
-      - arc5(2) - arc5(3) - arc5(4) - arc5(6) - arc5(7) + arc6(5) + arc7(5)
-       = 0
- c7:  arc0(7) + arc1(7) + arc2(7) + arc3(7) + arc4(7) + arc5(7) + arc6(7)
-      - arc7(0) - arc7(1) - arc7(2) - arc7(3) - arc7(4) - arc7(5) - arc7(6)
-       = 0
- c8:  arc0(6) + arc1(6) + arc2(6) + arc3(6) + arc4(6) + arc5(6) + arc6(6)
-      + arc7(6)  = 1
- c9:  arc0(0) <= 0
- c10: arc0(1) <= 8
- c11: arc0(2) <= 0
- c12: arc0(3) <= 0
- c13: arc0(4) <= 0
- c14: arc0(5) <= 0
- c15: arc0(6) <= 0
- c16: arc0(7) <= 0
- c17: arc1(0) <= 8
- c18: arc1(1) <= 0
- c19: arc1(2) <= 5
- c20: arc1(3) <= 0
- c21: arc1(4) <= 0
- c22: arc1(5) <= 0
- c23: arc1(6) <= 0
- c24: arc1(7) <= 0
- c25: arc2(0) <= 0
- c26: arc2(1) <= 10
- c27: arc2(2) <= 0
- c28: arc2(3) <= 0
- c29: arc2(4) <= 0
- c30: arc2(5) <= 8
- c31: arc2(6) <= 0
- c32: arc2(7) <= 0
- c33: arc3(0) <= 8
- c34: arc3(1) <= 0
- c35: arc3(2) <= 0
- c36: arc3(3) <= 0
- c37: arc3(4) <= 0
- c38: arc3(5) <= 0
- c39: arc3(6) <= 0
- c40: arc3(7) <= 0
- c41: arc4(0) <= 0
- c42: arc4(1) <= 8
- c43: arc4(2) <= 0
- c44: arc4(3) <= 8
- c45: arc4(4) <= 0
- c46: arc4(5) <= 0
- c47: arc4(6) <= 8
- c48: arc4(7) <= 0
- c49: arc5(0) <= 0
- c50: arc5(1) <= 0
- c51: arc5(2) <= 8
- c52: arc5(3) <= 0
- c53: arc5(4) <= 8
- c54: arc5(5) <= 0
- c55: arc5(6) <= 0
- c56: arc5(7) <= 8
- c57: arc6(0) <= 0
- c58: arc6(1) <= 0
- c59: arc6(2) <= 0
- c60: arc6(3) <= 0
- c61: arc6(4) <= 8
- c62: arc6(5) <= 0
- c63: arc6(6) <= 0
- c64: arc6(7) <= 8
- c65: arc7(0) <= 0
- c66: arc7(1) <= 0
- c67: arc7(2) <= 0
- c68: arc7(3) <= 0
- c69: arc7(4) <= 0
- c70: arc7(5) <= 8
- c71: arc7(6) <= 8
- c72: arc7(7) <= 0
+ c1:  arc0(1) + arc0(2) + arc0(3) - arc1(0) - arc2(0) - arc3(0)  = 1
+ c2:  arc0(1) - arc1(0) - arc1(2) - arc1(3) + arc2(1) + arc3(1)  = 0
+ c3:  arc0(2) + arc1(2) - arc2(0) - arc2(1) - arc2(3) + arc3(2)  = 0
+ c4:  arc0(3) + arc1(3) + arc2(3) + arc3(3)  = 1
+ c5:  arc0(0) <= 0
+ c6:  arc0(1) <= 0
+ c7:  arc0(2) <= 8
+ c8:  arc0(3) <= 0
+ c9:  arc1(0) <= 8
+ c10: arc1(1) <= 0
+ c11: arc1(2) <= 10
+ c12: arc1(3) <= 16
+ c13: arc2(0) <= 8
+ c14: arc2(1) <= 0
+ c15: arc2(2) <= 0
+ c16: arc2(3) <= 4
+ c17: arc3(0) <= 0
+ c18: arc3(1) <= 8
+ c19: arc3(2) <= 8
+ c20: arc3(3) <= 0
 Bounds
  0 <= arc0(0) <= 1
  0 <= arc0(1) <= 1
  0 <= arc0(2) <= 1
  0 <= arc0(3) <= 1
- 0 <= arc0(4) <= 1
- 0 <= arc0(5) <= 1
- 0 <= arc0(6) <= 1
- 0 <= arc0(7) <= 1
  0 <= arc1(0) <= 1
  0 <= arc1(1) <= 1
  0 <= arc1(2) <= 1
  0 <= arc1(3) <= 1
- 0 <= arc1(4) <= 1
- 0 <= arc1(5) <= 1
- 0 <= arc1(6) <= 1
- 0 <= arc1(7) <= 1
  0 <= arc2(0) <= 1
  0 <= arc2(1) <= 1
  0 <= arc2(2) <= 1
  0 <= arc2(3) <= 1
- 0 <= arc2(4) <= 1
- 0 <= arc2(5) <= 1
- 0 <= arc2(6) <= 1
- 0 <= arc2(7) <= 1
  0 <= arc3(0) <= 1
  0 <= arc3(1) <= 1
  0 <= arc3(2) <= 1
  0 <= arc3(3) <= 1
- 0 <= arc3(4) <= 1
- 0 <= arc3(5) <= 1
- 0 <= arc3(6) <= 1
- 0 <= arc3(7) <= 1
- 0 <= arc4(0) <= 1
- 0 <= arc4(1) <= 1
- 0 <= arc4(2) <= 1
- 0 <= arc4(3) <= 1
- 0 <= arc4(4) <= 1
- 0 <= arc4(5) <= 1
- 0 <= arc4(6) <= 1
- 0 <= arc4(7) <= 1
- 0 <= arc5(0) <= 1
- 0 <= arc5(1) <= 1
- 0 <= arc5(2) <= 1
- 0 <= arc5(3) <= 1
- 0 <= arc5(4) <= 1
- 0 <= arc5(5) <= 1
- 0 <= arc5(6) <= 1
- 0 <= arc5(7) <= 1
- 0 <= arc6(0) <= 1
- 0 <= arc6(1) <= 1
- 0 <= arc6(2) <= 1
- 0 <= arc6(3) <= 1
- 0 <= arc6(4) <= 1
- 0 <= arc6(5) <= 1
- 0 <= arc6(6) <= 1
- 0 <= arc6(7) <= 1
- 0 <= arc7(0) <= 1
- 0 <= arc7(1) <= 1
- 0 <= arc7(2) <= 1
- 0 <= arc7(3) <= 1
- 0 <= arc7(4) <= 1
- 0 <= arc7(5) <= 1
- 0 <= arc7(6) <= 1
- 0 <= arc7(7) <= 1
 Binaries
- arc0(0)  arc0(1)  arc0(2)  arc0(3)  arc0(4)  arc0(5)  arc0(6)  arc0(7) 
- arc1(0)  arc1(1)  arc1(2)  arc1(3)  arc1(4)  arc1(5)  arc1(6)  arc1(7) 
- arc2(0)  arc2(1)  arc2(2)  arc2(3)  arc2(4)  arc2(5)  arc2(6)  arc2(7) 
- arc3(0)  arc3(1)  arc3(2)  arc3(3)  arc3(4)  arc3(5)  arc3(6)  arc3(7) 
- arc4(0)  arc4(1)  arc4(2)  arc4(3)  arc4(4)  arc4(5)  arc4(6)  arc4(7) 
- arc5(0)  arc5(1)  arc5(2)  arc5(3)  arc5(4)  arc5(5)  arc5(6)  arc5(7) 
- arc6(0)  arc6(1)  arc6(2)  arc6(3)  arc6(4)  arc6(5)  arc6(6)  arc6(7) 
- arc7(0)  arc7(1)  arc7(2)  arc7(3)  arc7(4)  arc7(5)  arc7(6)  arc7(7) 
+ arc0(0)  arc0(1)  arc0(2)  arc0(3)  arc1(0)  arc1(1)  arc1(2)  arc1(3) 
+ arc2(0)  arc2(1)  arc2(2)  arc2(3)  arc3(0)  arc3(1)  arc3(2)  arc3(3) 
 End
