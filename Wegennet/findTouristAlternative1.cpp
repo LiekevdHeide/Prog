@@ -54,16 +54,22 @@ vector<size_t> findTouristAlternative1(size_t N, double Mu, vector<vector<double
 				allOut += arcs[i][j];
 				allIn += arcs[j][i];
 			}
-			if (i == interruptedRoute[0]) {
-				model.add(allOut == allIn + 1);
-			}
-			else {
+			if (i != interruptedRoute[0]) {
 				model.add(allIn == allOut);
+				//model.add(allOut == allIn + 1);
 			}
 			allIn.end();
 			allOut.end();
 		}
 	}
+
+	//leave origin once
+	IloExpr leaveOrigin(env);
+	for (size_t j = 0; j < N; ++j) {
+		leaveOrigin += arcs[interruptedRoute[0]][j];
+	}
+	model.add(leaveOrigin == 1);
+	leaveOrigin.end();
 
 	//arrive d = 1
 	IloExpr arriveDestination(env);
@@ -83,7 +89,7 @@ vector<size_t> findTouristAlternative1(size_t N, double Mu, vector<vector<double
 
 	// make + solve the cplex
 	IloCplex cplex(model);
-	cplex.exportModel("ObjectiveAndConstraints.lp");
+	//cplex.exportModel("ObjectiveAndConstraints.lp");
 	cplex.solve();
 
 	//get results from IP
