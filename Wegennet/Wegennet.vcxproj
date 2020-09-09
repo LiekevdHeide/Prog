@@ -189,6 +189,7 @@
     <ClCompile Include="VNS.cpp" />
     <ClCompile Include="VNSparameters.cpp" />
     <ClCompile Include="wholeScheduleToMaintenance.cpp" />
+    <ClCompile Include="writeMaintenanceInputs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConvexCombinations.h" />
