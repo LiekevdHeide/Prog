@@ -5,7 +5,7 @@
 #include "ScheduleCheckFunctions.h"
 
 using namespace std;
-void main() {
+void writeMaintenanceInputs() {
 
 	//write maintenance input
 	string whichComputer{ "/home/p279495/Wegennet/sourceFiles/" };

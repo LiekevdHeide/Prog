@@ -44,7 +44,7 @@ void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t>& availab
 			}
 		}
 	}
-	alpha += 0.5;//=M?
+	alpha *= 12.5;//0.5;//=M?
 	alpha = 1 / alpha;
 	//cout << "alpha=" << alpha << ' ';
 

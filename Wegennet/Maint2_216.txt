@@ -1,0 +1,5 @@
+/home/p279495/Wegennet/sourceFiles/Maint2_216.txt
+2 61 30
+10 10 
+1 3 14
+2 3 14

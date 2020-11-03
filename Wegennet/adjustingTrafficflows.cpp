@@ -22,7 +22,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 		pathTimes[od] = vector<double>(Network.numberODpaths[od]);//init to eq time ????
 		//init to freeFlow time
 		for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
-			pathTimes[od][p] = Network.pathTravelTime(Network.ODpaths[od][p], vector<vector<double>>(Network.vertices, vector<double>(Network.vertices, 0.0)), Network.standardCapacities);
+			pathTimes[od][p] = Network.pathTravelTime(Network.ODpaths[od][p], Schedule.arcFlowAll[0], Network.standardCapacities); // vector<vector<double>>(Network.vertices, vector<double>(Network.vertices, 0.0))
 		}
 	}
 	vector<vector<double>> freeFlowTimes = pathTimes;
@@ -50,6 +50,32 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 			pathTimes = freeFlowTimes;
 			//Calculate pathtimes at time t (to base decisions t + 1 on)    based on arcFlowAll @t + currentCap	 ONLY FOR AVAILABLE PATHS!
 			updateExpectedPathTimes(Network, od, Schedule.numAvailableRoutes[t][od], Schedule.availableRoutes[t][od], Schedule.scheduledCapacities[t], Schedule.arcFlowAll[t], pathTimes[od]);
+			
+			//if path just opened:
+			size_t q = 0;
+			double expectedFlow = 0.0;
+			for (size_t p = 0; p < Schedule.numAvailableRoutes[t + 1][od]; ++p) {
+				q = Schedule.availableRoutes[t + 1][od][p];
+				if (find(Schedule.availableRoutes[t][od].begin(), Schedule.availableRoutes[t][od].end(), Schedule.availableRoutes[t + 1][od][p]) == Schedule.availableRoutes[t][od].end()) {
+					//update costs: arcFlowAll[t] if >0, else: eq flows
+					cout << "opening path:" << q << ' ';
+					pathTimes[od][q] = 0.0;
+					for (size_t route = 0; route < Network.ODpaths[od][q].size() - 1; ++route) {
+						if (Schedule.arcFlowAll[t][Network.ODpaths[od][q][route]][Network.ODpaths[od][q][route + 1]] == 0) {
+							expectedFlow = Schedule.arcFlowAll[0][Network.ODpaths[od][q][route]][Network.ODpaths[od][q][route + 1]];
+							//cout << 0 << ' ';
+						}
+						else {
+							expectedFlow = Schedule.arcFlowAll[t][Network.ODpaths[od][q][route]][Network.ODpaths[od][q][route + 1]];
+						}
+						//cout << expectedFlow << ' ';
+						pathTimes[od][q] += Network.travelTimeRoad(Schedule.scheduledCapacities[t + 1][Network.ODpaths[od][q][route]][Network.ODpaths[od][q][route + 1]], Network.freeFlowTimes[Network.ODpaths[od][q][route]][Network.ODpaths[od][q][route + 1]], expectedFlow);
+					}
+					//cout << '\n';
+				}
+				cout << od << ':' << q << ' ' << pathTimes[od][q] << ' ';
+			}
+			cout << '\n'; 
 
 			//determine recurrent flow @ closing paths
 			flowAtClosingPath = determineFlowClosingPaths(Schedule, t, od);
@@ -74,7 +100,8 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 				//Calculate pathtimes at time t (to base decisions t + 1 on)    based on arcFlowAll @t + currentCap	(set to freeFlow t for paths unavailable at t)	
 				pathTimes = freeFlowTimes;
 				updateExpectedPathTimes(Network, od, Schedule.numAvailableRoutes[t][od], Schedule.availableRoutes[t][od], Schedule.scheduledCapacities[t], arcFlows, pathTimes[od]);
-
+				//updateExpectedPathTimes(Network, od, Schedule.numAvailableRoutes[t][od], Schedule.availableRoutes[t][od], Schedule.scheduledCapacities[t], arcFlows, pathTimes[od]);
+				
 				//Change recurring traffic flows at t+1 (using only paths available at t + 1). Resets pathFlow at t + 1 to flow at t, then updates it using PSAP.
 				//adjust newFlow using pathTimes. Only change flows on/to open paths at t + 1. resets newFlow + updates it.
 				proportionalSwitch(Schedule.numAvailableRoutes[t + 1][od], Schedule.availableRoutes[t + 1][od], oldFlow[od], pathTimes[od], newFlow[od]);

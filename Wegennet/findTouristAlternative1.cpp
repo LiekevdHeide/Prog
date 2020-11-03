@@ -54,9 +54,11 @@ vector<size_t> findTouristAlternative1(size_t N, double Mu, vector<vector<double
 				allOut += arcs[i][j];
 				allIn += arcs[j][i];
 			}
-			if (i != interruptedRoute[0]) {
+			if (i == interruptedRoute[0]) {
+				model.add(allOut == allIn + 1);
+			}
+			else {
 				model.add(allIn == allOut);
-				//model.add(allOut == allIn + 1);
 			}
 			allIn.end();
 			allOut.end();
@@ -70,6 +72,7 @@ vector<size_t> findTouristAlternative1(size_t N, double Mu, vector<vector<double
 	}
 	model.add(leaveOrigin == 1);
 	leaveOrigin.end();
+
 
 	//arrive d = 1
 	IloExpr arriveDestination(env);

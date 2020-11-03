@@ -13,6 +13,7 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 	//initialize: for every OD-pair, assign all demand to the path with the lowest freeflow.
 	size_t shortestPath{ 0 };
 	double shortestLength{ 0.0 };
+	//ofstream printConvexCombi("C:/Users/Gebruiker/Documents/Wegennetwerk/Experiment trials/ConvexCombi.txt");
 	for (size_t od = 0; od < Roads.numberODpairs; ++od) {
 		//find shortest path
 		shortestPath = findShortestPath(Roads, od, vector<vector<double>>(Roads.vertices, vector<double>(Roads.vertices, 0.0)), Flow.scheduledCapacities[time], Flow.numAvailableRoutes[time][od], Flow.availableRoutes[time][od], shortestLength);
@@ -84,7 +85,7 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 		//calculate convergenceTest
 		convergenceTest = calculateConvergenceTest(oldArcFlow, newArcFlow, Roads, Flow.scheduledCapacities[time], Flow.numAvailableRoutes[time], Flow.availableRoutes[time]);
 		++counter;//for trial
-		
+		cout << "convergenceTest:" << convergenceTest << ' ' << counter << ' ';
 		//---------------------------------------------------------------
 		//trail so print
 		/*
@@ -101,5 +102,6 @@ void convexCombinations(ScheduleAndFlows &Flow, RoadNetwork &Roads, double conve
 	//cout << "count:" << counter << ' ';
 	//Flow and Roads are changed and sent back
 
+	cout << '\n';
 	return;
 }
