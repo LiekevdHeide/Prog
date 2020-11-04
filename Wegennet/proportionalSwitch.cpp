@@ -44,7 +44,9 @@ void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t>& availab
 			}
 		}
 	}
-	alpha *= 12.5;//0.5;//=M?
+	//alpha *= 5;//0.5;//=M?
+	alpha += 1;
+	//cout << 'a'<< alpha << ' ';
 	alpha = 1 / alpha;
 	//cout << "alpha=" << alpha << ' ';
 
@@ -61,9 +63,11 @@ void proportionalSwitch(size_t numAvailableRoutes, const vector<size_t>& availab
 
 			if (r != p) {
 				pathFlowNew[p] += alpha * (pathFlowOld[r] * max(pathTimes[r] - pathTimes[p], 0.0) - pathFlowOld[p] * max(pathTimes[p] - pathTimes[r], 0.0));
+				//cout << (pathFlowOld[r] * max(pathTimes[r] - pathTimes[p], 0.0) - pathFlowOld[p] * max(pathTimes[p] - pathTimes[r], 0.0)) << ' ';
 			}
 		}
 	}
+	//cout << '\n';
 	return;
 }
 
