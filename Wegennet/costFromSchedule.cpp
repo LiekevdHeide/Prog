@@ -12,7 +12,7 @@
 #include <cstddef> //necessery for size_t!!
 
 using namespace std;
-double costFromSchedule(RoadNetwork &Network, MaintenanceActivities& Maintenance, ScheduleAndFlows& Schedule, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double bigCost) {
+double costFromSchedule(RoadNetwork &Network, MaintenanceActivities& Maintenance, ScheduleAndFlows& Schedule, vector<vector<vector<double>>>& touristAltPerwholeState, double PSAPalpha, size_t numSmallStep, double bigCost) {
 	//already changed: binarySchedule
 
 	//(to change: scheduledCapacities, availableRoutes, numAvailableRoutes, arcFlowALl, arcFLowTourists, pathFlow(informed)
@@ -45,7 +45,7 @@ double costFromSchedule(RoadNetwork &Network, MaintenanceActivities& Maintenance
 
 
 		//Adjust informed routing (pathFLow)
-		adjustingTrafficFlows(Maintenance.T, Network, Schedule, numSmallStep);
+		adjustingTrafficFlows(Maintenance.T, Network, Schedule, PSAPalpha, numSmallStep);
 
 
 

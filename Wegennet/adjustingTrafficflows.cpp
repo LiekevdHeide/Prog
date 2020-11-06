@@ -12,7 +12,7 @@
 #include <iomanip> // set precision
 using namespace std;
 
-void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule, size_t numSmallStep) { //assumes at 0 no maintenance!
+void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Schedule, double PSAPalpha, size_t numSmallStep) { //assumes at 0 no maintenance!
 
 	//cout << setprecision(3);
 
@@ -127,7 +127,7 @@ void adjustingTrafficFlows(size_t T, RoadNetwork& Network, ScheduleAndFlows& Sch
 			}
 				//Change recurring traffic flows at t+1 (using only paths available at t + 1). Resets pathFlow at t + 1 to flow at t, then updates it using PSAP.
 				//adjust newFlow using pathTimes. Only change flows on/to open paths at t + 1. resets newFlow + updates it.
-				proportionalSwitch(Schedule.numAvailableRoutes[t + 1][od], Schedule.availableRoutes[t + 1][od], oldFlow[od], pathTimes[od], newFlow[od]);
+				proportionalSwitch(Schedule.numAvailableRoutes[t + 1][od], Schedule.availableRoutes[t + 1][od], oldFlow[od], pathTimes[od], PSAPalpha, newFlow[od]);
 
 			}
 			oldFlow = newFlow;

@@ -10,9 +10,9 @@
 #include <vector>
 #include <algorithm>
 
-double timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double bigCost) {
+double timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, double PSAPalpha, size_t numSmallStep, double bigCost) {
 
-	double bestCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAltPerwholeState, numSmallStep, bigCost);
+	double bestCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAltPerwholeState, PSAPalpha, numSmallStep, bigCost);
 	double currentCosts = bestCosts;
 	ScheduleAndFlows NbSched = Schedule; 
 	ScheduleAndFlows bestSchedule = Schedule;
@@ -26,7 +26,7 @@ double timeMoveNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, M
 					NbSched.startTimes[mToShift] = t;
 
 					shiftToOne(Maintenance.M, NbSched.startTimes);
-					currentCosts = costFromStarttimes(Network, Maintenance, NbSched, touristAltPerwholeState, numSmallStep, bigCost);//uses binarySchedule to calc: capacities, availableRoutes, touristFlows + PSAP: returns costs
+					currentCosts = costFromStarttimes(Network, Maintenance, NbSched, touristAltPerwholeState, PSAPalpha, numSmallStep, bigCost);//uses binarySchedule to calc: capacities, availableRoutes, touristFlows + PSAP: returns costs
 
 					 //if found improvement:
 					if (currentCosts < bestCosts) {

@@ -120,6 +120,23 @@ int main(int argc, char* argv[])
 	}
 
 	//NECESSARY PARAMETERS!!
+	double PSAPalpha = 0;
+	for (size_t od = 0; od < Network.numberODpairs; ++od) {
+		for (size_t p = 0; p < Network.numberODpaths[od]; ++p) {
+			vector<vector<double>> arcF(Network.vertices, vector<double>(Network.vertices, 0.0));
+			for (size_t r = 0; r < Network.ODpaths[od][p].size() - 1; ++r) {
+				size_t q1 = Network.ODpaths[od][p][r];
+				size_t q2 = Network.ODpaths[od][p][r + 1];
+				arcF[q1][q2] += Network.ODdemands[od];
+			}
+			double routeC = Network.pathTravelTime(Network.ODpaths[od][p], arcF, Network.standardCapacities);
+			if (routeC > PSAPalpha) {
+				PSAPalpha = routeC;
+			}
+		}
+	}
+	//PSAPalpha *= 0.3;
+	cout << PSAPalpha << ' ';
 	size_t numSmallStep = 1;
 
 	double bigCost = 10000000000;
@@ -129,11 +146,11 @@ int main(int argc, char* argv[])
 
 	//Make initial schedule solution 
 	cout << "--------------Create initial schedule ----------------\n";
-	initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+	initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
 	for (size_t m = 0; m < Maintenance.M; ++m) {
 		cout << Schedule.startTimes[m] << ' ';
 	}
-	cout << costFromStarttimes(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
+	cout << costFromStarttimes(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost) << '\n';
 
 	//implement VNS
 	string bestHeursol = outputNames + "BestHeurSolution.txt";
@@ -145,7 +162,7 @@ int main(int argc, char* argv[])
 	for (size_t m = 0; m < Maintenance.M; ++m) {
 		printHeurStarttimes[locationToMaintenance[m]] = Schedule.startTimes[m];
 	}
-	double printHeurcosts = costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+	double printHeurcosts = costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
 	double printHeurtime = time.elapsed();
 
 	//find overlap:
@@ -194,7 +211,7 @@ int main(int argc, char* argv[])
 		if (bruteForceSchedule(Maintenance, s, Schedule.startTimes, Schedule.binarySchedule)) {//start from t = 1 (t = 0 is equilibrium!) (returns if schedule is feasible wrt time + Schedule.binarySchedule)		
 			//initialize the start for  pathFlows for informed
 
-			currentCosts = costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);//updates capacities, availableRoutes, touristFlows, recurrentFlows + calculates costs
+			currentCosts = costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);//updates capacities, availableRoutes, touristFlows, recurrentFlows + calculates costs
 
 			//test
 			for (size_t t = 0; t < Maintenance.T; ++t) {
@@ -252,7 +269,7 @@ int main(int argc, char* argv[])
 		bestSolution << Network.numberODpaths[od] << ' ';
 	}
 	bestSolution << '\n';
-	bestSolution << costFromSchedule(Network, Maintenance, bestSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+	bestSolution << costFromSchedule(Network, Maintenance, bestSchedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
 	printSchedule(bestSolution, Maintenance.T, Maintenance.M, bestSchedule.binarySchedule);
 	print2Dim(bestSchedule.binarySchedule, Maintenance.T, bestSolution);
 	printRoutes(bestSolution, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
@@ -331,7 +348,7 @@ int main(int argc, char* argv[])
 	cout << "\n Best all equilibrium schedule:\n";
 	ScheduleAndFlows eqSchedule(Schedule);
 	//ScheduleAndFlows bestEqSchedule(Schedule);
-	cout << costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << ' ';
+	cout << costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost) << ' ';
 
 	//for all new schedules?
   //ofstream trialWrite(whichComputer +"trialWrite.txt");
@@ -404,7 +421,7 @@ int main(int argc, char* argv[])
 	for (size_t state = 0; state < bestWholeStates.size(); ++state) {
 		wholeScheduleToMaintenance(Maintenance.T - Maintenance.runOutPeriod, Maintenance.M, bestWholeStates[state], eqSchedule.startTimes);
 		//check if only startTimes are used..
-		eqActcurrentCost = costFromStarttimes(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+		eqActcurrentCost = costFromStarttimes(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
 		//trialWrite << bestWholeStates[state] << ' ';
 		//for(size_t m = 0; m < Maintenance.M; ++m){
 		  //trialWrite << eqSchedule.startTimes[m] << ' ';
@@ -455,22 +472,22 @@ int main(int argc, char* argv[])
 	printRoutes(bestAllEq, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);
 	printSchedule(bestAllEq, Maintenance.T, Maintenance.M, eqSchedule.binarySchedule);
 	printTraffic(bestAllEq, Maintenance.T, Network.vertices, eqSchedule.arcFlowAll);
-	cout << "lowest actualCost " << costFromSchedule(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << ' '; //changes the flows!!
+	cout << "lowest actualCost " << costFromSchedule(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost) << ' '; //changes the flows!!
 	bestAllEq << bestEqCosts << ' ';
 	bestAllEq << "min actual cost schedule:\n";
-	bestAllEq << costFromSchedule(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
+	bestAllEq << costFromSchedule(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost) << '\n';
 	printTraffic(bestAllEq, Maintenance.T, Network.vertices, eqSchedule.arcFlowAll);
 	printRecurringTraffic(bestAllEq, Maintenance.T, Network.numberODpairs, Network.numberODpaths, eqSchedule.pathFlow);
 	//max cost eq schedule:
 	bestAllEq << "max actual cost schedule:\n";
 	eqSchedule.startTimes = eqActMaxStarttimes;
-	bestAllEq << costFromSchedule(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
+	bestAllEq << costFromSchedule(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost) << '\n';
 	printTraffic(bestAllEq, Maintenance.T, Network.vertices, eqSchedule.arcFlowAll);
 	printRecurringTraffic(bestAllEq, Maintenance.T, Network.numberODpairs, Network.numberODpaths, eqSchedule.pathFlow);
 	//earliest eq schedule:
 	bestAllEq << "Earliest schedule: \n";
 	eqSchedule.startTimes = eqActEarliestStarttimes;
-	bestAllEq << costFromSchedule(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
+	bestAllEq << costFromSchedule(Network, Maintenance, eqSchedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost) << '\n';
 	printTraffic(bestAllEq, Maintenance.T, Network.vertices, eqSchedule.arcFlowAll);
 	printRecurringTraffic(bestAllEq, Maintenance.T, Network.numberODpairs, Network.numberODpaths, eqSchedule.pathFlow);
 	bestAllEq.close();
@@ -564,5 +581,5 @@ int main(int argc, char* argv[])
 	cout << " end";
 	allResults.close();
 
-	costFromSchedule(Network, Maintenance, bestSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+	costFromSchedule(Network, Maintenance, bestSchedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
 }

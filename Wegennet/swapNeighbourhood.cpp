@@ -10,9 +10,9 @@
 #include <cstddef> //necessery for size_t!!
 
 using namespace std;
-double swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, size_t numSmallStep, double bigCost) {
+double swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, MaintenanceActivities& Maintenance, vector<vector<vector<double>>>& touristAltPerwholeState, double PSAPalpha, size_t numSmallStep, double bigCost) {
 
-	double bestSoFarCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAltPerwholeState, numSmallStep, bigCost);
+	double bestSoFarCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAltPerwholeState, PSAPalpha, numSmallStep, bigCost);
 	double currentCosts = bestSoFarCosts;
 	ScheduleAndFlows currentSchedule = Schedule;
 	ScheduleAndFlows bestSchedule = Schedule;
@@ -32,7 +32,7 @@ double swapNeighbourhood(RoadNetwork& Network, ScheduleAndFlows& Schedule, Maint
 			currentSchedule.startTimes[n] = minStart + maxEnd - oldStartTimes[n] - Maintenance.duration[n];
 
 			shiftToOne(Maintenance.M, currentSchedule.startTimes);
-			currentCosts = costFromStarttimes(Network, Maintenance, currentSchedule, touristAltPerwholeState, numSmallStep, bigCost);//uses startTimes to calc: binarySchedule, capacities, availableRoutes, touristFlows + PSAP: returns costs
+			currentCosts = costFromStarttimes(Network, Maintenance, currentSchedule, touristAltPerwholeState, PSAPalpha, numSmallStep, bigCost);//uses startTimes to calc: binarySchedule, capacities, availableRoutes, touristFlows + PSAP: returns costs
 			
 				if (currentCosts < bestSoFarCosts) {
 					bestSchedule = currentSchedule;

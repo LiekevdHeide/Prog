@@ -14,13 +14,13 @@
 
 using namespace std;
 
-void VNS(RoadNetwork &Network, ScheduleAndFlows &Schedule, MaintenanceActivities &Maintenance, VNSparameters &VNSinput, ScheduleAndFlows &equilibrium, vector<vector<vector<double>>> &touristAlternativeFlowsPerwholeState, string resultPrint, size_t numSmallStep, double bigCost) {
+void VNS(RoadNetwork &Network, ScheduleAndFlows &Schedule, MaintenanceActivities &Maintenance, VNSparameters &VNSinput, ScheduleAndFlows &equilibrium, vector<vector<vector<double>>> &touristAlternativeFlowsPerwholeState, string resultPrint, double PSAPalpha, size_t numSmallStep, double bigCost) {
 	//ofstream VNSPerformance(VNSperformancePrint);
 	ofstream bestHeur(resultPrint);
 	size_t NoImprovementsFor = 0;
 	size_t noOverallImprovements = 0;
 
-	double bestHeurCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+	double bestHeurCosts = costFromStarttimes(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
 	double overallBestHeurCosts = bestHeurCosts;
 	ScheduleAndFlows bestHeurSchedule = Schedule;
 	ScheduleAndFlows overallBestHeurSchedule = Schedule;
@@ -34,8 +34,8 @@ void VNS(RoadNetwork &Network, ScheduleAndFlows &Schedule, MaintenanceActivities
 		if (NoImprovementsFor > VNSinput.itsBeforeRestart) {
 			//cout << "restart\n";
 			NoImprovementsFor = 0;
-			initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
-			bestHeurCosts = costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+			initializeSchedule(Schedule, equilibrium, Maintenance, Network, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
+			bestHeurCosts = costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
 			//VNSPerformance << "--------------restart-----------------------\n";
 		}
 		while (iteration < VNSinput.maxItSameNBH && neighbourhood < 2) { //Maintenance.M  actualNoImprovementsFor < 50
@@ -46,14 +46,14 @@ void VNS(RoadNetwork &Network, ScheduleAndFlows &Schedule, MaintenanceActivities
 				//shake + adjust startTimes
 				shakeTimeNBH(Maintenance, Schedule);//only adjusts startTimes
 				//local search in timeMove
-				improvedCosts = timeMoveNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
+				improvedCosts = timeMoveNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost);
 
 			}
 			if (neighbourhood == 1) {//swap neighbourhood
 				//shake
 				shakeSwapNBH(Maintenance, Schedule);//only adjusts startTimes
 				//local search in swap neighbourhood
-				improvedCosts = swapNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, numSmallStep,  bigCost);
+				improvedCosts = swapNeighbourhood(Network, Schedule, Maintenance, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep,  bigCost);
 
 			}
 			//VNSPerformance << "it" << iteration << ' ' << costFromSchedule(Network, Maintenance, Schedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost);
@@ -98,7 +98,7 @@ void VNS(RoadNetwork &Network, ScheduleAndFlows &Schedule, MaintenanceActivities
 		bestHeur << Network.numberODpaths[od] << ' ';
 	}
 	bestHeur << '\n';
-	bestHeur << costFromStarttimes(Network, Maintenance, overallBestHeurSchedule, touristAlternativeFlowsPerwholeState, numSmallStep, bigCost) << '\n';
+	bestHeur << costFromStarttimes(Network, Maintenance, overallBestHeurSchedule, touristAlternativeFlowsPerwholeState, PSAPalpha, numSmallStep, bigCost) << '\n';
 	printSchedule(bestHeur, Maintenance.T, Maintenance.M, overallBestHeurSchedule.binarySchedule);
 	print2Dim(overallBestHeurSchedule.binarySchedule, Maintenance.T, bestHeur);
 	printRoutes(bestHeur, Network.numberODpairs, Network.numberODpaths, Network.ODpaths);

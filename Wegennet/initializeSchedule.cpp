@@ -15,7 +15,7 @@
 
 using namespace std;
 
-void initializeSchedule(ScheduleAndFlows &Schedule, ScheduleAndFlows &equilibrium, MaintenanceActivities &Maintenance, RoadNetwork &Network, vector<vector<vector<double>>> & touristAltPerWholeState, size_t numSmallStep, double bigCosts){
+void initializeSchedule(ScheduleAndFlows &Schedule, ScheduleAndFlows &equilibrium, MaintenanceActivities &Maintenance, RoadNetwork &Network, vector<vector<vector<double>>> & touristAltPerWholeState, double PSAPalpha, size_t numSmallStep, double bigCosts){
 	//create initial schedule in the ScheduleAndFlows class (binary) + adds the corresponding traffic flows (touristArcFlow, pathFlow, arcFlowAll)
 	//doesn't check if it's a feasible schedule..
 
@@ -35,7 +35,7 @@ void initializeSchedule(ScheduleAndFlows &Schedule, ScheduleAndFlows &equilibriu
 		}
 
 	//update binary, adjustavailable, adjustTourists, adjustingTrafficFlows + returns Costs!
-	costFromStarttimes(Network, Maintenance, Schedule, touristAltPerWholeState, numSmallStep, bigCosts);//bigCost??
+	costFromStarttimes(Network, Maintenance, Schedule, touristAltPerWholeState, PSAPalpha, numSmallStep, bigCosts);//bigCost??
 
 	
 	return;
